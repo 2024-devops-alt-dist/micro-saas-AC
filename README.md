@@ -33,3 +33,15 @@
 | Base de données | PostgreSQL         |
 | Environnement | Docker               |
 | Autres      | API externe de quiz (si utilisée) |
+
+
+## 📎 Livrables
+
+### 🖼️ Wireframes
+[🔗 Voir les wireframes sur Figma](https://www.figma.com/design/YdcOWTTci2QMH1sE2N6w6U/incollapps-wireframe?node-id=0-1&t=mAe4KxNikvUzydES-1)
+
+### 🗃️ MCD (Modèle Conceptuel de Données)
+[📄 Voir le MCD (PDF)](https://drive.google.com/file/d/1vGRwim1qmYariqFKNL3PTo4bW7l932Kc/view?usp=sharing)
+
+### 🎯 Diagramme de cas d'utilisation
+[📄 Voir le diagramme de cas d'utilisation (PDF)](https://drive.google.com/file/d/1jqqKLHOKpbJE32cHiWBQQjPc5RW24XPF/view?usp=sharing)
