@@ -37,6 +37,9 @@
 
 ## 📎 Livrables
 
+### 👩‍🏫 Presentation
+[🔗 Presentation](DOCS/INCOLLAPPS-prez.pdf)
+
 ### 🖼️ Wireframes
 [🔗 Voir les wireframes sur Figma](https://www.figma.com/design/YdcOWTTci2QMH1sE2N6w6U/incollapps-wireframe?node-id=0-1&t=mAe4KxNikvUzydES-1)
 
