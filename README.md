@@ -28,7 +28,7 @@
 
 | Côté        | Technologie            |
 |-------------|------------------------|
-| Frontend    | Symfony (Twig + Tailwind CSS) |
+| Frontend    | REACT Tailwind CSS     |
 | Backend     | Symfony (PHP 8+)       |
 | Base de données | PostgreSQL         |
 | Environnement | Docker               |
