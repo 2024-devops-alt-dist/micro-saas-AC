@@ -1,7 +1,7 @@
 
 ## 🎯 Concept
 
-**IncollApp** est une application Micro-SaaS de quiz éducatif, destinée aux enfants et adolescents, leur permettant de jouer en solo ou avec d'autres utilisateurs. Le but ? Réviser les matières scolaires tout en s'amusant grâce à une interface simple et ludique.
+**QuizPilot** est une application Micro-SaaS de quiz éducatif, leur permettant générer des quiz. Le but ? Réviser les matières scolaires tout en s'amusant grâce à une interface simple et ludique.
 
 ---
 
@@ -10,7 +10,7 @@
 - 🎓 Quiz classés par **catégorie** (Maths, Histoire, etc.) et **niveau** (Facile, Moyen, Difficile)
 - 🤖 Des questions pertinentes et toujours différentes grace à un agent IA doté de memoire
 - ✅ Score enregistré par utilisateur et par catégorie
-- 🎮 Mode **solo** + mode **multijoueur** (défis entre utilisateurs)
+- 📸 Possibilité de scanner un document et le faire analyser par L'ia
 - 🔐 Authentification des utilisateurs
 - 📊 Suivi des performances
 
@@ -18,7 +18,7 @@
 
 ## 👤 Public cible
 
-- Enfants et adolescents (7-15 ans)
+- public scolarisé (élèves, étudiants)
 - Parents souhaitant proposer une activité éducative
 - Écoles primaires et collèges en recherche d'outils ludo-éducatifs
 
@@ -37,14 +37,14 @@
 
 ## 📎 Livrables
 
-### 👩‍🏫 Presentation
-[🔗 Presentation](DOCS/INCOLLAPPS-prez.pdf)
+### 🖼️ Maquettes 
+[🔗 Voir les maquettes sur Figma](https://www.figma.com/design/Xu2ocFXQvCjZubZsyGHSic/QuizPilot-template-vrais?node-id=0-1&t=Q2HIV22vVWLG6mWS-1)
 
 ### 🖼️ Wireframes
 [🔗 Voir les wireframes sur Figma](https://www.figma.com/design/YdcOWTTci2QMH1sE2N6w6U/incollapps-wireframe?node-id=0-1&t=mAe4KxNikvUzydES-1)
 
 ### 🗃️ MCD (Modèle Conceptuel de Données)
-[📄 Voir le MCD (PDF)](https://drive.google.com/file/d/1vGRwim1qmYariqFKNL3PTo4bW7l932Kc/view?usp=sharing)
+[📄 Voir le MCD (PDF)](DOCS/MCD/QUIZPILOT.drawio.pdf)
 
 ### 🎯 Diagramme de cas d'utilisation
-[📄 Voir le diagramme de cas d'utilisation (PDF)](https://drive.google.com/file/d/1jqqKLHOKpbJE32cHiWBQQjPc5RW24XPF/view?usp=sharing)
+[📄 Voir le diagramme de cas d'utilisation (PDF)](DOCS/diagramme/QUIZPILOTDiagrammeCasUtilisatio.drawio.pdf)
