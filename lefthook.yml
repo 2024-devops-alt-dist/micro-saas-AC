@@ -1,0 +1,41 @@
+pre-commit:
+  commands:
+    # Backend
+    backend-check:
+      run: echo "🚀 Préparation du commit backend en cours..."
+    django-check:
+      run: python manage.py check
+
+    format-python:
+      glob: "**/*.py"
+      run: black {staged_files}
+      stage_fixed: true
+
+    # Frontend
+    frontend-check:
+      run: echo "🚀 Préparation du commit frontend en cours..."
+    lint-react:
+      run: cd client && npm run lint
+
+    build-check:
+      run: cd client && npm run build
+
+post-commit:
+  commands:
+    success:
+      run: echo "✅ Full-stack commit réussi!"
+
+# Hook qui s'exécute AVANT le push
+pre-push:
+  commands:
+    # Tests backend Django
+    test-backend:
+      run: python manage.py test --keepdb
+
+    # Tests frontend React
+    test-frontend:
+      run: cd client && npm run test:ci
+
+    # Build frontend pour vérifier que ça compile
+    build-frontend:
+      run: cd client && npm run build
