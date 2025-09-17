@@ -29,5 +29,20 @@ services:
     depends_on:
       - postgres
 
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: quizpilot_client
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    volumes:
+      - ./client:/usr/src/app
+    depends_on:
+      - api
+
 volumes:
   postgres_data:
