@@ -48,3 +48,74 @@
 
 ### 🎯 Diagramme de cas d'utilisation
 [📄 Voir le diagramme de cas d'utilisation (PDF)](DOCS/diagramme/QUIZPILOTDiagrammeCasUtilisatio.drawio.pdf)
+
+
+
+### 📁 Structure du projet
+```.
+├── back-django
+│   ├── api
+│   │   ├── migrations
+│   │   ├── serializers.py
+│   │   ├── urls.py
+│   │   └── views.py
+│   ├── manage.py
+│   ├── requirements.txt
+│   └── settings.py
+├── client
+│   ├── public
+│   └── src
+│       ├── components
+│       ├── pages
+│       ├── App.js
+│       └── index.js
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+└── tailwind.config.js
+``` 
+
+## 🚀 Démarrage rapide
+### Prérequis
+- Docker et Docker Compose installés sur votre machine
+- Cloner le dépôt GitHub du projet
+- Accéder au répertoire du projet
+```bash
+cd projet_rncp
+```
+- créer un fichier `.env` à la racine du projet avec les variables d'environnement nécessaires (exemple dans `.env.example`)
+### Lancement de l'application
+```bash
+docker-compose up --build
+```
+### Accès à l'application
+```bash 
+# Ouvrir votre navigateur et accéder aux URLs suivantes :
+```
+- Frontend : [http://localhost:3000](http://localhost:3000)
+- Backend : [http://localhost:8000](http://localhost:8000/api/)
+### Arrêt de l'application
+```bash
+docker-compose down
+```
+## 🛠️ Commandes utiles
+```bash
+# Accéder au conteneur backend
+docker-compose exec back-django bash
+
+# Accéder au conteneur frontend
+docker-compose exec client bash
+
+# Arrêter tous les conteneurs
+docker-compose down
+# Rebuild les conteneurs après modification
+docker-compose up --build
+```
+
+## 📚 Ressources supplémentaires
+- [Documentation Django REST Framework](https://www.django-rest-framework.org/)
+- [Documentation React](https://reactjs.org/docs/getting-started.html)  
+- [Documentation Tailwind CSS](https://tailwindcss.com/docs)    
+- [Documentation Docker](https://docs.docker.com/)
+## 🤝 Contribution
