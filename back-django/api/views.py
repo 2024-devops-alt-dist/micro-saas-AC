@@ -6,7 +6,9 @@ from .serializers import CategorySerializer
 
 
 def test_api(request):
-    return JsonResponse({"status": "ok", "message": "Test endpoint is working! on testttt"})
+    return JsonResponse(
+        {"status": "ok", "message": "Test endpoint is working! on testttt"}
+    )
 
 
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -22,10 +24,10 @@ class LevelListCreateView(generics.ListCreateAPIView):
 class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    lookup_field = 'id'
+    lookup_field = "id"
 
 
 class LevelRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
-    lookup_field = 'id'
+    lookup_field = "id"
