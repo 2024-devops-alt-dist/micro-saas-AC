@@ -6,7 +6,7 @@ pre-commit:
 
     format-python:
       glob: "**/*.py"
-      run: black {staged_files}
+      run: .\env\Scripts\black {staged_files}
       stage_fixed: true
 
     # Frontend React - ajustez le chemin selon votre structure

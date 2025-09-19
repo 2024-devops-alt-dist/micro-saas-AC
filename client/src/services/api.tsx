@@ -6,9 +6,13 @@ if (!API_URL) {
 }
 
 export async function apiFetch(endpoint: string, options?: RequestInit) {
-  const response = await fetch(`${API_URL}${endpoint}`, options);
-  if (!response.ok) throw new Error("Erreur lors de la récupération des données");
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}${endpoint}`, options);
+    if (!response.ok) throw new Error("Erreur lors de la récupération des données");
+    return response.json();
+  } catch (error) {
+    throw new Error("Erreur réseau ou serveur : " + (error instanceof Error ? error.message : String(error)));
+  }
 }
 
 
