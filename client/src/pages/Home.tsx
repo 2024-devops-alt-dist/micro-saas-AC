@@ -5,6 +5,7 @@ import {getLevels} from '../services/api.tsx'
 import { apiFetch } from '../services/api.tsx';
 //import quizpilot from '../assets/quizpilot.gif'
 import Title from '../components/Title.tsx';
+import AuthForm from '../components/AuthForm.tsx';
 
 type Level = {
   id: string | number;
@@ -61,6 +62,11 @@ function Home() {
         {apiResponse === "error" && (
           <div className="mt-2 text-red-600 font-semibold">aie aie aie</div>
         )}
+      </div>
+
+      <div className="mt-8">
+        <AuthForm />
+
       </div>
 
       </div>
