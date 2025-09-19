@@ -6,10 +6,10 @@ pre-commit:
 
     format-python:
       glob: "**/*.py"
-      run: .\env\Scripts\black {staged_files}
+      run: python -m black {staged_files}
       stage_fixed: true
 
-    # Frontend React - ajustez le chemin selon votre structure
+    # Frontend React
     react-lint:
       run: echo "⚛️ Vérification React..." && cd client && npm run lint
 

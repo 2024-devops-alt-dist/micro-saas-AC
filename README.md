@@ -118,4 +118,38 @@ docker-compose up --build
 - [Documentation React](https://reactjs.org/docs/getting-started.html)  
 - [Documentation Tailwind CSS](https://tailwindcss.com/docs)    
 - [Documentation Docker](https://docs.docker.com/)
-## 🤝 Contribution
+
+
+## ✅ Black - [Documentation Black](https://black.readthedocs.io/en/stable/)
+### Installation de Black
+```bash
+pip install black
+```
+### Utilisation de Black
+```bash
+ python -m black Chemin/nomDuFichier.py
+```
+## Pylint - [Documentation Pylint](https://pylint.pycqa.org/en/latest/)
+### Installation de Pylint
+```bash
+pip install pylint
+``` 
+### Utilisation de Pylint
+```bash
+python -m pylint Chemin/nomDuFichier.py
+```
+
+## Lefthook - [Documentation Lefthook](https://github.com/evilmartians/lefthook)
+### Installation de Lefthook
+```bash
+pip install lefthook
+```
+### Initialisation de Lefthook
+```bash
+lefthook install
+lefthook add pre-commit
+lefthook add pre-push
+lefthook install
+lefthook run pre-commit
+```
+## 📝 Notes
