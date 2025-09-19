@@ -11,10 +11,10 @@ pre-commit:
 
     # Frontend React - ajustez le chemin selon votre structure
     react-lint:
-      run: echo "⚛️ Vérification React..." && cd ../client && npm run lint
+      run: echo "⚛️ Vérification React..." && cd client && npm run lint
 
     react-build:
-      run: cd ../client && npm run build
+      run: cd client && npm run build
 
 post-commit:
   commands:
