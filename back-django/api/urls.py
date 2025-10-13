@@ -18,4 +18,10 @@ urlpatterns = [
         views.LevelRetrieveUpdateDestroyView.as_view(),
         name="level-detail",
     ),
+    path("users/", views.UserListCreateView.as_view(), name="user-list"),
+    path(
+        "users/<uuid:id>/",
+        views.UserRetrieveUpdateDestroyView.as_view(),
+        name="user-detail",
+    ),
 ]

@@ -3,6 +3,8 @@ from rest_framework import generics
 from .models import Category, Level
 from .serializers import LevelSerializer
 from .serializers import CategorySerializer
+from .serializers import UserSerializer
+from django.contrib.auth.models import User
 
 
 def test_api(request):
@@ -30,4 +32,16 @@ class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 class LevelRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
+    lookup_field = "id"
+
+
+class UserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = "id"
+
+
+class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     lookup_field = "id"

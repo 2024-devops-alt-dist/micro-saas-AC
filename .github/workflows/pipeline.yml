@@ -1,0 +1,13 @@
+name: Premier message
+on:
+  push:
+    branches:
+      - main
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Afficher un message
+        run: echo "Bonjour depuis GitHub Actions !"
+      - name: Afficher la date et l'heure actuelles
+        run: date

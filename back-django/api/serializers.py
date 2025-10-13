@@ -1,5 +1,13 @@
 from rest_framework import serializers
 from .models import Category, Level
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "date_joined"]
+        read_only_fields = ["id", "date_joined"]
 
 
 class CategorySerializer(serializers.ModelSerializer):
