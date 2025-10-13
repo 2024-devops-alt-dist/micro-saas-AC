@@ -38,9 +38,9 @@ jobs:
     runs-on: ubuntu-latest # 💡 L'environnement où ça tourne
 
     # OPTION : Si ton front est dans un sous-dossier
-    # defaults:
-    #   run:
-    #     working-directory: ./frontend
+    defaults:
+      run:
+        working-directory: ../client
 
     steps:
       # Étape 1 : Récupérer le code
