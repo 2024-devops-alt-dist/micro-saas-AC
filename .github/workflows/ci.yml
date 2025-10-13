@@ -82,10 +82,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Lint Dockerfiles
+      - name: Lint frontend Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./Dockerfile
+          dockerfile: client/Dockerfile
+
+      - name: Lint backend Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: back-django/Dockerfile
 
       - name: Build frontend image
         run: docker build -f client/Dockerfile -t frontend:ci client
