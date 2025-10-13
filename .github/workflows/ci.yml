@@ -49,8 +49,6 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
-
-      #test safety with packaging downgrade
       - name: Downgrade packaging before safety
         run: pip install "packaging<24.0"
       - name: Security audit
