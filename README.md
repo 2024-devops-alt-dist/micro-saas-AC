@@ -1,4 +1,9 @@
 
+## badge 
+[![CI](https://github.com/SIMPLON-PROJECT-RNCP/projet_rncp/actions/workflows/ci.yml/badge.svg)](https://github.com/SIMPLON-PROJECT-RNCP/projet_rncp/actions/workflows/ci.yml)
+
+# QuizPilot
+
 ## 🎯 Concept
 
 **QuizPilot** est une application Micro-SaaS de quiz éducatif, leur permettant générer des quiz. Le but ? Réviser les matières scolaires tout en s'amusant grâce à une interface simple et ludique.
