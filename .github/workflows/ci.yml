@@ -40,7 +40,7 @@ jobs:
     # OPTION : Si ton front est dans un sous-dossier
     defaults:
       run:
-        working-directory: ../../client
+        working-directory: client
 
     steps:
       # Étape 1 : Récupérer le code
