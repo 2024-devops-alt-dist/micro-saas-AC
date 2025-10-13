@@ -49,10 +49,8 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
-      - name: Downgrade packaging before safety
-        run: pip install "packaging<24.0"
       - name: Security audit
-        run: safety check
+        run: pip install safety && safety check
       - name: Lint code with pylint
         run: pylint .
       - name: Check code format with black
