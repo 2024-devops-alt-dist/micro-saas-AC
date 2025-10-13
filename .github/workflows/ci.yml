@@ -1,138 +1,56 @@
-# ========================================
-# GUIDE : GitHub Actions pour Front & Back
-# ========================================
-# Ce fichier va dans : .github/workflows/ci.yml
-#
-# 🎯 OBJECTIF : Comprendre comment structurer un pipeline CI/CD
-# plutôt que copier-coller du code sans comprendre !
-
 name: CI Pipeline
-
-# ========================================
-# 1. QUAND DÉCLENCHER LE WORKFLOW ?
-# ========================================
-# TODO: Réfléchis à QUAND tu veux que ce workflow se lance
-# Options courantes :
-#   - À chaque push sur certaines branches ?
-#   - À chaque pull request ?
-#   - Manuellement ?
 
 on:
   push:
-    branches: [main] # 💡 ADAPTER selon tes branches
+    branches: [main]
   pull_request:
     branches: [main]
 
-# ========================================
-# 2. DÉFINIR LES JOBS
-# ========================================
-# Un workflow peut avoir plusieurs "jobs" qui tournent en parallèle
-# Ici on va séparer Frontend et Backend
-
 jobs:
-  # ========================================
-  # JOB 1 : Frontend
-  # ========================================
   frontend:
     name: "Frontend CI"
-    runs-on: ubuntu-latest # 💡 L'environnement où ça tourne
-
-    # OPTION : Si ton front est dans un sous-dossier
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: client
-
     steps:
-      # Étape 1 : Récupérer le code
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # Étape 2 : Configurer Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # 💡 ADAPTER à ta version de Node
-          # cache: 'npm'  # 💡 DÉCOMMENTER pour accélérer les installs
-
-      # Étape 3 : Installer les dépendances
-      # 💡 EXEMPLE COMPLET pour comprendre la structure
+          node-version: "20"
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
-        # Notes :
-        # - npm ci est plus strict que npm install
-        # - Il nécessite un package-lock.json
-        # - Il supprime node_modules avant d'installer
-        # - Idéal pour CI/CD car reproductible
-
-      # ========================================
-      # À TOI DE JOUER ! Complète les étapes suivantes
-      # ========================================
-
-      # Étape 4 : Vérifier les vulnérabilités
-      # 💡 INDICES :
-      #   - Il existe une commande npm pour auditer les packages
-      #   - Tu peux définir un niveau de sévérité minimum (low, moderate, high, critical)
-      #   - Question : veux-tu que le build échoue si des vulnérabilités sont trouvées ?
-      #   - Regarde "continue-on-error" dans la doc GitHub Actions
       - name: Security audit
         run: npm audit --audit-level=moderate
-      # Étape 5 : Linting
-      # 💡 INDICES :
-      #   - Ton package.json doit avoir un script "lint"
-      #   - ESLint, Prettier, ou autre ? Vérifie ton projet
-      #   - Tu peux aussi auto-fix certaines erreurs (mais attention en CI !)
       - name: Run linter
         run: npm run lint
-
-      # Étape 6 : Type checking (TypeScript)
-      # 💡 INDICES :
-      #   - Si tu as un tsconfig.json, tu as besoin de cette étape
-      #   - Tu peux lancer le compilateur TypeScript sans générer de fichiers
-      #   - Option : utilise un script npm ou appelle directement tsc
       - name: Type check
         run: npx tsc --noEmit
-
-      # Étape 7 : Build
-      # 💡 INDICES :
-      #   - Vite ? Next.js ? Create React App ? La commande diffère
-      #   - Vérifie ton package.json pour le script de build
-      #   - Tu peux avoir besoin de variables d'environnement (API URLs, etc.)
       - name: Build application
         run: npm run build
         env:
-          # TODO: Variables d'environnement pour le build (ex: NODE_ENV)
           NODE_ENV: production
 
-  # ========================================
-  # JOB 2 : Backend
-  # ========================================
   backend:
     name: "Backend CI"
     runs-on: ubuntu-latest
-
-    # OPTION : Si ton back est dans un sous-dossier
-    # defaults:
-    #   run:
-    #     working-directory: ./backend
-
+    defaults:
+      run:
+        working-directory: back-django
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # 2. Installer Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      # Étape 3 : Installer les dépendances (même principe que le frontend)
       - name: Install dependencies
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
-
-      # ========================================
-      # Maintenant à toi ! Même logique que le frontend
-      # ========================================
-
+      - name: Install safety
+        run: pip install safety
       - name: Security audit
         run: safety check
       - name: Lint code with pylint
