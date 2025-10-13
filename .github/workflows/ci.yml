@@ -74,3 +74,27 @@ jobs:
 
       - name: Build application
         run: echo "No build step needed"
+
+  docker:
+    name: "Docker Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint Dockerfiles
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./Dockerfile
+
+      - name: Build frontend image
+        run: docker build -f client/Dockerfile -t frontend:ci client
+
+      - name: Build backend image
+        run: docker build -f back-django/Dockerfile -t backend:ci back-django
+
+      - name: Test frontend container
+        run: docker run --rm frontend:ci echo "Frontend OK"
+
+      - name: Test backend container
+        run: docker run --rm backend:ci echo "Backend OK"
