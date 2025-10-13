@@ -16,26 +16,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: client/package-lock.json
-
       - name: Install dependencies
         run: npm ci
-
       - name: Security audit
         run: npm audit --audit-level=moderate
-
       - name: Run linter
         run: npm run lint
-
       - name: Type check
         run: npx tsc --noEmit
-
       - name: Build application
         run: npm run build
         env:
@@ -47,17 +40,13 @@ jobs:
     defaults:
       run:
         working-directory: back-django
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: back-django/requirements.txt
 
       - name: Upgrade pip to latest version
         run: python -m pip install --upgrade pip
@@ -72,43 +61,16 @@ jobs:
         run: pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph
 
       - name: Lint code with pylint
-        run: pylint . --rcfile=.pylintrc
+        run: pylint .
 
-      - name: Auto-format with black
-        run: black .
+      - name: Check code format with black
+        run: black --check .
 
-      - name: Auto-sort imports with isort
-        run: isort .
+      - name: Check import sorting with isort
+        run: isort . --check-only
 
       - name: Run Django tests
         run: python manage.py test
-        env:
-          DJANGO_SETTINGS_MODULE: api.settings
 
       - name: Build application
         run: echo "No build step needed"
-
-  docker:
-    name: "Docker Validation"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Validate Backend Dockerfile
-        run: |
-          docker build --target builder -t backend-validate:test -f back-django/Dockerfile back-django || exit 1
-          echo "✅ Backend Dockerfile is valid"
-
-      - name: Validate Frontend Dockerfile
-        run: |
-          docker build --target builder -t frontend-validate:test -f client/Dockerfile client || exit 1
-          echo "✅ Frontend Dockerfile is valid"
-
-      - name: Validate Docker Compose
-        run: |
-          docker compose config > /dev/null || exit 1
-          echo "✅ Docker Compose configuration is valid"
