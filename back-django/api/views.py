@@ -1,10 +1,9 @@
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import generics
+
 from .models import Category, Level
-from .serializers import LevelSerializer
-from .serializers import CategorySerializer
-from .serializers import UserSerializer
-from django.contrib.auth.models import User
+from .serializers import CategorySerializer, LevelSerializer, UserSerializer
 
 
 def test_api(request):

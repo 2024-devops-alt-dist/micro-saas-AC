@@ -1,8 +1,8 @@
 """URL configuration for l’API QuizPilot."""
 
 from django.urls import path
-from . import views
 
+from . import views
 
 urlpatterns = [
     path("test/", views.test_api, name="test-api"),
