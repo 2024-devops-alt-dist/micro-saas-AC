@@ -6,7 +6,7 @@ import { apiFetch } from '../services/api.tsx';
 //import quizpilot from '../assets/quizpilot.gif'
 import Title from '../components/Title.tsx';
 import AuthForm from '../features/auth/components/AuthForm.tsx';
-import TestQuizService from '../features/quiz/components/TestQuizService.tsx';
+
 
 type Level = {
   id: string | number;
@@ -69,7 +69,6 @@ function Home() {
       <div className="mt-8">
         <AuthForm />
         <div className="mt-8">
-          <TestQuizService />
         </div>
       
 
