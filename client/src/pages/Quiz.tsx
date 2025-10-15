@@ -1,11 +1,12 @@
 import QuizCard from '../features/quiz/components/QuizCard.tsx';
+import QuizResult from '../features/quiz/components/QuizResult.tsx';
 import mockQuiz from '../features/quiz/data/mockQuiz.json';
 import { useState } from 'react';
 
 function Quiz() {
   const [currentIdx, setCurrentIdx] = useState(0);
  // const [selected, setSelected] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<(string | null)[]>(Array(mockQuiz.quiz.length).fill(null));
+  const [answers, setAnswers] = useState<(string | undefined)[]>(Array(mockQuiz.quiz.length).fill(undefined));
   const [score, setScore] = useState(0);
   
   const questions = mockQuiz.quiz;
@@ -49,11 +50,22 @@ function Quiz() {
   const handleNext = () => {
     if (currentIdx < questions.length - 1) {
       setCurrentIdx(currentIdx + 1);
-          //  setSelected(null);
+    } else {
+      // Quand on est à la dernière question, passer à l'état "résultat"
+      setCurrentIdx(questions.length); // currentIdx = length => mode résultat
     }
   };
 
-
+  // Affichage de la carte ou du résultat selon currentIdx
+  if (currentIdx >= questions.length) {
+    return (
+      <QuizResult
+        score={score}
+        answers={answers}
+        questions={questions}
+      />
+    );
+  }
 
   return (
   <QuizCard
@@ -64,7 +76,7 @@ function Quiz() {
       onPrev={handlePrev}
       onNext={handleNext}
       disablePrev={currentIdx === 0}
-      disableNext={currentIdx === questions.length - 1}
+      disableNext={!answers[currentIdx] || currentIdx >= questions.length}
     />
   );
 }
