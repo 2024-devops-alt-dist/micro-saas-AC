@@ -11,6 +11,7 @@ function AuthForm() {
        <InputField 
        type="text" 
        placeholder="Email"
+       className="border rounded px-3 py-2 placeholder-gray-400"
        id="email" />
         <div className="flex justify-end  text-shadow-white">
           <a href="#" className="text-sm text-white hover:underline">Mot de passe oublié ?</a>

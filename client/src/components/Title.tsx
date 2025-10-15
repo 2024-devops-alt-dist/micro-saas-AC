@@ -46,7 +46,7 @@ const Title = () => {
         onClick={animateText}
         className="mt-5 px-5 py-2 text-lg bg-[#FDDC0D] rounded-lg cursor-pointer font-skyfont"
       >
-        Encore
+        Encore !!!
       </button>
     </div>
   );
