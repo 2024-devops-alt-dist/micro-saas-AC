@@ -1,4 +1,3 @@
-//import { useState } from "react";
 
 type Proposition = {
   text: string;
@@ -32,13 +31,9 @@ export default function QuizCard({
   disablePrev = false,
   disableNext = false,
 }: Props) {
- // const [localSelected, setLocalSelected] = useState<string | null>(null);
 
-  // Utilise la sélection du parent si présente, sinon locale
-  //const sel = selected ?? localSelected;
 
   const handleClick = (p: Proposition) => {
-   // setLocalSelected(p.text);
     onSelect?.(p.text);
   };
 
