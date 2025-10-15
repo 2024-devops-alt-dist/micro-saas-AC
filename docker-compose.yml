@@ -40,7 +40,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./client:/usr/src/app
+      - ./client:/app
+      - /app/node_modules
     depends_on:
       - api
 

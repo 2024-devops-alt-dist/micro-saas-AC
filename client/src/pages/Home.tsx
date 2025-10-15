@@ -5,7 +5,7 @@ import {getLevels} from '../services/api.tsx'
 import { apiFetch } from '../services/api.tsx';
 //import quizpilot from '../assets/quizpilot.gif'
 import Title from '../components/Title.tsx';
-import AuthForm from '../components/AuthForm.tsx';
+import AuthForm from '../features/auth/components/AuthForm.tsx';
 import TestQuizService from '../features/quiz/components/TestQuizService.tsx';
 
 type Level = {
@@ -36,7 +36,7 @@ function Home() {
     <div>
       <Title />
       {/* <h1><img src={quizpilot} alt="QuizPilot" className="flex justify-center items-center w-full" /></h1> */}
-      <p className="mt-2 text-lg">Fais décoller tes révisions hugo !</p>
+      <p className="mt-2 text-lg">Fais décoller tes révisions, t'es un boss hugo !</p>
       
       <ul>
         {levels.map((level: Level) => (
