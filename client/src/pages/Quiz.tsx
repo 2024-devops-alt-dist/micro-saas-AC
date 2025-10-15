@@ -19,12 +19,14 @@ function Quiz() {
     setSelected(null);
     if (currentIdx > 0) {
       setCurrentIdx(currentIdx - 1);
+            setSelected(null);
     }
   };
 
   const handleNext = () => {
     if (currentIdx < questions.length - 1) {
       setCurrentIdx(currentIdx + 1);
+            setSelected(null);
     }
   };
 

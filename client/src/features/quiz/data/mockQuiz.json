@@ -18,8 +18,8 @@
       "theme": "Littérature",
       "level": "Lycée",
       "propositions": [
-        {"text": "Victor Hugo", "is_correct": true},
         {"text": "Émile Zola", "is_correct": false},
+        {"text": "Victor Hugo", "is_correct": true},
         {"text": "Gustave Flaubert", "is_correct": false},
         {"text": "Honoré de Balzac", "is_correct": false}
       ]
@@ -30,9 +30,9 @@
       "theme": "Sciences",
       "level": "Collège",
       "propositions": [
-        {"text": "H2O", "is_correct": true},
         {"text": "CO2", "is_correct": false},
         {"text": "O2", "is_correct": false},
+        {"text": "H2O", "is_correct": true},
         {"text": "NaCl", "is_correct": false}
       ]
     },
@@ -42,10 +42,10 @@
       "theme": "Géographie",
       "level": "Collège",
       "propositions": [
-        {"text": "Océan Pacifique", "is_correct": true},
         {"text": "Océan Atlantique", "is_correct": false},
         {"text": "Océan Indien", "is_correct": false},
-        {"text": "Océan Arctique", "is_correct": false}
+        {"text": "Océan Arctique", "is_correct": false},
+        {"text": "Océan Pacifique", "is_correct": true}
       ]
     },
     {
@@ -54,9 +54,9 @@
       "theme": "Art",
       "level": "Lycée",
       "propositions": [
+        {"text": "Raphaël", "is_correct": false},
         {"text": "Léonard de Vinci", "is_correct": true},
         {"text": "Michel-Ange", "is_correct": false},
-        {"text": "Raphaël", "is_correct": false},
         {"text": "Donatello", "is_correct": false}
       ]
     },
@@ -78,9 +78,9 @@
       "theme": "Littérature",
       "level": "Lycée",
       "propositions": [
-        {"text": "William Shakespeare", "is_correct": true},
         {"text": "Charles Dickens", "is_correct": false},
         {"text": "Jane Austen", "is_correct": false},
+        {"text": "William Shakespeare", "is_correct": true},
         {"text": "Mark Twain", "is_correct": false}
       ]
     },
@@ -90,10 +90,10 @@
       "theme": "Sciences",
       "level": "Collège",
       "propositions": [
-        {"text": "CO2", "is_correct": true},
         {"text": "H2O", "is_correct": false},
         {"text": "O2", "is_correct": false},
-        {"text": "CH4", "is_correct": false}
+        {"text": "CH4", "is_correct": false},
+        {"text": "CO2", "is_correct": true}
       ]
     },
     {
@@ -102,9 +102,9 @@
       "theme": "Géographie",
       "level": "Collège",
       "propositions": [
-        {"text": "Mont Everest", "is_correct": true},
         {"text": "K2", "is_correct": false},
         {"text": "Kangchenjunga", "is_correct": false},
+        {"text": "Mont Everest", "is_correct": true},
         {"text": "Lhotse", "is_correct": false}
       ]
     },
