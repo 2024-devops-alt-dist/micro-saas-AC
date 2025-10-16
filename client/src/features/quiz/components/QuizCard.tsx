@@ -48,6 +48,8 @@ export default function QuizCard({
       {/* Réponses */}
       <div className="flex flex-col gap-7 w-80 mb-12">
         {question.propositions.map((p) => {
+          // Attribue un testId pour les tests e2e
+          const testId = p.is_correct ? "answer-correct" : "answer-wrong";
           let btnStyle = "w-full py-4 rounded-lg font-bold text-lg text-black transition";
           if (selected === p.text) {
             btnStyle += p.is_correct
@@ -59,6 +61,7 @@ export default function QuizCard({
           return (
             <button
               key={p.text}
+              data-testid={testId}
               className={btnStyle}
               style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
               disabled={!!selected}

@@ -1,6 +1,6 @@
 import './App.css'
-import Home from './pages/Home.tsx'
-import Quiz from './pages/Quiz.tsx'
+import Home from './pages/Home'
+import Quiz from './pages/Quiz'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //import { Link, useLocation } from "react-router-dom";
 
