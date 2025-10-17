@@ -6,6 +6,7 @@ import { apiFetch } from '../services/api.tsx';
 //import quizpilot from '../assets/quizpilot.gif'
 import Title from '../components/Title.tsx';
 import AuthForm from '../features/auth/components/AuthForm.tsx';
+import BottomNav from '../components/BottomNav.jsx';
 
 
 type Level = {
@@ -73,7 +74,7 @@ function Home() {
       
 
       </div>
-
+     <BottomNav />
       </div>
       
   )
