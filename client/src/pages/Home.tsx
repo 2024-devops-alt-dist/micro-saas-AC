@@ -35,7 +35,7 @@ function Home() {
     <div>
       <Title />
       {/* <h1><img src={quizpilot} alt="QuizPilot" className="flex justify-center items-center w-full" /></h1> */}
-      <p className="mt-2 text-lg">Fais décoller tes révisions !</p>
+      <p className="mt-2 text-lg">Fais décoller tes révisions Hugo !</p>
       <ul>
         {levels.map((level: Level) => (
           <li key={level.id}>{level.name}</li>
