@@ -1,9 +1,23 @@
 
+## badge 
+[![CI](https://github.com/SIMPLON-PROJECT-RNCP/projet_rncp/actions/workflows/ci.yml/badge.svg)](https://github.com/SIMPLON-PROJECT-RNCP/projet_rncp/actions/workflows/ci.yml)
+
+### ce que fait la pipeline CI
+- Installe les dépendances pour le backend (Django) et le frontend (React)
+- Effectue un audit de sécurité des dépendances pour les deux parties
+- Analyse le code backend avec Pylint pour détecter les erreurs et les problèmes de style
+- Vérifie le formatage du code backend avec Black
+- Analyse le code frontend avec ESLint pour détecter les erreurs et les problèmes de style
+
+
+# QuizPilot
+
 ## 🎯 Concept
 
 **QuizPilot** est une application Micro-SaaS de quiz éducatif, leur permettant générer des quiz. Le but ? Réviser les matières scolaires tout en s'amusant grâce à une interface simple et ludique.
 
 ---
+
 
 ## ✨ Fonctionnalités
 
@@ -29,10 +43,10 @@
 | Côté        | Technologie            |
 |-------------|------------------------|
 | Frontend    | REACT Tailwind CSS     |
-| Backend     | Symfony (PHP 8+)       |
+| Backend     | Django (Python 3.11+)  |
 | Base de données | PostgreSQL         |
 | Environnement | Docker               |
-| Autres      | API externe de quiz (si utilisée) |
+| agent IA      | n8n                  |
 
 
 ## 📎 Livrables
@@ -62,6 +76,9 @@
 │   ├── manage.py
 │   ├── requirements.txt
 │   └── settings.py
+│   └── Dockerfile
+
+
 ├── client
 │   ├── public
 │   └── src
@@ -69,9 +86,11 @@
 │       ├── pages
 │       ├── App.js
 │       └── index.js
+│   └── Dockerfile
+│   └── package.json
+│   └── package-lock.json
 ├── .gitignore
 ├── docker-compose.yml
-├── Dockerfile
 ├── README.md
 └── tailwind.config.js
 ``` 

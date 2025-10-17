@@ -1,0 +1,124 @@
+{
+  "quiz": [
+    {
+      "id": 1,
+      "question": "Quelle est la capitale de la France ?",
+      "theme": "Géographie",
+      "level": "Collège",
+      "propositions": [
+        {"text": "Paris", "is_correct": true},
+        {"text": "Lyon", "is_correct": false},
+        {"text": "Marseille", "is_correct": false},
+        {"text": "Bordeaux", "is_correct": false}
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Qui a écrit 'Les Misérables' ?",
+      "theme": "Littérature",
+      "level": "Lycée",
+      "propositions": [
+        {"text": "Émile Zola", "is_correct": false},
+        {"text": "Victor Hugo", "is_correct": true},
+        {"text": "Gustave Flaubert", "is_correct": false},
+        {"text": "Honoré de Balzac", "is_correct": false}
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Quelle est la formule chimique de l'eau ?",
+      "theme": "Sciences",
+      "level": "Collège",
+      "propositions": [
+        {"text": "CO2", "is_correct": false},
+        {"text": "O2", "is_correct": false},
+        {"text": "H2O", "is_correct": true},
+        {"text": "NaCl", "is_correct": false}
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Quel est le plus grand océan du monde ?",
+      "theme": "Géographie",
+      "level": "Collège",
+      "propositions": [
+        {"text": "Océan Atlantique", "is_correct": false},
+        {"text": "Océan Indien", "is_correct": false},
+        {"text": "Océan Arctique", "is_correct": false},
+        {"text": "Océan Pacifique", "is_correct": true}
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Qui a peint la Joconde ?",
+      "theme": "Art",
+      "level": "Lycée",
+      "propositions": [
+        {"text": "Raphaël", "is_correct": false},
+        {"text": "Léonard de Vinci", "is_correct": true},
+        {"text": "Michel-Ange", "is_correct": false},
+        {"text": "Donatello", "is_correct": false}
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Quelle est la capitale de l'Allemagne ?",
+      "theme": "Géographie",
+      "level": "Collège",
+      "propositions": [
+        {"text": "Berlin", "is_correct": true},
+        {"text": "Munich", "is_correct": false},
+        {"text": "Francfort", "is_correct": false},
+        {"text": "Hambourg", "is_correct": false}
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Qui a écrit 'Roméo et Juliette' ?",
+      "theme": "Littérature",
+      "level": "Lycée",
+      "propositions": [
+        {"text": "Charles Dickens", "is_correct": false},
+        {"text": "Jane Austen", "is_correct": false},
+        {"text": "William Shakespeare", "is_correct": true},
+        {"text": "Mark Twain", "is_correct": false}
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Quelle est la formule chimique du dioxyde de carbone ?",
+      "theme": "Sciences",
+      "level": "Collège",
+      "propositions": [
+        {"text": "H2O", "is_correct": false},
+        {"text": "O2", "is_correct": false},
+        {"text": "CH4", "is_correct": false},
+        {"text": "CO2", "is_correct": true}
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Quel est le plus haut sommet du monde ?",
+      "theme": "Géographie",
+      "level": "Collège",
+      "propositions": [
+        {"text": "K2", "is_correct": false},
+        {"text": "Kangchenjunga", "is_correct": false},
+        {"text": "Mont Everest", "is_correct": true},
+        {"text": "Lhotse", "is_correct": false}
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Qui a peint 'La Nuit étoilée' ?",
+      "theme": "Art",
+      "level": "Lycée",
+      "propositions": [
+        {"text": "Vincent van Gogh", "is_correct": true},
+        {"text": "Pablo Picasso", "is_correct": false},
+        {"text": "Claude Monet", "is_correct": false},
+        {"text": "Salvador Dalí", "is_correct": false}      
+      ]
+    }  
+  ]
+}

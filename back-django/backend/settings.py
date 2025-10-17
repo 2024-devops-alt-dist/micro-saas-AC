@@ -1,5 +1,5 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,7 +17,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 # DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 # ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS","127.0.0.1").split(",")
 
 
@@ -46,6 +46,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+<<<<<<< HEAD
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://51.38.186.158:5173",
@@ -54,6 +55,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://quizpilot-rouge.vercel.app",
 
 ]
+=======
+
+CORS_ALLOWED_ORIGINS = os.getenv(
+    "CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000"
+).split(",")
+>>>>>>> 07ed5ad90f3f0aa3ebf33882795660930eaf59f0
 
 
 ROOT_URLCONF = "backend.urls"

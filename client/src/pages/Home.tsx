@@ -5,7 +5,9 @@ import {getLevels} from '../services/api.tsx'
 import { apiFetch } from '../services/api.tsx';
 //import quizpilot from '../assets/quizpilot.gif'
 import Title from '../components/Title.tsx';
-import AuthForm from '../components/AuthForm.tsx';
+import AuthForm from '../features/auth/components/AuthForm.tsx';
+import BottomNav from '../components/BottomNav.jsx';
+
 
 type Level = {
   id: string | number;
@@ -35,7 +37,12 @@ function Home() {
     <div>
       <Title />
       {/* <h1><img src={quizpilot} alt="QuizPilot" className="flex justify-center items-center w-full" /></h1> */}
+<<<<<<< HEAD
       <p className="mt-2 text-lg">Fais décoller tes révisions Hugo !</p>
+=======
+      <p className="mt-2 text-lg">Fais décoller tes révisions !</p>
+      
+>>>>>>> 07ed5ad90f3f0aa3ebf33882795660930eaf59f0
       <ul>
         {levels.map((level: Level) => (
           <li key={level.id}>{level.name}</li>
@@ -48,7 +55,7 @@ function Home() {
           onClick={testApiConnection}
 
         >
-          Tester la connexion à l'API
+          Tester la connexion à l'APi coucou le bouton
         </Button>
         {apiResponse && (
           <div className="mt-4 p-4 border rounded">
@@ -66,9 +73,12 @@ function Home() {
 
       <div className="mt-8">
         <AuthForm />
+        <div className="mt-8">
+        </div>
+      
 
       </div>
-
+     <BottomNav />
       </div>
       
   )

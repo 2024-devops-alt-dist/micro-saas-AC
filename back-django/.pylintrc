@@ -1,0 +1,26 @@
+[MASTER]
+disable=
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    R0903,  # too-few-public-methods
+    E1101,  # no-member (Django models)
+    W0611,  # unused-import
+    C0411,  # wrong-import-order
+    C0412,  # ungrouped-imports
+    C0103,  # invalid-name (for migrations)
+    R0801,  # duplicate-code
+    W0613,  # unused-argument
+    C0415   # import-outside-toplevel
+
+[VARIABLES]
+ignored-argument-names=request|args|kwargs|_
+
+[DESIGN]
+min-public-methods=0
+
+[BASIC]
+good-names=i,j,k,e,x,y,id,pk,_
+
+[TYPECHECK]
+generated-members=objects,DoesNotExist,MultipleObjectsReturned,id,pk

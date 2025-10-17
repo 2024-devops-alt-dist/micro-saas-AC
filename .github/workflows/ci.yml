@@ -1,0 +1,111 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend:
+    name: "Frontend CI"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Security audit
+        run: npm audit --audit-level=moderate
+      - name: Run linter
+        run: npm run lint
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+  backend:
+    name: "Backend CI"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: back-django
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upgrade pip to latest version
+        run: python -m pip install --upgrade pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Security audit (ignore pip vulnerability)
+        run: pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph
+
+      - name: Lint code with pylint
+        run: pylint .
+
+      - name: Check code format with black
+        run: black --check .
+
+      - name: Check import sorting with isort
+        run: isort . --check-only
+
+      - name: Run Django tests
+        run: python manage.py test
+
+      - name: Build application
+        run: echo "No build step needed"
+
+  docker:
+    name: "Docker Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint frontend Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: client/Dockerfile
+
+      - name: Lint backend Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: back-django/Dockerfile
+
+      - name: Build frontend image
+        run: docker build -f client/Dockerfile -t frontend:ci client
+
+      - name: Build backend image
+        run: docker build -f back-django/Dockerfile -t backend:ci back-django
+
+      - name: Test frontend container
+        run: docker run --rm frontend:ci echo "Frontend OK"
+
+      - name: Test backend container
+        run: docker run --rm backend:ci echo "Backend OK"
