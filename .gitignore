@@ -77,3 +77,6 @@ dist-ssr
 # ====================
 .DS_Store
 Thumbs.db
+back-django/env/
+back-django/backend/settings.py.bak
+*.bak
