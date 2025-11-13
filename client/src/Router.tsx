@@ -1,5 +1,7 @@
 import Home from "./pages/Home";
 import Quiz from "./pages/Quiz";
+import GenerateQuizView from "./pages/GenerateQuizView";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -10,6 +12,10 @@ const router = createBrowserRouter([
   {
     path: "/quiz",
     element: <Quiz />,
+  },
+  {
+    path: "/generate-quiz",
+    element: <GenerateQuizView />,
   },
 ]);
 

@@ -1,9 +1,9 @@
 
+
 type Proposition = {
   text: string;
   is_correct: boolean;
 };
-
 type Question = {
   id: number;
   question: string;
@@ -22,7 +22,7 @@ type Props = {
   disableNext?: boolean;
 };
 
-export default function QuizCard({
+export default function QuizCardView({
   question,
   selected,
   onSelect,
@@ -31,14 +31,12 @@ export default function QuizCard({
   disablePrev = false,
   disableNext = false,
 }: Props) {
-
-
   const handleClick = (p: Proposition) => {
     onSelect?.(p.text);
   };
 
   return (
-  <div className="min-h-screen flex flex-col items-center justify-center ">
+    <div className="min-h-screen flex flex-col items-center justify-center ">
       {/* Question */}
       <div className="bg-gray-800 rounded-lg shadow-lg p-8 mb-8 w-80">
         <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "Montserrat, Arial, sans-serif" }}>
@@ -46,21 +44,19 @@ export default function QuizCard({
         </h2>
       </div>
       {/* Réponses */}
+
       <div className="flex flex-col gap-7 w-80 mb-12">
-        {question.propositions.map((p) => {
-          // Attribue un testId pour les tests e2e
+        {question.propositions.map((p, idx) => {
           const testId = p.is_correct ? "answer-correct" : "answer-wrong";
           let btnStyle = "w-full py-4 rounded-lg font-bold text-lg text-black transition";
           if (selected === p.text) {
-            btnStyle += p.is_correct
-              ? " bg-green-400"
-              : " bg-red-400";
+            btnStyle += p.is_correct ? " bg-green-400" : " bg-red-400";
           } else {
             btnStyle += " bg-yellow-200";
           }
           return (
             <button
-              key={p.text}
+              key={`${idx}-${p.text}`}
               data-testid={testId}
               className={btnStyle}
               style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
@@ -73,7 +69,7 @@ export default function QuizCard({
         })}
       </div>
 
-      {/* Navigation */}
+        {/* Navigation */}
       <div className="flex gap-7 mt-2">
         <button
           onClick={onPrev}
