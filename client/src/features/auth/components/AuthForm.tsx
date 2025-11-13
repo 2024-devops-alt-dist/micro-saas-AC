@@ -1,39 +1,49 @@
 import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import { useState } from "react";
 
 
 
 function AuthForm() {
+  const [showPassword, setShowPassword] = useState(false);
     
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen ">
-        <h2>Plus qu'un quiz, un plan de vol vers la réussite</h2>
-      <form className="border border-gray-300 shadow-md rounded-lg px-8 py-6 w-full max-w-sm flex flex-col gap-4">
+    <div className="flex flex-col items-center justify-center min-h-screen">
+        <h2 className="text-3xl">Plus qu'un quiz, un plan de vol vers la réussite</h2>
+      <form className=" rounded-lg px-8 py-6 w-full max-w-sm flex flex-col gap-4">
        <InputField 
        type="text" 
        placeholder="Email"
-       className="border rounded px-3 py-2 placeholder-gray-400"
+       className="border rounded-xl px-3 py-2 placeholder-gray-400 text-[#1A1F26] shadow-md"
        id="email" />
         <div className="flex justify-end  text-shadow-white">
           <a href="#" className="text-sm text-white hover:underline">Mot de passe oublié ?</a>
         </div>
         <div className="relative">
           <InputField
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Mot de passe" 
+            className="border rounded-xl px-3 py-2 w-full placeholder-gray-400 text-[#1A1F26] shadow-md"
             id="password"
           />
-          <a href="#" className="absolute right-3 top-2 text-xs text-gray-500 hover:underline">Afficher</a>
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-2 text-xs text-gray-500 hover:text-gray-700 cursor-pointer"
+          >
+            {showPassword ? "Masquer" : "Afficher"}
+          </button>
         </div>
-        <label className="flex items-center gap-2 text-gray-700">
-          <input type="checkbox" className="accent-blue-500" />
+        <label className="flex justify-end  text-shadow-white gap-2 items-center text-sm">
           Rester connecté
+          <input type="checkbox" className="accent-blue-500" />
         </label>
-        <button
+        <Button
           type="submit"
-          className="bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition"
+          className="bg-[#f3eb75] text-[#1A1F26] font-semibold py-2 rounded hover:bg-yellow-400 transition"
         >
           Connexion
-        </button>
+        </Button>
       </form>
       <p className="mt-4 text-gray-700">
         Pas encore de compte ? <a href="#" className="text-blue-500 hover:underline">Créer un compte</a>

@@ -44,7 +44,7 @@ const Title = () => {
       <button
         id="reloadBtn"
         onClick={animateText}
-        className="mt-5 px-5 py-2 text-lg bg-[#FDDC0D] rounded-lg cursor-pointer font-skyfont"
+        className="mt-5 px-5 py-2 text-lg bg-[#f3eb75] rounded-lg cursor-pointer font-skyfont text-[#1A1F26]"
       >
         Encore !!!
       </button>

@@ -4,12 +4,13 @@ type ButtonProps = {
   onClick?: () => void;
   children: React.ReactNode;
   className?: string;
+  type?: "button" | "submit" | "reset";
 };
 
-function Button({ onClick, children, className }: ButtonProps) {
+function Button({ onClick, children, className, type = "button" }: ButtonProps) {
   return (
-    <button className={className} onClick={onClick}>
-      {children}
+    <button type={type} className={`rounded-xl shadow-md cursor-pointer ${className}`} onClick={onClick}>
+    {children}
     </button>
   );
 }

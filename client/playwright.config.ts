@@ -9,6 +9,12 @@ import { defineConfig, devices } from '@playwright/test';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
+ * Minimal declaration for the Node `process` global so TypeScript doesn't
+ * require @types/node for this config file.
+ */
+declare const process: { env: { CI?: string } };
+
+/**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
