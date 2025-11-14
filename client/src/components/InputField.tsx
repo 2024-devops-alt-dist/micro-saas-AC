@@ -14,7 +14,7 @@ const InputField = ({ type, placeholder, value, onChange, className, id }: Input
     value={value}
     onChange={onChange}
     id={id}
-    className={`border bg-white rounded px-3 py-2 ${className}`}
+    className={`${className}`}
   />
 );
 

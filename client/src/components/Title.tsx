@@ -33,7 +33,7 @@ const Title = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-[#1A1F26] text-[#F3EB75] ">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 ">
       <h1
         id="title"
         ref={titleRef}

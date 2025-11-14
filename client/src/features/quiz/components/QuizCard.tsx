@@ -52,14 +52,14 @@ export default function QuizCardView({
           if (selected === p.text) {
             btnStyle += p.is_correct ? " bg-green-400" : " bg-red-400";
           } else {
-            btnStyle += " bg-yellow-200";
+            btnStyle += " bg-yellow-300 hover:bg-yellow-400 cursor-pointer";
           }
           return (
             <button
               key={`${idx}-${p.text}`}
               data-testid={testId}
               className={btnStyle}
-              style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
+              // style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
               disabled={!!selected}
               onClick={() => handleClick(p)}
             >
@@ -74,16 +74,16 @@ export default function QuizCardView({
         <button
           onClick={onPrev}
           disabled={disablePrev}
-          className="px-6 py-3 rounded-lg bg-yellow-200 shadow font-bold text-black text-base transition active:scale-95 disabled:opacity-50"
-          style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
+          className="px-6 py-3 rounded-lg bg-yellow-300 shadow font-bold text-black text-base transition active:scale-95 disabled:opacity-50"
+          // style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
         >
           question<br />précédente
         </button>
         <button
           onClick={onNext}
           disabled={disableNext}
-          className="px-6 py-3 rounded-lg bg-yellow-200 shadow font-bold text-black text-base transition active:scale-95 disabled:opacity-50"
-          style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
+          className="px-6 py-3 rounded-lg bg-yellow-300 shadow font-bold text-black text-base transition active:scale-95 disabled:opacity-50"
+          // style={{ fontFamily: "Montserrat, Arial, sans-serif" }}
         >
           question<br />suivante
         </button>
