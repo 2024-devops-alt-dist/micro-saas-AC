@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
+import Scan from "../../../components/Scan";
+
 //import { type ChangeEvent } from "react";
 //import useGenerateQuiz from "./useGenerateQuiz";
 //import ProgressRing from "./ProgressRing";
@@ -45,9 +47,21 @@ export default function GenerateQuiz() {
     // if (f) await uploadFile(f);
   };
 
+  const handleScanConfirm = (file: File) => {
+    // Traiter le fichier scanné ici
+    console.log("Fichier scanné:", file);
+    // Tu peux appeler ta fonction pour uploader le fichier
+    // await uploadFile(file);
+    setIsScanOpen(false);
+  };
+
   const scanModalContent = (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4 text-black">Scanner un document</h2>
+      <Scan 
+        onConfirm={handleScanConfirm}
+        onClose={() => setIsScanOpen(false)}
+      />
     </div>
   );
   
@@ -115,7 +129,7 @@ export default function GenerateQuiz() {
 
         <div className="flex items-center justify-between">
           <span className="text-white font-semibold">Scanner un document</span>
-
+            
           <Button
             type="button"
             onClick={() => setIsScanOpen(true)}

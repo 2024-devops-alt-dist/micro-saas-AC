@@ -20,7 +20,7 @@ const ModalOverlay: React.FC<ModalProps> = ({ isOpen, isClose, content }: ModalP
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 modalBack" onClick={handleModalClick}>
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
+      <div className=" p-6 rounded-lg shadow-lg max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
         {content}
         <div className="absolute top-2 right-2 cursor-pointer text-xl hover:text-gray-600" onClick={isClose}>
           ✖️
