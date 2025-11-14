@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
+import Modal from "../../../components/Modal";
 //import { type ChangeEvent } from "react";
 //import useGenerateQuiz from "./useGenerateQuiz";
 //import ProgressRing from "./ProgressRing";
@@ -23,12 +25,32 @@ export default function GenerateQuiz() {
 //   }
   // = useGenerateQuiz({ theme: THEMES[0], difficulty: DIFFICULTIES[0], questionType: QUESTION_TYPES[0] });
 
+    const [isScanOpen, setIsScanOpen] = useState(false);
+  // empêche le scroll de fond quand la modale est ouverte
+  useEffect(() => {
+    if (isScanOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    return;
+  }, [isScanOpen]);
+
   const onFileChange = async () => {
    // const f = e.target.files?.[0] ?? null;
    // setFile(f);
     // Optionally auto-upload immediately:
     // if (f) await uploadFile(f);
   };
+
+  const scanModalContent = (
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4 text-black">Scanner un document</h2>
+    </div>
+  );
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-6">
@@ -93,8 +115,10 @@ export default function GenerateQuiz() {
 
         <div className="flex items-center justify-between">
           <span className="text-white font-semibold">Scanner un document</span>
+
           <Button
             type="button"
+            onClick={() => setIsScanOpen(true)}
             // onClick={() => startScan()}
             // disabled={isGenerating}
             className="px-3 py-2 bg-yellow-300 hover:bg-yellow-400 cursor-pointer text-black rounded font-bold"
@@ -122,6 +146,7 @@ export default function GenerateQuiz() {
           {/* <button onClick={() => reset()} className="flex-1 py-2 bg-gray-700 rounded text-sm">Réinitialiser</button> */}
         </div>
       </div>
+        <Modal isOpen={isScanOpen} isClose={() => setIsScanOpen(false)} content={scanModalContent} />
     </div>
   );
 }

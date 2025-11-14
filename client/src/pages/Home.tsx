@@ -35,7 +35,6 @@ function Home() {
       <Title />
       {/* <h1><img src={quizpilot} alt="QuizPilot" className="flex justify-center items-center w-full" /></h1> */}
 
-      <p className="mt-2 text-lg font-rajdhani">Fais décoller tes révisions !</p>
 
       <ul>
         {levels.map((level: Level) => (
@@ -43,6 +42,11 @@ function Home() {
         ))}
       </ul>
 
+
+      <div className="mt-8">
+        <AuthForm />
+      </div>
+      
       <div className="mt-4 p-4 border rounded">
         <Button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -64,10 +68,6 @@ function Home() {
         {apiResponse === "error" && (
           <div className="mt-2 text-red-600 font-semibold">aie aie aie</div>
         )}
-      </div>
-
-      <div className="mt-8">
-        <AuthForm />
       </div>
 
       <BottomNav />

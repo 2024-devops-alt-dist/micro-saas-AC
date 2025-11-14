@@ -33,7 +33,7 @@ const Title = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 ">
+    <div className="h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 ">
       <h1
         id="title"
         ref={titleRef}
@@ -44,9 +44,9 @@ const Title = () => {
       <button
         id="reloadBtn"
         onClick={animateText}
-        className="mt-5 px-5 py-2 text-lg bg-[#f3eb75] rounded-lg cursor-pointer font-skyfont text-[#1A1F26]"
+        className="mt-3 px-3 py-2 text-md bg-[#f3eb75] rounded-lg cursor-pointer font-skyfont text-[#1A1F26]"
       >
-        Encore !!!
+        rejouer l'animation
       </button>
     </div>
   );
