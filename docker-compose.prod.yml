@@ -12,7 +12,7 @@ services:
       - "${PG_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./src/scripts_sql:/docker-entrypoint-initdb.d/
+      # - ./src/scripts_sql:/docker-entrypoint-initdb.d/
 
   api:
     image: ${DOCKERHUB_USERNAME}/quizpilot_api:latest
@@ -22,8 +22,8 @@ services:
       - 8000:8000
     env_file:
       - .env
-    volumes:
-      - ./back-django:/usr/src/app
+    # volumes:
+    #   - ./back-django:/usr/src/app
     depends_on:
       - postgres
 
@@ -35,8 +35,8 @@ services:
       - "3010:3000"
     env_file:
       - .env
-    volumes:
-      - ./client:/usr/src/app
+    # volumes:
+    #   - ./client:/usr/src/app
     depends_on:
       - api
 
