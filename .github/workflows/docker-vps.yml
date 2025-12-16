@@ -71,6 +71,9 @@ jobs:
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
 
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+            echo "DEBUG=False" >> .env
+
             docker stop $(docker ps -q --filter "name=^quizpilot")
             docker rm -f $(docker ps -aq --filter "name=^quizpilot")
 
