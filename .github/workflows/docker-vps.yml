@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          script: mkdir -p /root/quizpilot-docker
+          script: mkdir -p /home/debian/quizpilot-docker
 
       - name: Copy docker-compose.prod.yml to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -54,7 +54,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           source: "docker-compose.prod.yml"
-          target: "/root/quizpilot-docker"
+          target: "/home/debian/quizpilot-docker"
 
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -63,7 +63,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            cd /root/quizpilot-docker
+            cd /home/debian/quizpilot-docker
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
