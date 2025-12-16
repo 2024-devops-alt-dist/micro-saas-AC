@@ -36,7 +36,7 @@ services:
     container_name: quizpilot_client
     restart: always
     ports:
-      - "3000:3000"
+      - "3010:3000"
     env_file:
       - .env
     volumes:

@@ -65,5 +65,7 @@ jobs:
           script: |
             cd /home/debian/quizpilot-docker
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            docker stop $(docker ps -q --filter "name=^quizpilot")
+            docker rm -f $(docker ps -aq --filter "name=^quizpilot")
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
