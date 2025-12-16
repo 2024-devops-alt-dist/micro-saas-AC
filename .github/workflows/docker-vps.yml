@@ -56,7 +56,7 @@ jobs:
           target: "/root/quizpilot-docker"
 
       - name: Deploy on VPS
-        uses: wslk/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
