@@ -24,6 +24,8 @@ FROM nginx:stable-alpine
 
 # Copier le résultat du build (dossier dist) vers le dossier public de Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
+# Copier le fichier de configuration nginx personnalisé pour gérer le SPA (404)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exposer le port 3000 pour le dev
 #EXPOSE 3000
