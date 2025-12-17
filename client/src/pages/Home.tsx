@@ -46,13 +46,13 @@ function Home() {
       <div className="mt-8">
         <AuthForm />
       </div>
-      
+
       <div className="mt-4 p-4 border rounded">
         <Button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={testApiConnection}
         >
-          Tester la connexion à l'APi coucou le bouton
+          Tester la connexion à l'API
         </Button>
 
         {apiResponse && (
