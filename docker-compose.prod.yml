@@ -1,7 +1,7 @@
 # Use postgres/example user/password credentials
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:18
     container_name: quizpilot_db
     restart: always
     environment:
@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${PG_PORT:-5438}:5432"
+      - "${PG_PORT:-5435}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # - ./src/scripts_sql:/docker-entrypoint-initdb.d/
