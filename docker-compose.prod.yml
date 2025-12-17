@@ -1,18 +1,18 @@
 # Use postgres/example user/password credentials
 services:
-  postgres:
-    image: postgres:17
-    container_name: quizpilot_db
-    restart: always
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "${PG_PORT:-5435}:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      # - ./src/scripts_sql:/docker-entrypoint-initdb.d/
+  # postgres:
+  #   image: postgres:17
+  #   container_name: quizpilot_db
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: ${DB_NAME}
+  #     POSTGRES_USER: ${DB_USER}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #   ports:
+  #     - "${PG_PORT:-5435}:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     # - ./src/scripts_sql:/docker-entrypoint-initdb.d/
 
   api:
     image: ${DOCKERHUB_USERNAME}/quizpilot_api:latest
@@ -24,8 +24,8 @@ services:
       - .env
     # volumes:
     #   - ./back-django:/usr/src/app
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
 
   client:
     image: ${DOCKERHUB_USERNAME}/quizpilot_client:latest
@@ -40,5 +40,5 @@ services:
     depends_on:
       - api
 
-volumes:
-  postgres_data:
+# volumes:
+#   postgres_data:

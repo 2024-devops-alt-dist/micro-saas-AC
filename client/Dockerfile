@@ -31,7 +31,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 #EXPOSE 3000
 EXPOSE 80
 
-# Lancer le serveur de développement
+# Lancer le serveur de développement 
 #CMD ["npm", "run", "dev"]
 CMD ["nginx", "-g", "daemon off;"]
 
