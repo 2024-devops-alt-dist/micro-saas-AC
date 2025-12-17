@@ -85,3 +85,9 @@ jobs:
 
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
+
+            sleep 10
+
+            docker exec quizpilot_api python manage.py migrate
+
+
