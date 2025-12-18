@@ -90,6 +90,5 @@ jobs:
 
             sleep 10
 
-            docker exec quizpilot_api python manage.py migrate
 
 
