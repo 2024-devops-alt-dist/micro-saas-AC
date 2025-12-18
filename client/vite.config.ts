@@ -9,7 +9,13 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3005,
-    strictPort: true
-    }
-  })
-  
+    strictPort: true,
+    proxy: {
+      '/n8n': {
+        target: 'http://51.38.186.158:5678',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/n8n/, ''),
+      },
+    },
+  },
+})

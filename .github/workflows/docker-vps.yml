@@ -33,6 +33,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/quizpilot_client:latest
           build-args: |
            VITE_API_URL=${{ secrets.VITE_API_URL }}
+           VITE_N8N_WEBHOOK_URL=${{ secrets.VITE_N8N_WEBHOOK_URL }}
 
   deploy:
     needs: build-and-push
