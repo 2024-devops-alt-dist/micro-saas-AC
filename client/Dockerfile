@@ -5,8 +5,10 @@ WORKDIR /app
 
 # Arguments de build
 ARG VITE_API_URL
+ARG VITE_N8N_WEBHOOK_URL
 # transformé en variable d'environnement
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_N8N_WEBHOOK_URL=$VITE_N8N_WEBHOOK_URL
 
 # Copier package.json et package-lock.json pour installer les dépendances
 COPY package.json package-lock.json ./
