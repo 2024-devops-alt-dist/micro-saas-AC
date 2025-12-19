@@ -8,7 +8,7 @@
 //  // const [selected, setSelected] = useState<string | null>(null);
 //   const [answers, setAnswers] = useState<(string | undefined)[]>(Array(mockQuiz.quiz.length).fill(undefined));
 //   const [score, setScore] = useState(0);
-  
+
 //   const questions = mockQuiz.quiz;
 //   const question = questions[currentIdx];
 
@@ -21,7 +21,7 @@
 //   // console.log('Propositions:', question.propositions);
 //   // console.log('proposition correcte:', question.propositions.find(p => p.is_correct)?.text);
 //   // État pour l'index de la question courante
-  
+
 
 //     // Fonction appelée quand on répond à une question
 //   const handleSelect = (answer: string) => {
@@ -82,14 +82,19 @@
 // }
 // export default Quiz;
 
+import { useLocation } from "react-router-dom";
 import QuizCard from "../features/quiz/components/QuizCard";
 import QuizResult from "../features/quiz/components/QuizResult";
 import mockQuiz from "../features/quiz/data/mockQuiz.json";
 import UseQuiz from "../features/quiz/components/UseQuiz";
 
 function QuizPage() {
+
+  const location = useLocation();
+  const quizDataFromNavigation = location.state?.quizData;
+  const dataToUse = quizDataFromNavigation || mockQuiz.quiz;
   const { question, currentIdx, answers, score, isFinished, selectAnswer, prev, next, questions } =
-    UseQuiz(mockQuiz.quiz);
+    UseQuiz(dataToUse);
 
   if (isFinished) {
     return <QuizResult score={score} answers={answers} questions={questions} />;

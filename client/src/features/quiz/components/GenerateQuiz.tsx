@@ -3,6 +3,7 @@ import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
 import Scan from "../../../components/Scan";
 import { generateQuizFromFile } from "../../../services/n8nServices";
+import { useNavigate } from "react-router-dom";
 
 //import { type ChangeEvent } from "react";
 //import useGenerateQuiz from "./useGenerateQuiz";
@@ -28,6 +29,7 @@ export default function GenerateQuiz() {
   //   }
   // = useGenerateQuiz({ theme: THEMES[0], difficulty: DIFFICULTIES[0], questionType: QUESTION_TYPES[0] });
 
+  const navigate = useNavigate();
   const [isScanOpen, setIsScanOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -81,6 +83,11 @@ export default function GenerateQuiz() {
       const result = await generateQuizFromFile(file);
       console.log("Resultat du quiz généré:", result);
       setSuccess("Quiz généré avec succès");
+      if (result && result.quiz) {
+        // On redirige vers la page quiz en passant les données réelles
+
+        navigate("/quiz", { state: { quizData: result.quiz } });
+      }
     } catch (error) {
       setError("Erreur lors de la génération du quiz");
     } finally {
