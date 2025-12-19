@@ -5,6 +5,7 @@ import Scan from "../../../components/Scan";
 import { generateQuizFromFile } from "../../../services/n8nServices";
 import { useNavigate } from "react-router-dom";
 
+
 //import { type ChangeEvent } from "react";
 //import useGenerateQuiz from "./useGenerateQuiz";
 //import ProgressRing from "./ProgressRing";
@@ -79,16 +80,39 @@ export default function GenerateQuiz() {
     setIsGenerating(true);
     setError(null);
     setSuccess(null);
-    try {
-      const result = await generateQuizFromFile(file);
-      console.log("Resultat du quiz généré:", result);
-      setSuccess("Quiz généré avec succès");
-      if (result && result.quiz) {
-        // On redirige vers la page quiz en passant les données réelles
+    // try {
+    //   const result = await generateQuizFromFile(file);
+    //   console.log("Resultat du quiz généré (result):", result);
+    //   console.log("Resultat du quiz généré (result.quiz):", result.quiz);
+    //   setSuccess("Quiz généré avec succès");
+    //   if (result && result.quiz) {
+    //     // On redirige vers la page quiz en passant les données réelles
 
+    //     navigate("/quiz", { state: { quizData: result.quiz } });
+    //   }
+    // } catch (error) {
+    try {
+      const response = await generateQuizFromFile(file);
+      console.log("DEBUG - Réponse brute:", response);
+
+      // 1. On gère le cas où n8n renvoie un tableau [ { quiz: ... } ]
+      const result = Array.isArray(response) ? response[0] : response;
+
+      // 2. On vérifie si n8n n'a pas renvoyé une erreur (format JSON d'erreur n8n)
+      if (result.errorMessage || result.error) {
+        setError(`Erreur n8n: ${result.errorMessage || result.error}`);
+        return;
+      }
+
+      // 3. On vérifie si on a bien nos questions
+      if (result && result.quiz) {
+        setSuccess("Quiz généré avec succès ! Redirection...");
         navigate("/quiz", { state: { quizData: result.quiz } });
+      } else {
+        setError("Format de réponse inconnu (pas de clé 'quiz')");
       }
     } catch (error) {
+      console.error("DEBUG - Erreur lors de la génération du quiz:", error);
       setError("Erreur lors de la génération du quiz");
     } finally {
       setIsGenerating(false);
