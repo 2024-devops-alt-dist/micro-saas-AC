@@ -26,6 +26,7 @@ export default function ScanModal({ onConfirm, onClose, maxWidth = 1280 }: Props
 
   const dataURLtoFile = (dataurl: string, filename = "scan.jpg") => {
     const arr = dataurl.split(",");
+    if (arr.length < 2) return null; // Sécurité si l'URL est malformée
     const mime = arr[0].match(/:(.*?);/)?.[1] ?? "image/jpeg";
     const bstr = atob(arr[1]);
     let n = bstr.length;
@@ -38,9 +39,22 @@ export default function ScanModal({ onConfirm, onClose, maxWidth = 1280 }: Props
     if (!imgSrc) return;
     setIsProcessing(true);
     try {
-      // Convertir dataURL en File et envoyer
-      const file = dataURLtoFile(imgSrc, "scan.jpg");
-      onConfirm(file);
+      let file: File | null = null;
+      // On vérifie le type d'URL pour choisir la bonne méthode de conversion
+      if (imgSrc.startsWith("data:")) {
+        // C'est une capture Webcam (base64)
+        file = dataURLtoFile(imgSrc, "scan.jpg");
+      } else if (imgSrc.startsWith("blob:")) {
+        // C'est un import de fichier (blob URL)
+        const response = await fetch(imgSrc);
+        const blob = await response.blob();
+        file = new File([blob], "scan.jpg", { type: blob.type });
+      }
+      if (file) {
+        onConfirm(file);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la préparation du fichier:", error);
     } finally {
       setIsProcessing(false);
     }
