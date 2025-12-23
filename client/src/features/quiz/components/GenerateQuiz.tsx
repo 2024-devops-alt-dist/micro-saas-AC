@@ -10,9 +10,9 @@ import { useNavigate } from "react-router-dom";
 //import useGenerateQuiz from "./useGenerateQuiz";
 //import ProgressRing from "./ProgressRing";
 
-const THEMES = ["Général", "Histoire", "Maths", "Science"];
+const THEMES = ["Histoire", "Maths", "Science", "Technologie et Sciences numériques", "Géographie", "Biologie", "Physique Chimie", "Langues Vivantes", "Economie et Gestion", "Sciences de la Vie et de la Terre", "Autres"];
 const DIFFICULTIES = ["Facile", "Intermédiaire", "Difficile"];
-const QUESTION_TYPES = ["QCM", "Vrai/Faux", "Ouverte"];
+//const QUESTION_TYPES = ["QCM", "Vrai/Faux", "Ouverte"];
 
 export default function GenerateQuiz() {
   //   const {
@@ -39,7 +39,7 @@ export default function GenerateQuiz() {
   const [options, setOptions] = useState({
     theme: THEMES[0],
     difficulty: DIFFICULTIES[0],
-    questionType: QUESTION_TYPES[0],
+    //questionType: QUESTION_TYPES[0],
   });
 
   // empêche le scroll de fond quand la modale est ouverte
@@ -92,7 +92,7 @@ export default function GenerateQuiz() {
     //   }
     // } catch (error) {
     try {
-      const response = await generateQuizFromFile(file);
+      const response = await generateQuizFromFile(file, options);
       console.log("DEBUG - Réponse brute:", response);
 
       // 1. On gère le cas où n8n renvoie un tableau [ { quiz: ... } ]
@@ -156,7 +156,7 @@ export default function GenerateQuiz() {
             </option>
           ))}
         </select>
-
+        {/* 
         <select
           value={options.questionType}
           onChange={(e) => setOptions({ ...options, questionType: e.target.value })}
@@ -167,7 +167,7 @@ export default function GenerateQuiz() {
               {q}
             </option>
           ))}
-        </select>
+        </select> */}
 
         <div className="flex items-center gap-3">
           <label htmlFor="file-input" className="flex-1 cursor-pointer">

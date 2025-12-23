@@ -29,7 +29,7 @@ function Collapse({ title, children }: CollapseProps) {
         </span>
       </button>
       <div
-        className={`transition-all duration-300 ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} px-4`}
+        className={`transition-all duration-300 ${isOpen ? "max-h-[100%] opacity-100" : "max-h-0 opacity-0"} px-4`}
         style={{ borderTop: isOpen ? "2px solid #E6DE52" : "0px" }}
       >
         {isOpen && (
