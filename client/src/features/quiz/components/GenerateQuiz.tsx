@@ -4,7 +4,7 @@ import Modal from "../../../components/Modal";
 import Scan from "../../../components/Scan";
 import { generateQuizFromFile } from "../../../services/n8nServices";
 import { useNavigate } from "react-router-dom";
-
+import jsPDF from "jspdf";
 
 //import { type ChangeEvent } from "react";
 //import useGenerateQuiz from "./useGenerateQuiz";
@@ -54,6 +54,7 @@ export default function GenerateQuiz() {
     return;
   }, [isScanOpen]);
 
+  // on gère l upload du fichier pdf
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Fichier selectionné:", e.target.files);
     const f = e.target.files?.[0] ?? null;
@@ -63,13 +64,56 @@ export default function GenerateQuiz() {
     setSuccess(null);
   };
 
-  const handleScanConfirm = (scannedFile: File) => {
-    // Traiter le fichier scanné ici
+  // on gère le scan du document img
+  const imageToPdf = async (imageFile: File): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const img = new Image();
+      img.src = reader.result as string;
+
+      img.onload = () => {
+        const pdf = new jsPDF({
+          orientation: img.width > img.height ? "landscape" : "portrait",
+          unit: "px",
+          format: [img.width, img.height],
+        });
+
+        // Support JPG + PNG automatiquement
+        const imageType = imageFile.type.includes("png") ? "PNG" : "JPEG";
+
+        pdf.addImage(img, imageType, 0, 0, img.width, img.height);
+
+        const pdfBlob = pdf.output("blob");
+        const pdfFile = new File([pdfBlob], "scan.pdf", {
+          type: "application/pdf",
+        });
+
+        resolve(pdfFile);
+      };
+
+      img.onerror = reject;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(imageFile);
+  });
+};
+
+  const handleScanConfirm = async (scannedFile: File) => {
     console.log("Fichier scanné:", scannedFile);
-    setFile(scannedFile);
+   try {
+    const pdfFile = await imageToPdf(scannedFile);
+    setFile(pdfFile); // ← on stocke le PDF
+    setSuccess("Scan converti en PDF avec succès");
     setError(null);
-    setSuccess(null);
-    setIsScanOpen(false);
+  } catch (err) {
+    console.error(err);
+    setError("Erreur lors de la conversion du scan en PDF");
+  }
+
+  setIsScanOpen(false);
   };
 
   const handleGenerateQuiz = async () => {
