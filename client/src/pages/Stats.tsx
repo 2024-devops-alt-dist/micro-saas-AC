@@ -1,4 +1,4 @@
-import BottomNav from '../components/BottomNav.jsx';
+import BottomNav from '../components/BottomNav';
 
 function Stats() {
   return (
