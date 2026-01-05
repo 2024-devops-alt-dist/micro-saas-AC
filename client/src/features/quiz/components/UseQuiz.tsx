@@ -23,6 +23,7 @@ export default function useQuiz(questions: Question[], initialIndex = 0) {
   const question = questions[currentIdx];
   const isFinished = currentIdx >= questions.length;
 
+
   function selectAnswer(answer: string) {
     if (isFinished) return;
     if (answers[currentIdx]) return; // déjà répondu

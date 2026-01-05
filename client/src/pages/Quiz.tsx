@@ -87,6 +87,7 @@ import QuizCard from "../features/quiz/components/QuizCard";
 import QuizResult from "../features/quiz/components/QuizResult";
 import mockQuiz from "../features/quiz/data/mockQuiz.json";
 import UseQuiz from "../features/quiz/components/UseQuiz";
+import BottomNav from "../components/BottomNav";
 
 function QuizPage() {
 
@@ -101,16 +102,20 @@ function QuizPage() {
   }
 
   return (
-    <QuizCard
-      question={question}
-      selected={answers[currentIdx] ?? null}
-      onSelect={(a) => { selectAnswer(a); }}
-      onPrev={prev}
-      onNext={next}
-      disablePrev={currentIdx === 0}
-      disableNext={!answers[currentIdx]}
-    />
+    <div>
+      <QuizCard
+        question={question}
+        selected={answers[currentIdx] ?? null}
+        onSelect={(a) => { selectAnswer(a); }}
+        onPrev={prev}
+        onNext={next}
+        disablePrev={currentIdx === 0}
+        disableNext={!answers[currentIdx]}
+      />
+      <BottomNav />
+    </div>
   );
+
 }
 
 export default QuizPage;
