@@ -62,7 +62,7 @@ class Questions(models.Model):
         managed = False
 
     def __str__(self):
-        return f"Question: {self.text_question[:50]}"
+        return f"Question: {str(self.text_question)[:50]}"
 
 
 class Propositions(models.Model):
