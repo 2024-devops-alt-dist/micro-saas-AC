@@ -2,13 +2,13 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import generics
 
-from .models import Category, Level, Questions, Propositions
+from .models import Category, Level, Propositions, Questions
 from .serializers import (
     CategorySerializer,
     LevelSerializer,
-    UserSerializer,
-    QuestionsSerializer,
     PropositionsSerializer,
+    QuestionsSerializer,
+    UserSerializer,
 )
 
 
