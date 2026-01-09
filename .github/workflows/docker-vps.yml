@@ -1,5 +1,6 @@
 name: Build and Deploy to VPS
 
+# quand une push est faite sur la branche main
 on:
   push:
     branches:
@@ -9,15 +10,18 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      # cloner le repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # se connecter à Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # construire et pousser les images - API
       - name: Build and push API
         uses: docker/build-push-action@v6
         with:
@@ -25,6 +29,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/quizpilot_api:latest
 
+      # construire et pousser les images - Client
       - name: Build and push Client
         uses: docker/build-push-action@v6
         with:
@@ -32,16 +37,19 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/quizpilot_client:latest
           build-args: |
-           VITE_API_URL=${{ secrets.VITE_API_URL }}
-           VITE_N8N_WEBHOOK_URL=${{ secrets.VITE_N8N_WEBHOOK_URL }}
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_N8N_WEBHOOK_URL=${{ secrets.VITE_N8N_WEBHOOK_URL }}
 
   deploy:
+    # needs permet d'attendre la fin du job build-and-push avant de lancer le déploiement
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
+      # cloner le repo (à nouveau, car chaque job est isolé)
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # créer le dossier sur le VPS distant en SSH
       - name: Create directory on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -50,21 +58,31 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: mkdir -p /home/debian/quizpilot-docker
 
+      # copier le fichier docker-compose.prod.yml sur le VPS distant (toujours en ssh)
       - name: Copy docker-compose.prod.yml to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
+          # à voir : ameliorer avec avec key: ${{ secrets.VPS_SSH_KEY }} au lieu de password ?
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           source: "docker-compose.prod.yml"
           target: "/home/debian/quizpilot-docker"
 
+      # se connecter en SSH sur le VPS et lancer le déploiement
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
+          # créer le fichier .env avec les secrets, arrêter et supprimer les conteneurs existants, pull des nouvelles images, et relancer les conteneurs
+          # voir pour ajouter set-e -e pour arrêter en cas d'erreur ?
+          # voir pour ajouter helthcheck avant/après le sleep 20 ?
+          #. Si aucun conteneur ne correspond au filtre, docker stop peut échouer et bloquer le script
+          # donc voir pour ajouter :
+          # docker stop $(docker ps -q --filter "name=^quizpilot") 2>/dev/null || true
+          # docker rm -f $(docker ps -aq --filter "name=^quizpilot") 2>/dev/null || true
           script: |
             cd /home/debian/quizpilot-docker
 
@@ -93,6 +111,3 @@ jobs:
             sleep 20
 
             docker exec quizpilot_api python manage.py migrate
-
-
-

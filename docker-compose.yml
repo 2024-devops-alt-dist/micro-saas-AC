@@ -1,7 +1,7 @@
 # Use postgres/example user/password credentials
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:15
     container_name: quizpilot_db
     restart: always
     environment:
@@ -33,10 +33,14 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_N8N_WEBHOOK_URL: ${VITE_N8N_WEBHOOK_URL:-http://localhost:5678/webhook}
     container_name: quizpilot_client
     restart: always
     ports:
-      - "3010:3000"
+      - "${FRONT_PORT:-3005}:80"
+      # à supprimer si front derrière nginx ?
     env_file:
       - .env
     volumes:
@@ -44,5 +48,33 @@ services:
     depends_on:
       - api
 
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: quizpilot_n8n_local
+    restart: unless-stopped
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: quizpilot_db
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: ${N8N_DB}
+      DB_POSTGRESDB_USER: ${DB_USER}
+      DB_POSTGRESDB_PASSWORD: ${DB_PASSWORD}
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: ${N8N_USER}
+      N8N_BASIC_AUTH_PASSWORD: ${N8N_PASSWORD}
+      N8N_HOST: ${N8N_HOST}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: ${N8N_PROTOCOL}
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      GENERIC_TIMEZONE: ${TZ}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+    volumes:
+      - n8n_local_data:/home/node/.n8n
+    ports:
+      - "5678:5678"
+    depends_on:
+      - postgres
+
 volumes:
   postgres_data:
+  n8n_local_data:

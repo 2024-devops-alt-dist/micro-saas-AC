@@ -1,6 +1,7 @@
 # Utiliser node pour le développement
 FROM node:20-alpine AS build
 
+# définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
 # Arguments de build

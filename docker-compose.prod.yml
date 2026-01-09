@@ -33,12 +33,14 @@ services:
     restart: always
     ports:
       - "3010:80"
+      # à supprimer si front derrière nginx ?
     env_file:
       - .env
     # volumes:
     #   - ./client:/usr/src/app
     depends_on:
       - api
-
 # volumes:
 #   postgres_data:
+
+# pas de n8n ?

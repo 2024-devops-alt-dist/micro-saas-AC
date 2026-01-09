@@ -7,6 +7,7 @@ pre-commit:
     format-python:
       glob: "**/*.py"
       run: python -m black {staged_files}
+      # formater le code Python avec Black avant le commit
       stage_fixed: true
 
     # Frontend React
