@@ -27,4 +27,20 @@ urlpatterns = [
         views.UserRetrieveUpdateDestroyView.as_view(),
         name="user-detail",
     ),
+    path("questions/", views.QuestionsListCreateView.as_view(), name="questions-list"),
+    path(
+        "questions/<int:id>/",
+        views.QuestionsRetrieveUpdateDestroyView.as_view(),
+        name="questions-detail",
+    ),
+    path(
+        "propositions/",
+        views.PropositionsListCreateView.as_view(),
+        name="propositions-list",
+    ),
+    path(
+        "propositions/<int:id>/",
+        views.PropositionsRetrieveUpdateDestroyView.as_view(),
+        name="propositions-detail",
+    ),
 ]

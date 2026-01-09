@@ -13,6 +13,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./src/scripts_sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
 
   api:
     build:
@@ -28,6 +35,8 @@ services:
       - ./back-django:/usr/src/app
     depends_on:
       - postgres
+    networks:
+      - app_network
 
   client:
     build:
@@ -47,6 +56,8 @@ services:
       - ./client:/usr/src/app
     depends_on:
       - api
+    networks:
+      - app_network
 
   n8n:
     image: n8nio/n8n:latest
@@ -78,3 +89,7 @@ services:
 volumes:
   postgres_data:
   n8n_local_data:
+
+networks:
+  app_network:
+    driver: bridge
