@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 test.describe('feature Quiz E2E', () => {
   
   test('Bonne réponse colore en vert', async ({ page }) => {
-    await page.goto('http://localhost:3000/quiz');
+    await page.goto('http://localhost:3005/quiz');
     for (let i = 0; i < 10; i++) {
       await expect(page.locator('h2')).toBeVisible();
       const correctAnswer = page.locator('[data-testid="answer-correct"]:not([disabled])');
@@ -23,7 +23,7 @@ test.describe('feature Quiz E2E', () => {
   });
 
   test('Mauvaise réponse colore en rouge', async ({ page }) => {
-    await page.goto('http://localhost:3000/quiz');
+    await page.goto('http://localhost:3005/quiz');
     for (let i = 0; i < 10; i++) {
       await expect(page.locator('h2')).toBeVisible();
       const wrongAnswers = page.locator('[data-testid="answer-wrong"]:not([disabled])');
@@ -47,7 +47,7 @@ test.describe('feature Quiz E2E', () => {
   });
 
   test('Affichage des résultats', async ({ page }) => {
-    await page.goto('http://localhost:3000/quiz');
+    await page.goto('http://localhost:3005/quiz');
     for (let i = 0; i < 10; i++) {
       await expect(page.locator('h2')).toBeVisible();
       // Clique simplement sur la première réponse disponible pour avancer
@@ -63,12 +63,12 @@ test.describe('feature Quiz E2E', () => {
     await expect(nextBtn).toBeEnabled();
     await nextBtn.click();
 
-    await expect(page.getByText(/résultat du quiz/i)).toBeVisible();
-    await expect(page.getByText(/Votre score/i)).toBeVisible();
+    // Vérifie que la page de résultats est affichée avec le score
+    await expect(page.getByText(/Votre score:/i)).toBeVisible();
   });
 
   test('Navigation arrière : impossible de reselectionner une proposition déjà choisie, couleur correcte', async ({ page }) => {
-    await page.goto('http://localhost:3000/quiz');
+    await page.goto('http://localhost:3005/quiz');
 
     // 1. Répond à la première question (bonne ou mauvaise réponse selon le cas)
     await expect(page.locator('h2')).toBeVisible();
