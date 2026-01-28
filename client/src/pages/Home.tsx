@@ -1,25 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button.tsx';
-import { getLevels } from '../services/api.tsx';
 import { apiFetch } from '../services/api.tsx';
 import Title from '../components/Title.tsx';
 import BottomNav from '../components/BottomNav.tsx';
 import { authService } from '../features/auth/services/authService';
 
-type Level = {
-  id: string | number;
-  name: string;
-};
-
 function Home() {
-  const [levels, setLevels] = useState<Level[]>([]);
   const [apiResponse, setApiResponse] = useState<string | object | null>(null);
   const isAuthenticated = authService.isAuthenticated();
-
-  useEffect(() => {
-    getLevels().then((data: Level[]) => setLevels(data)).catch(() => setLevels([]));
-  }, []);
 
   const testApiConnection = async () => {
     try {
@@ -37,7 +26,7 @@ function Home() {
       <div className="flex flex-col items-center gap-6 mt-10 text-center">
         <h2 className="text-3xl font-bold">Bienvenue sur QuizPilot</h2>
         <p className="text-gray-400 max-w-md">
-          Préparez vos examens avec des quiz personnalisés générés par l'IA.
+          Préparez vos examens avec des quiz personnalisés générés par l'IA
         </p>
 
         {!isAuthenticated ? (
@@ -62,7 +51,7 @@ function Home() {
         )}
       </div>
 
-      <div className="mt-12">
+      {/* <div className="mt-12">
         <h3 className="text-xl font-semibold mb-4 text-center">Niveaux disponibles</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {levels.map((level: Level) => (
@@ -71,7 +60,7 @@ function Home() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-12 p-4 border border-gray-700 rounded-lg bg-gray-800/50">
         <Button

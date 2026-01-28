@@ -9,6 +9,7 @@ export const authService = {
         if (data.access) {
             localStorage.setItem("access_token", data.access);
             localStorage.setItem("refresh_token", data.refresh);
+            localStorage.setItem("username", username);
         }
         return data;
     },
@@ -23,9 +24,14 @@ export const authService = {
     logout() {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+        localStorage.removeItem("username");
     },
 
     isAuthenticated() {
         return !!localStorage.getItem("access_token");
+    },
+
+    getUsername() {
+        return localStorage.getItem("username") || "Utilisateur";
     },
 };

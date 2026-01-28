@@ -10,6 +10,12 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 3005,
     strictPort: true,
+    watch: {
+      usePolling: true,
+    },
+    hmr: {
+      clientPort: 3005,
+    },
     proxy: {
       '/n8n': {
         target: 'http://51.38.186.158:5678',
