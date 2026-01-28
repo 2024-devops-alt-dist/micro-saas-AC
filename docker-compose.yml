@@ -41,19 +41,20 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       args:
         VITE_API_URL: ${VITE_API_URL}
         VITE_N8N_WEBHOOK_URL: ${VITE_N8N_WEBHOOK_URL:-http://localhost:5678/webhook}
     container_name: quizpilot_client
     restart: always
     ports:
-      - "${FRONT_PORT:-3005}:80"
+      - "${FRONT_PORT:-3005}:3005"
       # à supprimer si front derrière nginx ?
     env_file:
       - .env
     volumes:
       - ./client:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       - api
     networks:

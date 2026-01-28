@@ -1,0 +1,20 @@
+# Utiliser node pour le développement
+FROM node:20-alpine
+
+# définir le répertoire de travail dans le conteneur
+WORKDIR /usr/src/app
+
+# Copier package.json et package-lock.json
+COPY package.json package-lock.json ./
+
+# Installer toutes les dépendances
+RUN npm install
+
+# Copier tout le code
+COPY . .
+
+# Exposer le port 3005 pour le serveur de dev Vite
+EXPOSE 3005
+
+# Lancer le serveur de développement avec support réseau externe
+CMD ["npm", "run", "dev"]

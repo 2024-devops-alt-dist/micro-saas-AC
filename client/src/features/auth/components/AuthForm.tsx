@@ -5,9 +5,13 @@ import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { authService } from "../services/authService";
 
-function AuthForm() {
+interface AuthFormProps {
+  initialIsLogin?: boolean;
+}
+
+function AuthForm({ initialIsLogin = true }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(initialIsLogin);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +41,7 @@ function AuthForm() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-6">
       <h2 className="text-3xl text-center max-w-lg mb-6">
         {isLogin
-          ? "Plus qu'un quiz, un plan de vol vers la réussite"
+          ? "Plus qu'un quiz, un plan de vol vers la réussite !"
           : "Prêt pour le décollage ? Créez votre compte"}
       </h2>
 
