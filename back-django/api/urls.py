@@ -1,10 +1,20 @@
 """URL configuration for l’API QuizPilot."""
 
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from . import views
 
 urlpatterns = [
+    # Pour échanger un identifiant/mot de passe contre un jeton (Connexion)
+    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # Pour rester connecté sans avoir à retaper son mot de passe
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # Enregistrer un nouvel utilisateur
+    path("register/", views.RegisterView.as_view(), name="auth_register"),
     path("test/", views.test_api, name="test-api"),
     path("categories/", views.CategoryListCreateView.as_view(), name="category-list"),
     path(

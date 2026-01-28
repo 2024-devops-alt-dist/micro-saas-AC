@@ -5,9 +5,18 @@ type InputFieldProps = {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  required?: boolean;
 };
 
-const InputField = ({ type, placeholder, value, onChange, className, id }: InputFieldProps) => (
+const InputField = ({
+  type,
+  placeholder,
+  value,
+  onChange,
+  className,
+  id,
+  required,
+}: InputFieldProps) => (
   <input
     type={type}
     placeholder={placeholder}
@@ -15,6 +24,7 @@ const InputField = ({ type, placeholder, value, onChange, className, id }: Input
     onChange={onChange}
     id={id}
     className={`${className}`}
+    required={required}
   />
 );
 

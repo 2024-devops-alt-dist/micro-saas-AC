@@ -29,6 +29,9 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: client
 
+      - name: Create .env file
+        run: cp .env.exemple .env
+
       - name: Start Docker services
         run: docker compose up -d
 

@@ -3,6 +3,8 @@ import Quiz from "./pages/Quiz";
 import GenerateQuizView from "./pages/GenerateQuizView";
 import Profil from "./pages/Profil";
 import Stats from "./pages/Stats";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -10,6 +12,14 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/quiz",
@@ -32,5 +42,3 @@ const router = createBrowserRouter([
 export default function Router() {
   return <RouterProvider router={router} />;
 }
-
-
