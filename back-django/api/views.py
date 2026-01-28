@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 from .models import Category, Level, Propositions, Questions
 from .serializers import (
@@ -8,8 +9,16 @@ from .serializers import (
     LevelSerializer,
     PropositionsSerializer,
     QuestionsSerializer,
+    RegisterSerializer,
     UserSerializer,
 )
+
+
+# creation d un nouveau compte
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
 
 
 def test_api(request):
@@ -18,11 +27,13 @@ def test_api(request):
     )
 
 
+# creation d une nouvelle catégorie
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
+# creation d'un nouveau niveau
 class LevelListCreateView(generics.ListCreateAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
