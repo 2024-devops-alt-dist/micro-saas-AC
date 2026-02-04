@@ -90,7 +90,7 @@ const BarChartPerThem = () => {
                     <Tooltip
                         cursor={{ fill: '#f8fafc' }}
                         contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
-                        formatter={(value: any) => [`${value ?? 0}/10`, 'Moyenne']}
+                        formatter={(value: number | string | undefined) => [`${value ?? 0}/10`, 'Moyenne']}
                     />
                     <Bar
                         dataKey="average"

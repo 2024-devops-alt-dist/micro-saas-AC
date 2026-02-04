@@ -28,16 +28,27 @@ const data = [
   { "date": "2025-03-01", "matiere": "Sciences de la vie et de la terre", "score": 10 }
 ];
 
+interface RawDataItem {
+  date: string;
+  matiere: string;
+  score: number;
+}
+
+interface ChartDataPoint {
+  date: string;
+  [key: string]: string | number;
+}
+
 // Regroupement des données par date
-const processData = (rawData: any[]) => {
-  const chartDataMap: { [key: string]: any } = {};
+const processData = (rawData: RawDataItem[]): ChartDataPoint[] => {
+  const chartDataMap: { [key: string]: ChartDataPoint } = {};
   rawData.forEach(item => {
     if (!chartDataMap[item.date]) {
       chartDataMap[item.date] = { date: item.date };
     }
     chartDataMap[item.date][item.matiere] = item.score;
   });
-  return Object.values(chartDataMap).sort((a: any, b: any) =>
+  return Object.values(chartDataMap).sort((a, b) =>
     new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 };
