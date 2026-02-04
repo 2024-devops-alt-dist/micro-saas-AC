@@ -1,62 +1,14 @@
-# # Use postgres/example user/password credentials
-# services:
-#   # postgres:
-#   #   image: postgres:17
-#   #   container_name: quizpilot_db
-#   #   restart: always
-#   #   environment:
-#   #     POSTGRES_DB: ${DB_NAME}
-#   #     POSTGRES_USER: ${DB_USER}
-#   #     POSTGRES_PASSWORD: ${DB_PASSWORD}
-#   #   ports:
-#   #     - "${PG_PORT:-5435}:5432"
-#   #   volumes:
-#   #     - postgres_data:/var/lib/postgresql/data
-#   #     # - ./src/scripts_sql:/docker-entrypoint-initdb.d/
-
-#   api:
-#     image: ${DOCKERHUB_USERNAME}/quizpilot_api:latest
-#     container_name: quizpilot_api
-#     restart: always
-#     ports:
-#       - 8000:8000
-#     env_file:
-#       - .env
-#     # volumes:
-#     #   - ./back-django:/usr/src/app
-#     # depends_on:
-#     #   - postgres
-
-#   client:
-#     image: ${DOCKERHUB_USERNAME}/quizpilot_client:latest
-#     container_name: quizpilot_client
-#     restart: always
-#     ports:
-#       - "3010:80"
-#       # à supprimer si front derrière nginx ?
-#     env_file:
-#       - .env
-#     # volumes:
-#     #   - ./client:/usr/src/app
-#     depends_on:
-#       - api
-# # volumes:
-# #   postgres_data:
-
-# # pas de n8n ?
-
-
 services:
   postgres:
     image: postgres:15
-    container_name: quizpilot_db_new
+    container_name: quizpilot_db
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "9432:5432" 
+      - "5432:5432"
     volumes:
       - postgres_data_new:/var/lib/postgresql/data
     networks:
@@ -64,10 +16,10 @@ services:
 
   api:
     image: ${DOCKERHUB_USERNAME}/quizpilot_api:latest
-    container_name: quizpilot_api_new
+    container_name: quizpilot_api
     restart: always
     ports:
-      - 9000:8000 
+      - 8000:8000
     env_file: .env
     depends_on:
       - postgres
@@ -76,10 +28,10 @@ services:
 
   client:
     image: ${DOCKERHUB_USERNAME}/quizpilot_client:latest
-    container_name: quizpilot_client_new
+    container_name: quizpilot_client
     restart: always
     ports:
-      - "3020:80" 
+      - "3010:80"
     env_file: .env
     depends_on:
       - api
@@ -88,7 +40,7 @@ services:
 
   n8n:
     image: n8nio/n8n:latest
-    container_name: quizpilot_n8n_new
+    container_name: quizpilot_n8n
     restart: unless-stopped
     environment:
       - DB_TYPE=postgresdb
@@ -98,12 +50,12 @@ services:
       - DB_POSTGRESDB_USER=${DB_USER}
       - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
       - N8N_HOST=${N8N_HOST}
-      - N8N_PROTOCOL=https
+      - N8N_PROTOCOL=http
       - NODE_ENV=production
     volumes:
       - n8n_data_new:/home/node/.n8n
     ports:
-      - "9678:5678" 
+      - "5678:5678"
     depends_on:
       - postgres
     networks:
