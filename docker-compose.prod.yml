@@ -52,6 +52,7 @@ services:
       - N8N_HOST=${N8N_HOST}
       - N8N_PROTOCOL=http
       - NODE_ENV=production
+      - N8N_SECURE_COOKIE=false
     volumes:
       - n8n_data_new:/home/node/.n8n
     ports:
