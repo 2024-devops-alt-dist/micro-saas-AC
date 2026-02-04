@@ -56,7 +56,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5436:5432" # Un port différent (5436) au lieu de l'actuel
+      - "5438:5432" # Un port différent (5436) au lieu de l'actuel
     volumes:
       - postgres_data_new:/var/lib/postgresql/data
     networks:
