@@ -34,7 +34,7 @@ const data: RawDataItem[] = [
     { "date": "2025-03-01", "matiere": "Sciences de la vie et de la terre", "score": 10 }
 ];
 
-const BestPerformanceChart = () => {
+const BarChartPerThem = () => {
     // 1. Calculer la moyenne par matière
     const subjectsMap: { [key: string]: { total: number, count: number } } = {};
 
@@ -111,4 +111,4 @@ const BestPerformanceChart = () => {
     );
 };
 
-export default BestPerformanceChart;
+export default BarChartPerThem;

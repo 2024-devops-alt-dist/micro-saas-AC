@@ -45,7 +45,7 @@ const processData = (rawData: any[]) => {
 const processedData = processData(data);
 const uniqueMatieres = Array.from(new Set(data.map(d => d.matiere)));
 
-const FilterableMatiereChart = () => {
+const LineChart = () => {
   const [selectedSubject, setSelectedSubject] = useState(uniqueMatieres[0]);
 
   return (
@@ -155,4 +155,4 @@ const FilterableMatiereChart = () => {
   );
 };
 
-export default FilterableMatiereChart;
+export default LineChart;
