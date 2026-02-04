@@ -64,9 +64,11 @@ services:
     image: n8nio/n8n:latest
     container_name: quizpilot_n8n_local
     restart: unless-stopped
+    networks:
+      - app_network
     environment:
       DB_TYPE: postgresdb
-      DB_POSTGRESDB_HOST: quizpilot_db
+      DB_POSTGRESDB_HOST: postgres
       DB_POSTGRESDB_PORT: 5432
       DB_POSTGRESDB_DATABASE: ${N8N_DB}
       DB_POSTGRESDB_USER: ${DB_USER}
@@ -77,6 +79,7 @@ services:
       N8N_HOST: ${N8N_HOST}
       N8N_PORT: 5678
       N8N_PROTOCOL: ${N8N_PROTOCOL}
+      N8N_SECURE_COOKIE: "false"
       WEBHOOK_URL: ${WEBHOOK_URL}
       GENERIC_TIMEZONE: ${TZ}
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
