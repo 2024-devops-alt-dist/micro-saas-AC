@@ -49,14 +49,14 @@
 services:
   postgres:
     image: postgres:15
-    container_name: quizpilot_db_new # Un nom différent pour ne pas heurter l'actuel
+    container_name: quizpilot_db_new
     restart: always
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "9432:5432" # Un port différent (5436) au lieu de l'actuel
+      - "9432:5432" 
     volumes:
       - postgres_data_new:/var/lib/postgresql/data
     networks:
@@ -67,7 +67,7 @@ services:
     container_name: quizpilot_api_new
     restart: always
     ports:
-      - 9000:8000 # Nouveau port
+      - 9000:8000 
     env_file: .env
     depends_on:
       - postgres
@@ -79,7 +79,7 @@ services:
     container_name: quizpilot_client_new
     restart: always
     ports:
-      - "3020:80" # Nouveau port
+      - "3020:80" 
     env_file: .env
     depends_on:
       - api
@@ -103,7 +103,7 @@ services:
     volumes:
       - n8n_data_new:/home/node/.n8n
     ports:
-      - "9678:5678" # Nouveau port
+      - "9678:5678" 
     depends_on:
       - postgres
     networks:
