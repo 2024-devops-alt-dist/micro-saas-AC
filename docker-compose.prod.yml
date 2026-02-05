@@ -55,6 +55,8 @@ services:
       - NODE_ENV=production
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - N8N_SECURE_COOKIE=false
+      # pour nginx : "1" pour confirmer que la requete est bien passée par nginx
+      - N8N_PROXY_HOPS=1
       - N8N_CORS_ALLOWED_ORIGINS=https://quizpilot.senga200.ovh,http://51.38.186.158:3010
     volumes:
       - n8n_data_new:/home/node/.n8n
