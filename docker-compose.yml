@@ -49,7 +49,6 @@ services:
     restart: always
     ports:
       - "${FRONT_PORT:-3005}:3005"
-      # à supprimer si front derrière nginx ?
     env_file:
       - .env
     volumes:
