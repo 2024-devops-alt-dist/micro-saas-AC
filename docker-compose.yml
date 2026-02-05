@@ -80,6 +80,8 @@ services:
       N8N_PORT: 5678
       N8N_PROTOCOL: ${N8N_PROTOCOL}
       N8N_SECURE_COOKIE: "false"
+      N8N_CORS_ALLOWED_ORIGINS: "http://localhost:3005"
+      N8N_LOG_LEVEL: "debug"
       WEBHOOK_URL: ${WEBHOOK_URL}
       GENERIC_TIMEZONE: ${TZ}
       N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
