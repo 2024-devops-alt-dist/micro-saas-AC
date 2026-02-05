@@ -50,9 +50,10 @@ services:
       - DB_POSTGRESDB_USER=${DB_USER}
       - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
       - N8N_HOST=${N8N_HOST}
-      - N8N_PROTOCOL=http
-      - WEBHOOK_URL=http://${N8N_HOST}:5678/
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://${N8N_HOST}/
       - NODE_ENV=production
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       - N8N_SECURE_COOKIE=false
       - N8N_CORS_ALLOWED_ORIGINS=https://quizpilot.senga200.ovh,http://51.38.186.158:3010
     volumes:
