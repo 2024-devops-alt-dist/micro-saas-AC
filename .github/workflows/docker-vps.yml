@@ -99,6 +99,10 @@ jobs:
             echo "N8N_ENCRYPTION_KEY=${{ secrets.N8N_ENCRYPTION_KEY }}" >> .env
             echo "N8N_HOST=${{ secrets.N8N_HOST }}" >> .env
             echo "N8N_PROTOCOL=https" >> .env
+            echo "N8N_PROXY_HOPS=1" >> .env
+            echo "N8N_SECURE_COOKIE=false" >> .env
+            echo "N8N_DEFAULT_BINARY_DATA_MODE=filesystem" >> .env
+            echo "WEBHOOK_URL=https://${{ secrets.N8N_HOST }}/" >> .env
             
             echo "ALLOWED_HOSTS=\"${{ secrets.ALLOWED_HOSTS }}\"" >> .env
             echo "SECRET_KEY=\"${{ secrets.SECRET_KEY }}\"" >> .env
