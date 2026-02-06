@@ -10,8 +10,17 @@ export const authService = {
             localStorage.setItem("access_token", data.access);
             localStorage.setItem("refresh_token", data.refresh);
             localStorage.setItem("username", username);
+            // On récupère le profil complet pour avoir l'ID
+            const profile = await this.getProfile();
+            if (profile.id) {
+                localStorage.setItem("user_id", profile.id.toString());
+            }
         }
         return data;
+    },
+
+    async getProfile() {
+        return apiFetch("/api/me/");
     },
 
     async register(username: string, email: string, password: string) {
@@ -25,6 +34,7 @@ export const authService = {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("username");
+        localStorage.removeItem("user_id");
     },
 
     isAuthenticated() {
