@@ -5,6 +5,11 @@ import ValidationAnimation from './ValidationAnimation';
 import { useEffect, useState } from 'react';
 import { getCategories, getLevels, saveQuizStats } from '../../../services/api';
 
+interface CategoryOrLevel {
+  id: number;
+  name: string;
+}
+
 type ResultProps = {
   score: number;
   questions: {
@@ -40,15 +45,15 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
       if (isSaved) return;
 
       try {
-        const [categories, levels] = await Promise.all([getCategories(), getLevels()]);
+        const [categories, levels] = await Promise.all([getCategories(), getLevels()]) as [CategoryOrLevel[], CategoryOrLevel[]];
 
         // On cherche une correspondance souple pour le thème (ex: "Maths" vs "Mathématiques")
-        const cat = categories.find((c: any) =>
+        const cat = categories.find((c: CategoryOrLevel) =>
           c.name.toLowerCase().includes(metadata.theme.toLowerCase()) ||
           metadata.theme.toLowerCase().includes(c.name.toLowerCase())
         );
 
-        const lev = levels.find((l: any) =>
+        const lev = levels.find((l: CategoryOrLevel) =>
           l.name.toLowerCase() === metadata.difficulty.toLowerCase()
         );
 
