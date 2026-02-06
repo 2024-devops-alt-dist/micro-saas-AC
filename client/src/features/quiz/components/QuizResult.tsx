@@ -26,14 +26,34 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
   useEffect(() => {
     const saveResult = async () => {
       const userId = localStorage.getItem("user_id");
-      if (!userId || !metadata || isSaved) return;
+      console.log("DEBUG STATS - userId:", userId);
+      console.log("DEBUG STATS - metadata:", metadata);
+
+      if (!userId) {
+        console.warn("DEBUG STATS - Aucun userId trouvé. Reconnectez-vous.");
+        return;
+      }
+      if (!metadata) {
+        console.warn("DEBUG STATS - Pas de metadata reçues.");
+        return;
+      }
+      if (isSaved) return;
 
       try {
-        // On récupère les IDs pour le thème et la difficulté
         const [categories, levels] = await Promise.all([getCategories(), getLevels()]);
 
-        const cat = categories.find((c: any) => c.name === metadata.theme);
-        const lev = levels.find((l: any) => l.name === metadata.difficulty);
+        // On cherche une correspondance souple pour le thème (ex: "Maths" vs "Mathématiques")
+        const cat = categories.find((c: any) =>
+          c.name.toLowerCase().includes(metadata.theme.toLowerCase()) ||
+          metadata.theme.toLowerCase().includes(c.name.toLowerCase())
+        );
+
+        const lev = levels.find((l: any) =>
+          l.name.toLowerCase() === metadata.difficulty.toLowerCase()
+        );
+
+        console.log("DEBUG STATS - Catégorie trouvée:", cat);
+        console.log("DEBUG STATS - Niveau trouvé:", lev);
 
         if (cat && lev) {
           await saveQuizStats({
@@ -43,10 +63,12 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
             score: score
           });
           setIsSaved(true);
-          console.log("Statistiques enregistrées !");
+          console.log("✅ Statistiques enregistrées !");
+        } else {
+          console.warn("DEBUG STATS - Correspondance non trouvée en base pour:", metadata);
         }
       } catch (err) {
-        console.error("Erreur lors de l'enregistrement des stats:", err);
+        console.error("DEBUG STATS - Erreur API:", err);
       }
     };
 

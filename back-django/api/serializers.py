@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Category, Level, Propositions, Questions
+from .models import Category, Level, Propositions, Questions, QuizStats, Users
 
 
 class UserSerializer(serializers.ModelSerializer):
