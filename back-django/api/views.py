@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Category, Level, Propositions, Questions, QuizStats, Users
 from .serializers import (
