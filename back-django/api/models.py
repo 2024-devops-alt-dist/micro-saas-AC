@@ -94,7 +94,7 @@ class Users(models.Model):
         managed = False
 
     def __str__(self):
-        return self.username
+        return str(self.username)
 
 
 class QuizStats(models.Model):
