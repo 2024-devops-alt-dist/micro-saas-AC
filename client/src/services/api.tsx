@@ -35,3 +35,10 @@ export function getCategories() {
 export function getLevels() {
   return apiFetch("/api/levels/");
 }
+
+export function saveQuizStats(stats: { user_id: number, category_id: number, level_id: number, score: number }) {
+  return apiFetch("/api/stats/", {
+    method: "POST",
+    body: JSON.stringify(stats),
+  });
+}

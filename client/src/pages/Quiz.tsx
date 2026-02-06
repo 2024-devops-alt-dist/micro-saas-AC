@@ -93,12 +93,13 @@ function QuizPage() {
 
   const location = useLocation();
   const quizDataFromNavigation = location.state?.quizData;
+  const metadata = location.state?.metadata;
   const dataToUse = quizDataFromNavigation || mockQuiz.quiz;
   const { question, currentIdx, answers, score, isFinished, selectAnswer, prev, next, questions } =
     UseQuiz(dataToUse);
 
   if (isFinished) {
-    return <QuizResult score={score} answers={answers} questions={questions} />;
+    return <QuizResult score={score} answers={answers} questions={questions} metadata={metadata} />;
   }
 
   return (

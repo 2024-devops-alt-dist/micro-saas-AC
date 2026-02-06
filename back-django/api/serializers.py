@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Category, Level, Propositions, Questions
+from .models import Category, Level, Propositions, Questions, QuizStats, Users
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,3 +56,10 @@ class QuestionsSerializer(serializers.ModelSerializer):
         model = Questions
         fields = ["id", "text_question", "category_id", "level_id", "propositions"]
         read_only_fields = ["id"]
+
+
+class QuizStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizStats
+        fields = ["id", "user_id", "category_id", "level_id", "date", "score"]
+        read_only_fields = ["id", "date"]

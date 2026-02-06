@@ -66,54 +66,54 @@ export default function GenerateQuiz() {
 
   // on gère le scan du document img
   const imageToPdf = async (imageFile: File): Promise<File> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
 
-    reader.onload = () => {
-      const img = new Image();
-      img.src = reader.result as string;
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result as string;
 
-      img.onload = () => {
-        const pdf = new jsPDF({
-          orientation: img.width > img.height ? "landscape" : "portrait",
-          unit: "px",
-          format: [img.width, img.height],
-        });
+        img.onload = () => {
+          const pdf = new jsPDF({
+            orientation: img.width > img.height ? "landscape" : "portrait",
+            unit: "px",
+            format: [img.width, img.height],
+          });
 
-        // Support JPG + PNG automatiquement
-        const imageType = imageFile.type.includes("png") ? "PNG" : "JPEG";
+          // Support JPG + PNG automatiquement
+          const imageType = imageFile.type.includes("png") ? "PNG" : "JPEG";
 
-        pdf.addImage(img, imageType, 0, 0, img.width, img.height);
+          pdf.addImage(img, imageType, 0, 0, img.width, img.height);
 
-        const pdfBlob = pdf.output("blob");
-        const pdfFile = new File([pdfBlob], "scan.pdf", {
-          type: "application/pdf",
-        });
+          const pdfBlob = pdf.output("blob");
+          const pdfFile = new File([pdfBlob], "scan.pdf", {
+            type: "application/pdf",
+          });
 
-        resolve(pdfFile);
+          resolve(pdfFile);
+        };
+
+        img.onerror = reject;
       };
 
-      img.onerror = reject;
-    };
-
-    reader.onerror = reject;
-    reader.readAsDataURL(imageFile);
-  });
-};
+      reader.onerror = reject;
+      reader.readAsDataURL(imageFile);
+    });
+  };
 
   const handleScanConfirm = async (scannedFile: File) => {
     console.log("Fichier scanné:", scannedFile);
-   try {
-    const pdfFile = await imageToPdf(scannedFile);
-    setFile(pdfFile); // ← on stocke le PDF
-    setSuccess("Scan converti en PDF avec succès");
-    setError(null);
-  } catch (err) {
-    console.error(err);
-    setError("Erreur lors de la conversion du scan en PDF");
-  }
+    try {
+      const pdfFile = await imageToPdf(scannedFile);
+      setFile(pdfFile); // ← on stocke le PDF
+      setSuccess("Scan converti en PDF avec succès");
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Erreur lors de la conversion du scan en PDF");
+    }
 
-  setIsScanOpen(false);
+    setIsScanOpen(false);
   };
 
   const handleGenerateQuiz = async () => {
@@ -151,7 +151,15 @@ export default function GenerateQuiz() {
       // 3. On vérifie si on a bien nos questions
       if (result && result.quiz) {
         setSuccess("Quiz généré avec succès ! Redirection...");
-        navigate("/quiz", { state: { quizData: result.quiz } });
+        navigate("/quiz", {
+          state: {
+            quizData: result.quiz,
+            metadata: {
+              theme: options.theme,
+              difficulty: options.difficulty
+            }
+          }
+        });
       } else {
         setError("Format de réponse inconnu (pas de clé 'quiz')");
       }

@@ -1,14 +1,17 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework import generics, permissions
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-from .models import Category, Level, Propositions, Questions
+from .models import Category, Level, Propositions, Questions, QuizStats, Users
 from .serializers import (
     CategorySerializer,
     LevelSerializer,
     PropositionsSerializer,
     QuestionsSerializer,
+    QuizStatsSerializer,
     RegisterSerializer,
     UserSerializer,
 )
@@ -19,6 +22,14 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
 
 def test_api(request):
@@ -83,3 +94,13 @@ class PropositionsRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
     queryset = Propositions.objects.all()
     serializer_class = PropositionsSerializer
     lookup_field = "id"
+
+
+class QuizStatsListCreateView(generics.ListCreateAPIView):
+    queryset = QuizStats.objects.all()
+    serializer_class = QuizStatsSerializer
+
+    def perform_create(self, serializer):
+        # On pourrait ici récupérer l'user connecté s'il y a un lien direct,
+        # mais on va laisser le front envoyer l'ID pour plus de flexibilité avec votre table 'users'
+        serializer.save()

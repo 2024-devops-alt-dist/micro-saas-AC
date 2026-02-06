@@ -82,3 +82,38 @@ class Propositions(models.Model):
 
     def __str__(self):
         return f"Proposition: {self.text}"
+
+
+class Users(models.Model):
+    id_user = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+
+    class Meta:
+        db_table = "users"
+        managed = False
+
+    def __str__(self):
+        return self.username
+
+
+class QuizStats(models.Model):
+    user = models.ForeignKey(
+        Users, on_delete=models.CASCADE, db_column="user_id", null=True
+    )
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, db_column="category_id", null=True
+    )
+    level = models.ForeignKey(
+        Level, on_delete=models.CASCADE, db_column="level_id", null=True
+    )
+    date = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField()
+    # On laisse les autres champs (quiz_id, average_time) optionnels car gérés par la base ou n8n
+
+    class Meta:
+        db_table = "quiz_stats"
+        managed = False
+
+    def __str__(self):
+        return f"Stat {self.id}: {self.score}"

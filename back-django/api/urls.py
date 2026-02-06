@@ -15,6 +15,7 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Enregistrer un nouvel utilisateur
     path("register/", views.RegisterView.as_view(), name="auth_register"),
+    path("me/", views.MeView.as_view(), name="me"),
     path("test/", views.test_api, name="test-api"),
     path("categories/", views.CategoryListCreateView.as_view(), name="category-list"),
     path(
@@ -53,4 +54,5 @@ urlpatterns = [
         views.PropositionsRetrieveUpdateDestroyView.as_view(),
         name="propositions-detail",
     ),
+    path("stats/", views.QuizStatsListCreateView.as_view(), name="stats-list"),
 ]
