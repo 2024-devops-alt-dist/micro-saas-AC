@@ -59,7 +59,28 @@ class QuestionsSerializer(serializers.ModelSerializer):
 
 
 class QuizStatsSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(
+        source="user", queryset=Users.objects.all()
+    )
+    category_id = serializers.PrimaryKeyRelatedField(
+        source="category", queryset=Category.objects.all()
+    )
+    level_id = serializers.PrimaryKeyRelatedField(
+        source="level", queryset=Level.objects.all()
+    )
+    category_name = serializers.ReadOnlyField(source="category.name")
+    level_name = serializers.ReadOnlyField(source="level.name")
+
     class Meta:
         model = QuizStats
-        fields = ["id", "user_id", "category_id", "level_id", "date", "score"]
+        fields = [
+            "id",
+            "user_id",
+            "category_id",
+            "category_name",
+            "level_id",
+            "level_name",
+            "date",
+            "score",
+        ]
         read_only_fields = ["id", "date"]
