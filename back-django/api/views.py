@@ -107,15 +107,25 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         )
 
     def perform_create(self, serializer):
-        # On s'assure que l'utilisateur existe dans la table 'users' de n8n
-        # pour satisfaire la contrainte de clé étrangère SQL
         user_django = self.request.user
-        user_n8n, _ = Users.objects.get_or_create(
-            email=user_django.email,
-            defaults={
-                "pseudo": user_django.username,
-                "password": "dummy_password_for_constraint",
-            },
-        )
-        # On sauvegarde en liant le score à l'utilisateur de la table 'users'
-        serializer.save(user=user_n8n)
+        print(f"DEBUG STATS - Tentative création pour: {user_django.email}")
+
+        try:
+            user_n8n, created = Users.objects.get_or_create(
+                email=user_django.email,
+                defaults={
+                    "pseudo": user_django.username,
+                    "password": "dummy_password_for_constraint",
+                },
+            )
+            print(
+                f"DEBUG STATS - Utilisateur n8n (ID: {user_n8n.id_user}, Created: {created})"
+            )
+            print(f"DEBUG STATS - Data envoyée: {self.request.data}")
+
+            serializer.save(user=user_n8n)
+            print("DEBUG STATS - Sauvegarde réussie")
+
+        except Exception as e:
+            print(f"DEBUG STATS - ERREUR CRITIQUE: {str(e)}")
+            raise e
