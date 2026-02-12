@@ -4,13 +4,17 @@ import BottomNav from "../components/BottomNav";
 import { authService } from "../features/auth/services/authService";
 import Button from "../components/Button";
 import Title from "../components/Title";
-//import { getUsersStats, type UserStats } from "../features/quiz/services/statsService";
+import { getUsersStats, type UserStats } from "../features/quiz/services/statsService";
+import EditProfileModal from "../features/auth/components/EditProfileModal";
+import { PresentationChartBarIcon, AtSymbolIcon, AcademicCapIcon } from '@heroicons/react/24/outline';
 
 function Profil() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
-  //const [stats, setStats] = useState<UserStats[]>([]);
-  //const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<UserStats[]>([]);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -18,22 +22,19 @@ function Profil() {
       return;
     }
 
-    // const fetchStats = async () => {
-    //   try {
-    //     const data = await getUsersStats();
-    //     // Trier par date décroissante
-    //     const sortedData = [...data].sort((a, b) =>
-    //       new Date(b.date).getTime() - new Date(a.date).getTime()
-    //     );
-    //     setStats(sortedData);
-    //   } catch (error) {
-    //     console.error("Erreur lors de la récupération des stats:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    //
-    //fetchStats();
+    const fetchStats = async () => {
+      try {
+        const data = await getUsersStats();
+        const sortedData = [...data].sort((a, b) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        setStats(sortedData);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des stats:", error);
+      }
+    };
+
+    fetchStats();
   }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
@@ -42,97 +43,121 @@ function Profil() {
     navigate("/");
   };
 
+  const handleUpdateProfile = async (currentPassword: string, newEmail?: string, newPassword?: string) => {
+    await authService.updateProfile(currentPassword, newEmail, newPassword);
+
+    if (newPassword) {
+      // Si le mot de passe a changé, l'utilisateur est déconnecté automatiquement
+      navigate("/login");
+    } else {
+      setSuccessMessage("Profil mis à jour avec succès !");
+      setTimeout(() => setSuccessMessage(""), 3000);
+      // Recharger les données du profil si l'email a changé
+      if (newEmail) {
+        window.location.reload();
+      }
+    }
+  };
+
   if (!isAuthenticated) return null;
 
   const username = authService.getUsername();
+  const email = authService.getEmail();
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6 pb-24">
       <Title text="MON PROFIL" />
 
-      {/* Carte Utilisateur */}
-      <div className="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700 mb-6">
-        <div className="flex justify-between items-center">
+      {successMessage && (
+        <div className="mb-4 bg-green-500/10 border border-green-500/30 text-green-400 px-4 py-3 rounded-lg">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Carte Informations Utilisateur */}
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl shadow-xl border border-gray-700 mb-6">
+        <div className="flex justify-between items-start mb-6">
           <div>
-            <p className="text-gray-400 text-sm uppercase">Pilote</p>
-            <h2 className="text-2xl font-bold text-blue-400">{username}</h2>
+            <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Compte Pilote</p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              {username}
+            </h2>
           </div>
           <Button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-600/30 hover:bg-red-600 hover:text-white rounded-lg transition"
+            className="px-4 py-2 bg-red-600/10 text-red-400 border border-red-600/30 hover:bg-red-600 hover:text-white rounded-lg transition-all duration-300"
           >
             Déconnexion
           </Button>
         </div>
+
+        {/* Informations du compte */}
+        <div className="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+              <span className="text-blue-400 text-lg">👤</span>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Nom du pilote</p>
+              <p className="text-white font-medium">{username}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center">
+              <AtSymbolIcon className="w-5 h-5 text-indigo-400" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Email</p>
+              <p className="text-white font-medium">{email}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+              <PresentationChartBarIcon className="w-5 h-5 text-green-400" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Quiz effectués</p>
+              <p className="text-white font-medium">{stats.length} quiz</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bouton Modifier */}
+        <div className="mt-4">
+          <Button
+            onClick={() => setIsEditModalOpen(true)}
+            className="w-full py-2 bg-blue-600/10 text-blue-400 border border-blue-600/30 hover:bg-blue-600 hover:text-white rounded-lg transition-all duration-300"
+          >
+            ✏️ Modifier mes informations
+          </Button>
+        </div>
       </div>
 
-      <div className="flex gap-4 mb-8">
+      {/* Boutons d'action */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <Button
           onClick={() => navigate("/stats")}
-          className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold shadow-lg shadow-blue-900/20"
+          className="py-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition-all flex items-center justify-center gap-2"
         >
-          Voir mes Graphiques 📊
+          <PresentationChartBarIcon className="w-5 h-5" />
+          <span>Mes Stats</span>
         </Button>
-      </div>
-
-      <div className="flex gap-4 mb-8">
         <Button
-          onClick={() => navigate("/quiz")}
-          className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold shadow-lg shadow-blue-900/20"
+          onClick={() => navigate("/generate-quiz")}
+          className="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold shadow-lg shadow-indigo-900/20 transition-all flex items-center justify-center gap-2"
         >
-          Voir mes Quiz
+          <AcademicCapIcon className="w-5 h-5" />
+          <span>Nouveau Quiz</span>
         </Button>
       </div>
-
-      {/* Tableau des Quiz
-      <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-gray-700 bg-gray-800/50">
-          <h3 className="font-bold text-lg">Derniers Quiz</h3>
-        </div>
-
-        <div className="overflow-x-auto">
-          {loading ? (
-            <div className="p-8 text-center text-gray-400 italic">Chargement des données...</div>
-          ) : stats.length > 0 ? (
-            <table className="w-full text-left">
-              <thead className="bg-gray-900/50 text-gray-400 text-xs uppercase">
-                <tr>
-                  <th className="px-4 py-3">Thème</th>
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">Score</th>
-                  <th className="px-4 py-3">Niveau</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700/50">
-                {stats.map((row) => (
-                  <tr key={row.id} className="hover:bg-gray-700/30 transition-colors">
-                    <td className="px-4 py-3 font-medium text-blue-300">
-                      {row.category_name || "Général"}
-                    </td>
-                    <td className="px-4 py-3 text-gray-400 text-sm">
-                      {new Date(row.date).toLocaleDateString("fr-FR")}
-                    </td>
-                    <td className="px-4 py-3 px-4">
-                      <span className={`font-bold ${row.score >= 7 ? 'text-green-400' : row.score >= 5 ? 'text-yellow-400' : 'text-red-400'}`}>
-                        {row.score}/10
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-[10px] px-2 py-1 rounded bg-gray-900 border border-gray-700 uppercase font-bold text-gray-400">
-                        {row.level_name || "Normal"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="p-8 text-center text-gray-500 italic">
-              Aucun quiz enregistré. Lancez-vous !
-            </div>
-          )}
-        </div>
-      </div> */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleUpdateProfile}
+        currentEmail={email}
+      />
 
       <BottomNav />
     </div>

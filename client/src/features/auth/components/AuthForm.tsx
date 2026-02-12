@@ -4,6 +4,7 @@ import { useState } from "react";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { authService } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 interface AuthFormProps {
   initialIsLogin?: boolean;
@@ -17,6 +18,7 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
       if (isLogin) {
         await authService.login(username, password);
         setMessage("Connexion réussie !");
+        navigate("/profil");
       } else {
         await authService.register(username, email, password);
         setMessage("Compte créé avec succès ! Connectez-vous.");

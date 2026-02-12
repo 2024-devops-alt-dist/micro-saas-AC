@@ -44,13 +44,13 @@ const Title = ({ text = "QUIZPILOT" }: TitleProps) => {
       >
         {text}
       </h1>
-      <button
+      {/* <button
         id="reloadBtn"
         onClick={animateText}
         className="mt-3 px-3 py-2 text-md bg-[#f3eb75] rounded-lg cursor-pointer font-skyfont text-[#1A1F26]"
       >
         rejouer l'animation
-      </button>
+      </button> */}
     </div>
   );
 };

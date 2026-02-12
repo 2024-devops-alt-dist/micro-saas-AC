@@ -90,6 +90,7 @@ import mockQuiz from "../features/quiz/data/mockQuiz.json";
 import UseQuiz from "../features/quiz/components/UseQuiz";
 import BottomNav from "../components/BottomNav";
 import { getUsersStats, type UserStats } from "../features/quiz/services/statsService";
+import Title from "../components/Title";
 
 function QuizPage() {
 
@@ -125,6 +126,7 @@ function QuizPage() {
 
   return (
     <div>
+      <Title text="MES QUIZ" />
       {/* Tableau des Quiz */}
       <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-xl">
         <div className="p-4 border-b border-gray-700 bg-gray-800/50">

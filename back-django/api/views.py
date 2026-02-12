@@ -31,6 +31,49 @@ class MeView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
+    def patch(self, request):
+        user = request.user
+        data = request.data
+
+        # Vérifier le mot de passe actuel pour toute modification
+        current_password = data.get("current_password")
+        if not current_password:
+            return Response(
+                {
+                    "error": "Le mot de passe actuel est requis pour modifier votre profil"
+                },
+                status=400,
+            )
+
+        if not user.check_password(current_password):
+            return Response({"error": "Mot de passe actuel incorrect"}, status=400)
+
+        # Modifier l'email si fourni
+        new_email = data.get("email")
+        if new_email and new_email != user.email:
+            # Vérifier que l'email n'est pas déjà utilisé
+            if User.objects.filter(email=new_email).exclude(id=user.id).exists():
+                return Response({"error": "Cet email est déjà utilisé"}, status=400)
+            user.email = new_email
+
+        # Modifier le mot de passe si fourni
+        new_password = data.get("new_password")
+        if new_password:
+            if len(new_password) < 8:
+                return Response(
+                    {
+                        "error": "Le nouveau mot de passe doit contenir au moins 8 caractères"
+                    },
+                    status=400,
+                )
+            user.set_password(new_password)
+
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(
+            {"message": "Profil mis à jour avec succès", "user": serializer.data}
+        )
+
 
 def test_api(request):
     return JsonResponse(
