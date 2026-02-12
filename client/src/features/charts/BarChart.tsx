@@ -36,16 +36,22 @@ import { getUsersStats } from '../quiz/services/statsService';
 const BarChartPerThem = () => {
     const [stats, setStats] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const datadeStats = getUsersStats();
-    console.log(datadeStats);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
+                setError(null);
                 const data = await getUsersStats();
                 setStats(data);
             } catch (error) {
                 console.error("Erreur lors de la récupération des stats:", error);
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                setError(errorMessage);
+                if (errorMessage.includes("Session expirée")) {
+                    // Optionally redirect to login or show a specific message
+                    // For now, the error message itself will trigger the "Se reconnecter" button
+                }
             } finally {
                 setLoading(false);
             }
@@ -54,6 +60,32 @@ const BarChartPerThem = () => {
     }, []);
 
     if (loading) return <div className="text-center p-4 text-white">Chargement des graphiques...</div>;
+
+    if (error) {
+        return (
+            <div style={{
+                width: '100%',
+                height: '400px',
+                background: '#ffffff',
+                padding: '24px',
+                borderRadius: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: '#ef4444',
+                textAlign: 'center'
+            }}>
+                <p className='font-bold mb-2'>Erreur de chargement</p>
+                <p className='text-sm text-gray-600 mb-4'>{error}</p>
+                {error.includes("Session expirée") && (
+                    <a href="/login" className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">
+                        Se reconnecter
+                    </a>
+                )}
+            </div>
+        );
+    }
 
     // 1. Calculer la moyenne par matière à partir des données réelles
     const subjectsMap: { [key: string]: { total: number, count: number } } = {};
