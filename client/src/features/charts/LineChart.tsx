@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AreaChart,
   Area,
@@ -8,56 +8,88 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-
-const data = [
-  { "date": "2025-01-12", "matiere": "Histoire", "score": 5 },
-  { "date": "2025-01-15", "matiere": "Maths", "score": 2 },
-  { "date": "2025-01-15", "matiere": "Sciences de la vie et de la terre", "score": 8 },
-  { "date": "2025-01-17", "matiere": "Histoire", "score": 6 },
-  { "date": "2025-01-18", "matiere": "Maths", "score": 5 },
-  { "date": "2025-01-19", "matiere": "Maths", "score": 4 },
-  { "date": "2025-01-23", "matiere": "Histoire", "score": 4 },
-  { "date": "2025-01-25", "matiere": "Maths", "score": 6 },
-  { "date": "2025-01-28", "matiere": "Histoire", "score": 8 },
-  { "date": "2025-02-01", "matiere": "Maths", "score": 9 },
-  { "date": "2025-02-02", "matiere": "Histoire", "score": 9 },
-  { "date": "2025-02-02", "matiere": "Sciences de la vie et de la terre", "score": 5 },
-  { "date": "2025-02-05", "matiere": "Histoire", "score": 8 },
-  { "date": "2025-02-06", "matiere": "Sciences de la vie et de la terre", "score": 7 },
-  { "date": "2025-02-25", "matiere": "Sciences de la vie et de la terre", "score": 10 },
-  { "date": "2025-03-01", "matiere": "Sciences de la vie et de la terre", "score": 10 }
-];
-
-interface RawDataItem {
-  date: string;
-  matiere: string;
-  score: number;
-}
+import { getUsersStats, type UserStats } from '../quiz/services/statsService';
 
 interface ChartDataPoint {
   date: string;
   [key: string]: string | number;
 }
 
-// Regroupement des données par date
-const processData = (rawData: RawDataItem[]): ChartDataPoint[] => {
-  const chartDataMap: { [key: string]: ChartDataPoint } = {};
-  rawData.forEach(item => {
-    if (!chartDataMap[item.date]) {
-      chartDataMap[item.date] = { date: item.date };
-    }
-    chartDataMap[item.date][item.matiere] = item.score;
-  });
-  return Object.values(chartDataMap).sort((a, b) =>
-    new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
-};
-
-const processedData = processData(data);
-const uniqueMatieres = Array.from(new Set(data.map(d => d.matiere)));
-
 const LineChart = () => {
-  const [selectedSubject, setSelectedSubject] = useState(uniqueMatieres[0]);
+  const [stats, setStats] = useState<UserStats[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const data = await getUsersStats();
+        setStats(data);
+
+        // Extraire les matières uniques pour le select
+        const subjects = Array.from(new Set(data.map(d => d.category_name || "Inconnu")));
+        if (subjects.length > 0) {
+          setSelectedSubject(subjects[0]);
+        }
+      } catch (err) {
+        console.error("Erreur stats:", err);
+        setError(err instanceof Error ? err.message : "Erreur lors du chargement des données");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  // Regroupement des données par date
+  const processData = (rawData: UserStats[]): ChartDataPoint[] => {
+    const chartDataMap: { [key: string]: ChartDataPoint } = {};
+    rawData.forEach(item => {
+      // On formate la date pour regrouper par jour (YYYY-MM-DD)
+      const dateKey = new Date(item.date).toISOString().split('T')[0];
+      const subject = item.category_name || "Inconnu";
+
+      if (!chartDataMap[dateKey]) {
+        chartDataMap[dateKey] = { date: dateKey };
+      }
+      // On prend le score le plus récent ou on pourrait faire une moyenne journalière
+      chartDataMap[dateKey][subject] = item.score;
+    });
+
+    return Object.values(chartDataMap).sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+  };
+
+  if (loading) return <div className="text-center p-8 text-slate-500">Chargement de votre progression...</div>;
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[400px] bg-white rounded-3xl border border-slate-100 p-6 text-center">
+        <p className="text-red-500 font-medium mb-2">Oups ! Une erreur est survenue</p>
+        <p className="text-slate-400 text-sm mb-4">{error}</p>
+        {error.includes("Session expirée") && (
+          <a href="/login" className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors">
+            Se reconnecter
+          </a>
+        )}
+      </div>
+    );
+  }
+
+  if (stats.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[400px] bg-white rounded-3xl border border-slate-100 p-6 text-center">
+        <p className="text-slate-500 font-medium">Aucune donnée disponible</p>
+        <p className="text-slate-400 text-sm">Réalisez quelques quiz pour voir votre progression !</p>
+      </div>
+    );
+  }
+
+  const processedData = processData(stats);
+  const uniqueMatieres = Array.from(new Set(stats.map(d => d.category_name || "Inconnu")));
 
   return (
     <div style={{
