@@ -28,7 +28,7 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
       let errorData;
       try {
         errorData = await response.json();
-      } catch (e) {
+      } catch {
         errorData = { message: response.statusText };
       }
       throw new Error(errorData.message || errorData.detail || "Erreur lors de la récupération des données");

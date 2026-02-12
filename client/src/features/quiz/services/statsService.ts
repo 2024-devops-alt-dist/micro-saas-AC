@@ -4,7 +4,9 @@ export interface UserStats {
     id: number;
     user_id: number;
     category_id: number;
+    category_name?: string;
     level_id: number;
+    level_name?: string;
     date: string;
     score: number;
 }

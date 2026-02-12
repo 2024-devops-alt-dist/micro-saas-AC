@@ -9,7 +9,7 @@ import {
     Cell
 } from 'recharts';
 import { useEffect, useState } from 'react';
-import { getUsersStats } from '../quiz/services/statsService';
+import { getUsersStats, type UserStats } from '../quiz/services/statsService';
 
 // interface RawDataItem {
 //     date: string;
@@ -34,7 +34,7 @@ import { getUsersStats } from '../quiz/services/statsService';
 // ];
 
 const BarChartPerThem = () => {
-    const [stats, setStats] = useState<any[]>([]);
+    const [stats, setStats] = useState<UserStats[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -90,7 +90,7 @@ const BarChartPerThem = () => {
     // 1. Calculer la moyenne par matière à partir des données réelles
     const subjectsMap: { [key: string]: { total: number, count: number } } = {};
 
-    stats.forEach((item: any) => {
+    stats.forEach((item: UserStats) => {
         const theme = item.category_name || "Inconnu";
         if (!subjectsMap[theme]) {
             subjectsMap[theme] = { total: 0, count: 0 };

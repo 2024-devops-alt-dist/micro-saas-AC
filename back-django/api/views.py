@@ -105,5 +105,6 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         return QuizStats.objects.filter(user_id=self.request.user.id).order_by("-date")
 
     def perform_create(self, serializer):
-        # On force l'utilisateur actuel si nécessaire, ou on laisse le front envoyer si IDs identiques
+        # On force l'utilisateur actuel si nécessaire,
+        # ou on laisse le front envoyer si IDs identiques
         serializer.save()
