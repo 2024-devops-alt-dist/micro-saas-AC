@@ -1,28 +1,31 @@
 import { useEffect, useRef } from "react";
 import "../App.css";
 
-const FINAL_TEXT = "QUIZPILOT";
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-const Title = () => {
-  const titleRef = useRef<HTMLDivElement>(null);
+interface TitleProps {
+  text?: string;
+}
+
+const Title = ({ text = "QUIZPILOT" }: TitleProps) => {
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   const animateText = () => {
     let step = 0;
     const timer = setInterval(() => {
-      const revealed = FINAL_TEXT.slice(0, step);
+      const revealed = text.slice(0, step);
       let randomPart = "";
-      for (let i = 0; i < FINAL_TEXT.length - step; i++) {
+      for (let i = 0; i < text.length - step; i++) {
         randomPart += LETTERS[Math.floor(Math.random() * LETTERS.length)];
       }
       if (titleRef.current) {
         titleRef.current.textContent = revealed + randomPart;
       }
       step++;
-      if (step > FINAL_TEXT.length) {
+      if (step > text.length) {
         clearInterval(timer);
         if (titleRef.current) {
-          titleRef.current.textContent = FINAL_TEXT;
+          titleRef.current.textContent = text;
         }
       }
     }, 110);
@@ -30,7 +33,7 @@ const Title = () => {
 
   useEffect(() => {
     animateText();
-  }, []);
+  }, [text]);
 
   return (
     <div className="h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 ">
@@ -39,7 +42,7 @@ const Title = () => {
         ref={titleRef}
         className="text-6xl tracking-wider text-center font-skyfont"
       >
-        QUIZPILOT
+        {text}
       </h1>
       <button
         id="reloadBtn"

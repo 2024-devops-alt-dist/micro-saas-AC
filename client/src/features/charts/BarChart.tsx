@@ -8,53 +8,106 @@ import {
     ResponsiveContainer,
     Cell
 } from 'recharts';
+import { useEffect, useState } from 'react';
+import { getUsersStats, type UserStats } from '../quiz/services/statsService';
 
-interface RawDataItem {
-    date: string;
-    matiere: string;
-    score: number;
-}
+// interface RawDataItem {
+//     date: string;
+//     matiere: string;
+//     score: number;
+// }
 
-const data: RawDataItem[] = [
-    { "date": "2025-01-12", "matiere": "Histoire", "score": 5 },
-    { "date": "2025-01-15", "matiere": "Maths", "score": 2 },
-    { "date": "2025-01-15", "matiere": "Sciences de la vie et de la terre", "score": 8 },
-    { "date": "2025-01-17", "matiere": "Histoire", "score": 6 },
-    { "date": "2025-01-18", "matiere": "Maths", "score": 5 },
-    { "date": "2025-01-19", "matiere": "Maths", "score": 4 },
-    { "date": "2025-01-23", "matiere": "Histoire", "score": 4 },
-    { "date": "2025-01-25", "matiere": "Maths", "score": 6 },
-    { "date": "2025-01-28", "matiere": "Histoire", "score": 8 },
-    { "date": "2025-02-01", "matiere": "Maths", "score": 9 },
-    { "date": "2025-02-02", "matiere": "Histoire", "score": 9 },
-    { "date": "2025-02-02", "matiere": "Sciences de la vie et de la terre", "score": 5 },
-    { "date": "2025-02-05", "matiere": "Histoire", "score": 8 },
-    { "date": "2025-02-06", "matiere": "Sciences de la vie et de la terre", "score": 7 },
-    { "date": "2025-02-25", "matiere": "Sciences de la vie et de la terre", "score": 10 },
-    { "date": "2025-03-01", "matiere": "Sciences de la vie et de la terre", "score": 10 }
-];
+// const data: RawDataItem[] = [
+//     { "date": "2025-01-12", "matiere": "Histoire", "score": 5 },
+//     { "date": "2025-01-15", "matiere": "Maths", "score": 2 },
+//     { "date": "2025-01-15", "matiere": "Sciences de la vie et de la terre", "score": 8 },
+//     { "date": "2025-01-17", "matiere": "Histoire", "score": 6 },
+//     { "date": "2025-01-18", "matiere": "Maths", "score": 5 },
+//     { "date": "2025-01-19", "matiere": "Maths", "score": 4 },
+//     { "date": "2025-01-23", "matiere": "Histoire", "score": 4 },
+//     { "date": "2025-01-25", "matiere": "Maths", "score": 6 },
+//     { "date": "2025-01-28", "matiere": "Histoire", "score": 8 },
+//     { "date": "2025-02-01", "matiere": "Maths", "score": 9 },
+//     { "date": "2025-02-02", "matiere": "Histoire", "score": 9 },
+//     { "date": "2025-02-02", "matiere": "Sciences de la vie et de la terre", "score": 5 },
+//     { "date": "2025-02-05", "matiere": "Histoire", "score": 8 }
+// ];
 
 const BarChartPerThem = () => {
-    // 1. Calculer la moyenne par matière
+    const [stats, setStats] = useState<UserStats[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                setError(null);
+                const data = await getUsersStats();
+                setStats(data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des stats:", error);
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                setError(errorMessage);
+                if (errorMessage.includes("Session expirée")) {
+                    // Optionally redirect to login or show a specific message
+                    // For now, the error message itself will trigger the "Se reconnecter" button
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
+
+    if (loading) return <div className="text-center p-4 text-white">Chargement des graphiques...</div>;
+
+    if (error) {
+        return (
+            <div style={{
+                width: '100%',
+                height: '500px',
+                background: '#ffffff',
+                padding: '24px',
+                borderRadius: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: '#ef4444',
+                textAlign: 'center'
+            }}>
+                <p className='font-bold mb-2'>Erreur de chargement</p>
+                <p className='text-sm text-gray-600 mb-4'>{error}</p>
+                {error.includes("Session expirée") && (
+                    <a href="/login" className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">
+                        Se reconnecter
+                    </a>
+                )}
+            </div>
+        );
+    }
+
+    // 1. Calculer la moyenne par matière à partir des données réelles
     const subjectsMap: { [key: string]: { total: number, count: number } } = {};
 
-    data.forEach(item => {
-        if (!subjectsMap[item.matiere]) {
-            subjectsMap[item.matiere] = { total: 0, count: 0 };
+    stats.forEach((item: UserStats) => {
+        const theme = item.category_name || "Inconnu";
+        if (!subjectsMap[theme]) {
+            subjectsMap[theme] = { total: 0, count: 0 };
         }
-        subjectsMap[item.matiere].total += item.score;
-        subjectsMap[item.matiere].count += 1;
+        subjectsMap[theme].total += item.score;
+        subjectsMap[theme].count += 1;
     });
 
-    const barData = Object.keys(subjectsMap).map(subject => ({
-        subject,
-        average: parseFloat((subjectsMap[subject].total / subjectsMap[subject].count).toFixed(2))
-    })).sort((a, b) => b.average - a.average); // Trier du meilleur au moins bon
+    const barData = Object.keys(subjectsMap).map(theme => ({
+        matiere: theme,
+        moyenne: parseFloat((subjectsMap[theme].total / subjectsMap[theme].count).toFixed(2))
+    })).sort((a, b) => b.moyenne - a.moyenne);
 
     return (
         <div style={{
             width: '100%',
-            height: '400px',
+            height: '500px',
             background: '#ffffff',
             padding: '24px',
             borderRadius: '24px',
@@ -74,13 +127,13 @@ const BarChartPerThem = () => {
             <ResponsiveContainer width="100%" height="75%">
                 <BarChart
                     data={barData}
-                    layout="vertical" // Format horizontal pour mieux lire les noms longs (ex: SVT)
+                    layout="vertical"
                     margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9" />
+                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#adadefff" />
                     <XAxis type="number" domain={[0, 10]} hide />
                     <YAxis
-                        dataKey="subject"
+                        dataKey="matiere"
                         type="category"
                         axisLine={false}
                         tickLine={false}
@@ -93,7 +146,7 @@ const BarChartPerThem = () => {
                         formatter={(value: number | string | undefined) => [`${value ?? 0}/10`, 'Moyenne']}
                     />
                     <Bar
-                        dataKey="average"
+                        dataKey="moyenne"
                         radius={[0, 8, 8, 0]}
                         barSize={30}
                     >

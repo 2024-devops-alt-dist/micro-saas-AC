@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Category, Level, Propositions, Questions, QuizStats, Users
 from .serializers import (
@@ -97,10 +97,14 @@ class PropositionsRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
 
 
 class QuizStatsListCreateView(generics.ListCreateAPIView):
-    queryset = QuizStats.objects.all()
     serializer_class = QuizStatsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # On ne retourne que les stats de l'utilisateur connecté
+        return QuizStats.objects.filter(user_id=self.request.user.id).order_by("-date")
 
     def perform_create(self, serializer):
-        # On pourrait ici récupérer l'user connecté s'il y a un lien direct,
-        # mais on va laisser le front envoyer l'ID pour plus de flexibilité avec votre table 'users'
+        # On force l'utilisateur actuel si nécessaire,
+        # ou on laisse le front envoyer si IDs identiques
         serializer.save()

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
     PieChart,
     Pie,
@@ -6,40 +7,61 @@ import {
     Legend,
     ResponsiveContainer
 } from 'recharts';
-
-interface RawDataItem {
-    date: string;
-    matiere: string;
-    score: number;
-}
-
-const data: RawDataItem[] = [
-    { "date": "2025-01-12", "matiere": "Histoire", "score": 5 },
-    { "date": "2025-01-15", "matiere": "Maths", "score": 2 },
-    { "date": "2025-01-15", "matiere": "Sciences de la vie et de la terre", "score": 8 },
-    { "date": "2025-01-17", "matiere": "Histoire", "score": 6 },
-    { "date": "2025-01-18", "matiere": "Maths", "score": 5 },
-    { "date": "2025-01-19", "matiere": "Maths", "score": 4 },
-    { "date": "2025-01-23", "matiere": "Histoire", "score": 4 },
-    { "date": "2025-01-25", "matiere": "Maths", "score": 6 },
-    { "date": "2025-01-28", "matiere": "Histoire", "score": 8 },
-    { "date": "2025-02-01", "matiere": "Maths", "score": 9 },
-    { "date": "2025-02-02", "matiere": "Histoire", "score": 9 },
-    { "date": "2025-02-02", "matiere": "Sciences de la vie et de la terre", "score": 5 },
-    { "date": "2025-02-05", "matiere": "Histoire", "score": 8 },
-    { "date": "2025-02-06", "matiere": "Sciences de la vie et de la terre", "score": 7 },
-    { "date": "2025-02-25", "matiere": "Sciences de la vie et de la terre", "score": 10 },
-    { "date": "2025-03-01", "matiere": "Sciences de la vie et de la terre", "score": 10 }
-];
+import { getUsersStats, type UserStats } from '../quiz/services/statsService';
 
 const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
 const PieChartPerTheme = () => {
+    const [stats, setStats] = useState<UserStats[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                setLoading(true);
+                const data = await getUsersStats();
+                setStats(data);
+            } catch (err) {
+                console.error("Erreur stats PieChart:", err);
+                setError(err instanceof Error ? err.message : "Erreur de chargement");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
+
+    if (loading) return <div className="text-center p-8 text-slate-500">Analyse de vos activités...</div>;
+
+    if (error || stats.length === 0) {
+        return (
+            <div style={{
+                width: '100%',
+                height: '500px',
+                background: '#ffffff',
+                padding: '24px',
+                borderRadius: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: error ? '#ef4444' : '#64748b',
+                textAlign: 'center',
+                border: '1px solid #f1f5f9'
+            }}>
+                <p className='font-bold mb-2'>{error ? "Erreur" : "Pas de données"}</p>
+                <p className='text-sm text-gray-500'>{error || "Prenez part à votre premier quiz !"}</p>
+            </div>
+        );
+    }
+
     // Calcul de la répartition : nombre d'évaluations par matière
     const distributionMap: { [key: string]: number } = {};
 
-    data.forEach(item => {
-        distributionMap[item.matiere] = (distributionMap[item.matiere] || 0) + 1;
+    stats.forEach(item => {
+        const theme = item.category_name || "Inconnu";
+        distributionMap[theme] = (distributionMap[theme] || 0) + 1;
     });
 
     const chartData = Object.keys(distributionMap).map(subject => ({
@@ -50,7 +72,7 @@ const PieChartPerTheme = () => {
     return (
         <div style={{
             width: '100%',
-            height: '400px',
+            height: '500px',
             background: '#ffffff',
             padding: '24px',
             borderRadius: '24px',
@@ -77,7 +99,7 @@ const PieChartPerTheme = () => {
                         outerRadius={80}
                         paddingAngle={5}
                         dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent ? percent * 100 : 0).toFixed(0)}%`}
+                    // label={({ name, percent }) => `${name} ${(percent ? percent * 100 : 0).toFixed(0)}%`}
                     >
                         {chartData.map((_entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

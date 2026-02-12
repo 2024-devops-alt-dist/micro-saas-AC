@@ -19,7 +19,20 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
       ...options,
       headers,
     });
-    if (!response.ok) throw new Error("Erreur lors de la récupération des données");
+    if (response.status === 401) {
+      localStorage.removeItem("access_token");
+      throw new Error("Session expirée ou jeton invalide. Veuillez vous reconnecter.");
+    }
+
+    if (!response.ok) {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { message: response.statusText };
+      }
+      throw new Error(errorData.message || errorData.detail || "Erreur lors de la récupération des données");
+    }
     return response.json();
   } catch (error) {
     throw new Error("Erreur réseau ou serveur : " + (error instanceof Error ? error.message : String(error)));
