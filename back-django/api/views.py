@@ -31,6 +31,49 @@ class MeView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
+    def patch(self, request):
+        user = request.user
+        data = request.data
+
+        # Vérifier le mot de passe actuel pour toute modification
+        current_password = data.get("current_password")
+        if not current_password:
+            return Response(
+                {
+                    "error": "Le mot de passe actuel est requis pour modifier votre profil"
+                },
+                status=400,
+            )
+
+        if not user.check_password(current_password):
+            return Response({"error": "Mot de passe actuel incorrect"}, status=400)
+
+        # Modifier l'email si fourni
+        new_email = data.get("email")
+        if new_email and new_email != user.email:
+            # Vérifier que l'email n'est pas déjà utilisé
+            if User.objects.filter(email=new_email).exclude(id=user.id).exists():
+                return Response({"error": "Cet email est déjà utilisé"}, status=400)
+            user.email = new_email
+
+        # Modifier le mot de passe si fourni
+        new_password = data.get("new_password")
+        if new_password:
+            if len(new_password) < 8:
+                return Response(
+                    {
+                        "error": "Le nouveau mot de passe doit contenir au moins 8 caractères"
+                    },
+                    status=400,
+                )
+            user.set_password(new_password)
+
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(
+            {"message": "Profil mis à jour avec succès", "user": serializer.data}
+        )
+
 
 def test_api(request):
     return JsonResponse(
@@ -106,39 +149,26 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             "-date"
         )
 
-    def create(self, request, *args, **kwargs):
-        print(f"DEBUG STATS - Requête reçue de: {request.user.email}")
-        print(f"DEBUG STATS - Payload: {request.data}")
+    def perform_create(self, serializer):
+        user_django = self.request.user
+        print(f"DEBUG STATS - Tentative création pour: {user_django.email}")
 
         try:
-            # On s'assure d'abord que l'utilisateur n8n existe
-            user_django = request.user
             user_n8n, created = Users.objects.get_or_create(
                 email=user_django.email,
                 defaults={
-                    "pseudo": user_django.username,
-                    "password": "dummy_password_for_constraint",
+                    "username": user_django.username,
                 },
             )
             print(
-                f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} "
+                f"DEBUG STATS - Utilisateur n8n: {user_n8n.username} "
                 f"(ID: {user_n8n.id_user}, Created: {created})"
             )
+            print(f"DEBUG STATS - Data envoyée: {self.request.data}")
 
-            # Validation manuelle pour voir si ça bloque ici
-            serializer = self.get_serializer(data=request.data)
-            if not serializer.is_valid():
-                print(f"DEBUG STATS - Erreur Validation: {serializer.errors}")
-                return Response(serializer.errors, status=400)
-
-            # Sauvegarde
             serializer.save(user=user_n8n)
-            print("DEBUG STATS - SUCCESS: Score enregistré en base")
-            return Response(serializer.data, status=201)
+            print("DEBUG STATS - Sauvegarde réussie")
 
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"DEBUG STATS - ERREUR CRITIQUE: {str(e)}")
-            import traceback
-
-            traceback.print_exc()  # Affiche la pile d'exécution complète dans les logs
-            return Response({"error": str(e)}, status=500)
+            raise e

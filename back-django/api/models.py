@@ -86,18 +86,15 @@ class Propositions(models.Model):
 
 class Users(models.Model):
     id_user = models.AutoField(primary_key=True)
-    pseudo = models.CharField(
-        max_length=150, unique=True, db_column="pseudo", blank=True, null=True
-    )
+    username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True, db_column="email")
-    password = models.CharField(max_length=255, db_column="password")
 
     class Meta:
         db_table = "users"
         managed = False
 
     def __str__(self):
-        return str(self.pseudo)
+        return str(self.username)
 
 
 class QuizStats(models.Model):
