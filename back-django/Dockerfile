@@ -1,5 +1,6 @@
 # utiliser une image de base Python 3
 FROM python:3
+ENV PYTHONUNBUFFERED=1
 # définir le répertoire de travail dans le conteneur
 WORKDIR /usr/src/app
 # copier le fichier des dépendances dans le conteneur

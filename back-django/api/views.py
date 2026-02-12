@@ -106,11 +106,13 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             "-date"
         )
 
-    def perform_create(self, serializer):
-        user_django = self.request.user
-        print(f"DEBUG STATS - Tentative création pour: {user_django.email}")
+    def create(self, request, *args, **kwargs):
+        print(f"DEBUG STATS - Requête reçue de: {request.user.email}")
+        print(f"DEBUG STATS - Payload: {request.data}")
 
         try:
+            # On s'assure d'abord que l'utilisateur n8n existe
+            user_django = request.user
             user_n8n, created = Users.objects.get_or_create(
                 email=user_django.email,
                 defaults={
@@ -119,13 +121,24 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
                 },
             )
             print(
-                f"DEBUG STATS - Utilisateur n8n (ID: {user_n8n.id_user}, Created: {created})"
+                f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} "
+                f"(ID: {user_n8n.id_user}, Created: {created})"
             )
-            print(f"DEBUG STATS - Data envoyée: {self.request.data}")
 
+            # Validation manuelle pour voir si ça bloque ici
+            serializer = self.get_serializer(data=request.data)
+            if not serializer.is_valid():
+                print(f"DEBUG STATS - Erreur Validation: {serializer.errors}")
+                return Response(serializer.errors, status=400)
+
+            # Sauvegarde
             serializer.save(user=user_n8n)
-            print("DEBUG STATS - Sauvegarde réussie")
+            print("DEBUG STATS - SUCCESS: Score enregistré en base")
+            return Response(serializer.data, status=201)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"DEBUG STATS - ERREUR CRITIQUE: {str(e)}")
-            raise e
+            import traceback
+
+            traceback.print_exc()  # Affiche la pile d'exécution complète dans les logs
+            return Response({"error": str(e)}, status=500)

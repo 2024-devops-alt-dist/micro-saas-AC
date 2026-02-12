@@ -59,7 +59,7 @@ class QuestionsSerializer(serializers.ModelSerializer):
 
 
 class QuizStatsSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
+    user_id = serializers.IntegerField(source="user.id_user", read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         source="category", queryset=Category.objects.all()
     )
