@@ -1,5 +1,6 @@
 import Home from "./pages/Home";
 import Quiz from "./pages/Quiz";
+import QuizHistory from "./pages/QuizHistory";
 import GenerateQuizView from "./pages/GenerateQuizView";
 import Profil from "./pages/Profil";
 import Stats from "./pages/Stats";
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/quiz",
     element: <Quiz />,
+  },
+  {
+    path: "/history",
+    element: <QuizHistory />,
   },
   {
     path: "/generate-quiz",
