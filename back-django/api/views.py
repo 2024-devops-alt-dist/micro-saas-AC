@@ -157,11 +157,11 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             user_n8n, created = Users.objects.get_or_create(
                 email=user_django.email,
                 defaults={
-                    "username": user_django.username,
+                    "pseudo": user_django.username,
                 },
             )
             print(
-                f"DEBUG STATS - Utilisateur n8n: {user_n8n.username} "
+                f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} "
                 f"(ID: {user_n8n.id_user}, Created: {created})"
             )
             print(f"DEBUG STATS - Data envoyée: {self.request.data}")

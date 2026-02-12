@@ -86,15 +86,22 @@ class Propositions(models.Model):
 
 class Users(models.Model):
     id_user = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=150, unique=True)
+    # Support both 'username' (local) and 'pseudo' (production)
+    pseudo = models.CharField(max_length=150, unique=True, db_column="pseudo")
     email = models.EmailField(unique=True, db_column="email")
+    password = models.CharField(max_length=255, db_column="password")
 
     class Meta:
         db_table = "users"
         managed = False
 
     def __str__(self):
-        return str(self.username)
+        return str(self.pseudo)
+
+    @property
+    def username(self):
+        """Alias pour compatibilité avec le code existant"""
+        return self.pseudo
 
 
 class QuizStats(models.Model):
