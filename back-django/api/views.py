@@ -101,15 +101,21 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # On ne retourne que les stats de l'utilisateur connecté
-        return QuizStats.objects.filter(user_id=self.request.user.id).order_by("-date")
+        # On filtre via l'email pour faire le lien entre auth_user et la table users
+        return QuizStats.objects.filter(user__email=self.request.user.email).order_by(
+            "-date"
+        )
 
     def perform_create(self, serializer):
         # On s'assure que l'utilisateur existe dans la table 'users' de n8n
         # pour satisfaire la contrainte de clé étrangère SQL
         user_django = self.request.user
         user_n8n, _ = Users.objects.get_or_create(
-            email=user_django.email, defaults={"pseudo": user_django.username}
+            email=user_django.email,
+            defaults={
+                "pseudo": user_django.username,
+                "password": "dummy_password_for_constraint",
+            },
         )
         # On sauvegarde en liant le score à l'utilisateur de la table 'users'
         serializer.save(user=user_n8n)
