@@ -86,15 +86,17 @@ class Propositions(models.Model):
 
 class Users(models.Model):
     id_user = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
+    pseudo = models.CharField(
+        max_length=150, unique=True, db_column="pseudo", blank=True, null=True
+    )
+    email = models.EmailField(unique=True, db_column="email")
 
     class Meta:
         db_table = "users"
         managed = False
 
     def __str__(self):
-        return str(self.username)
+        return str(self.pseudo)
 
 
 class QuizStats(models.Model):
@@ -107,7 +109,7 @@ class QuizStats(models.Model):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, db_column="level_id", null=True
     )
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
     score = models.IntegerField()
     # On laisse les autres champs (quiz_id, average_time) optionnels car gérés par la base ou n8n
 
