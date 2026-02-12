@@ -121,7 +121,8 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
                 },
             )
             print(
-                f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} (ID: {user_n8n.id_user}, Created: {created})"
+                f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} "
+                f"(ID: {user_n8n.id_user}, Created: {created})"
             )
 
             # Validation manuelle pour voir si ça bloque ici
@@ -135,7 +136,7 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             print("DEBUG STATS - SUCCESS: Score enregistré en base")
             return Response(serializer.data, status=201)
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"DEBUG STATS - ERREUR CRITIQUE: {str(e)}")
             import traceback
 
