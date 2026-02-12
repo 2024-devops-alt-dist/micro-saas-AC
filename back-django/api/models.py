@@ -99,7 +99,7 @@ class Users(models.Model):
 
 class QuizStats(models.Model):
     user = models.ForeignKey(
-        Users, on_delete=models.CASCADE, db_column="user_id", null=True
+        User, on_delete=models.CASCADE, db_column="user_id", null=True
     )
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, db_column="category_id", null=True

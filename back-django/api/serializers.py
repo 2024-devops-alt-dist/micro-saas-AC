@@ -60,7 +60,7 @@ class QuestionsSerializer(serializers.ModelSerializer):
 
 class QuizStatsSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(
-        source="user", queryset=Users.objects.all()
+        source="user", queryset=User.objects.all()
     )
     category_id = serializers.PrimaryKeyRelatedField(
         source="category", queryset=Category.objects.all()
