@@ -90,6 +90,7 @@ class Users(models.Model):
         max_length=150, unique=True, db_column="pseudo", blank=True, null=True
     )
     email = models.EmailField(unique=True, db_column="email")
+    password = models.CharField(max_length=255, db_column="password")
 
     class Meta:
         db_table = "users"
