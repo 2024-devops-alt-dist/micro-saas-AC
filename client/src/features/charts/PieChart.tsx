@@ -38,7 +38,7 @@ const PieChartPerTheme = () => {
         return (
             <div style={{
                 width: '100%',
-                height: '400px',
+                height: '500px',
                 background: '#ffffff',
                 padding: '24px',
                 borderRadius: '24px',
@@ -72,7 +72,7 @@ const PieChartPerTheme = () => {
     return (
         <div style={{
             width: '100%',
-            height: '400px',
+            height: '500px',
             background: '#ffffff',
             padding: '24px',
             borderRadius: '24px',
@@ -99,7 +99,7 @@ const PieChartPerTheme = () => {
                         outerRadius={80}
                         paddingAngle={5}
                         dataKey="value"
-                        label={({ name, percent }) => `${name} ${(percent ? percent * 100 : 0).toFixed(0)}%`}
+                    // label={({ name, percent }) => `${name} ${(percent ? percent * 100 : 0).toFixed(0)}%`}
                     >
                         {chartData.map((_entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

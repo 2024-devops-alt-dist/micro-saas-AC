@@ -103,9 +103,8 @@ const LineChart = () => {
       fontFamily: 'Inter, system-ui, sans-serif'
     }}>
       <div style={{
-        display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         marginBottom: '32px'
       }}>
         <div>
@@ -155,7 +154,7 @@ const LineChart = () => {
               <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#adadefff" />
           <XAxis
             dataKey="date"
             axisLine={false}

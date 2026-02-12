@@ -65,7 +65,7 @@ const BarChartPerThem = () => {
         return (
             <div style={{
                 width: '100%',
-                height: '400px',
+                height: '500px',
                 background: '#ffffff',
                 padding: '24px',
                 borderRadius: '24px',
@@ -107,7 +107,7 @@ const BarChartPerThem = () => {
     return (
         <div style={{
             width: '100%',
-            height: '400px',
+            height: '500px',
             background: '#ffffff',
             padding: '24px',
             borderRadius: '24px',
@@ -130,7 +130,7 @@ const BarChartPerThem = () => {
                     layout="vertical"
                     margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9" />
+                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#adadefff" />
                     <XAxis type="number" domain={[0, 10]} hide />
                     <YAxis
                         dataKey="matiere"
