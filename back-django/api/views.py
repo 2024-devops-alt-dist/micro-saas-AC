@@ -105,6 +105,11 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         return QuizStats.objects.filter(user_id=self.request.user.id).order_by("-date")
 
     def perform_create(self, serializer):
-        # On force l'utilisateur actuel si nécessaire,
-        # ou on laisse le front envoyer si IDs identiques
-        serializer.save()
+        # On s'assure que l'utilisateur existe dans la table 'users' de n8n
+        # pour satisfaire la contrainte de clé étrangère SQL
+        user_django = self.request.user
+        user_n8n, created = Users.objects.get_or_create(
+            email=user_django.email, defaults={"username": user_django.username}
+        )
+        # On sauvegarde en liant le score à l'utilisateur de la table 'users'
+        serializer.save(user=user_n8n)

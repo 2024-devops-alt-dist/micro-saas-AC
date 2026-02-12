@@ -99,7 +99,7 @@ class Users(models.Model):
 
 class QuizStats(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, db_column="user_id", null=True
+        Users, on_delete=models.CASCADE, db_column="user_id", null=True
     )
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, db_column="category_id", null=True
@@ -107,7 +107,7 @@ class QuizStats(models.Model):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, db_column="level_id", null=True
     )
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     score = models.IntegerField()
     # On laisse les autres champs (quiz_id, average_time) optionnels car gérés par la base ou n8n
 
