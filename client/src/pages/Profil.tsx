@@ -12,7 +12,6 @@ function Profil() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
   const [stats, setStats] = useState<UserStats[]>([]);
-
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -47,12 +46,10 @@ function Profil() {
     await authService.updateProfile(currentPassword, newEmail, newPassword);
 
     if (newPassword) {
-      // Si le mot de passe a changé, l'utilisateur est déconnecté automatiquement
       navigate("/login");
     } else {
       setSuccessMessage("Profil mis à jour avec succès !");
       setTimeout(() => setSuccessMessage(""), 3000);
-      // Recharger les données du profil si l'email a changé
       if (newEmail) {
         window.location.reload();
       }
@@ -135,6 +132,15 @@ function Profil() {
         </div>
       </div>
 
+      <div className="flex gap-4 mb-4">
+        <Button
+          onClick={() => navigate("/history")}
+          className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold shadow-lg shadow-blue-900/20"
+        >
+          Voir mes Quiz
+        </Button>
+      </div>
+
       {/* Boutons d'action */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <Button
@@ -152,6 +158,7 @@ function Profil() {
           <span>Nouveau Quiz</span>
         </Button>
       </div>
+
       <EditProfileModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

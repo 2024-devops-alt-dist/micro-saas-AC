@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const navItems = [
   { label: 'Accueil', icon: <HomeIcon className="h-6 w-6" />, route: '/' },
-  { label: 'Quiz', icon: <BookmarkIcon className="h-6 w-6" />, route: '/quiz' },
+  { label: 'Quiz', icon: <BookmarkIcon className="h-6 w-6" />, route: '/history' },
   { label: 'Stats', icon: <UsersIcon className="h-6 w-6" />, route: '/stats' },
   { label: 'Profil', icon: <UserIcon className="h-6 w-6" />, route: '/profil' },
 ];
