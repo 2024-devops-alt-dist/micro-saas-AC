@@ -108,7 +108,7 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         # On s'assure que l'utilisateur existe dans la table 'users' de n8n
         # pour satisfaire la contrainte de clé étrangère SQL
         user_django = self.request.user
-        user_n8n, created = Users.objects.get_or_create(
+        user_n8n, _ = Users.objects.get_or_create(
             email=user_django.email, defaults={"pseudo": user_django.username}
         )
         # On sauvegarde en liant le score à l'utilisateur de la table 'users'
