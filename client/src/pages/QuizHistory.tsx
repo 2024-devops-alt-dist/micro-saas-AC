@@ -25,7 +25,7 @@ function QuizHistory() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white p-6 pb-24">
+        <div className="min-h-screen text-white pb-24">
             <Title text="MES QUIZ" />
 
             <div className="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden shadow-xl max-w-4xl mx-auto">

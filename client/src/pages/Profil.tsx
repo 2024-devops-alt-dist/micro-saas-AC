@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import Title from "../components/Title";
 import { getUsersStats, type UserStats } from "../features/quiz/services/statsService";
 import EditProfileModal from "../features/auth/components/EditProfileModal";
-import { PresentationChartBarIcon, AtSymbolIcon, AcademicCapIcon } from '@heroicons/react/24/outline';
+import { PresentationChartBarIcon, AtSymbolIcon, AcademicCapIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 
 function Profil() {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ function Profil() {
   const email = authService.getEmail();
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 pb-24">
+    <div className="min-h-screen text-white pb-24">
       <Title text="MON PROFIL" />
 
       {successMessage && (
@@ -76,7 +76,7 @@ function Profil() {
         <div className="flex justify-between items-start mb-6">
           <div>
             <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Compte Pilote</p>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold text-yellow-300">
               {username}
             </h2>
           </div>
@@ -125,9 +125,10 @@ function Profil() {
         <div className="mt-4">
           <Button
             onClick={() => setIsEditModalOpen(true)}
-            className="w-full py-2 bg-blue-600/10 text-blue-400 border border-blue-600/30 hover:bg-blue-600 hover:text-white rounded-lg transition-all duration-300"
+            className="w-full py-2 bg-blue-600/10 text-blue-400 border border-blue-600/30 hover:bg-yellow-300 hover:text-gray-900 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
           >
-            ✏️ Modifier mes informations
+            <PencilSquareIcon className="w-5 h-5 mr-2" />
+             Modifier mes informations
           </Button>
         </div>
       </div>
@@ -135,7 +136,7 @@ function Profil() {
       <div className="flex gap-4 mb-4">
         <Button
           onClick={() => navigate("/history")}
-          className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold shadow-lg shadow-blue-900/20"
+          className="flex-1 py-3  text-gray-900 bg-yellow-300 hover:bg-yellow-400 rounded-xl font-bold shadow-lg shadow-yellow-900/20"
         >
           Voir mes Quiz
         </Button>
@@ -145,14 +146,14 @@ function Profil() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <Button
           onClick={() => navigate("/stats")}
-          className="py-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-bold shadow-lg shadow-blue-900/20 transition-all flex items-center justify-center gap-2"
+          className="py-4 text-gray-900 bg-yellow-300 hover:bg-yellow-400 rounded-xl font-bold shadow-lg shadow-yellow-900/20 transition-all flex items-center justify-center gap-2"
         >
           <PresentationChartBarIcon className="w-5 h-5" />
           <span>Mes Stats</span>
         </Button>
         <Button
           onClick={() => navigate("/generate-quiz")}
-          className="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold shadow-lg shadow-indigo-900/20 transition-all flex items-center justify-center gap-2"
+          className="py-4  text-gray-900 bg-yellow-300 hover:bg-yellow-400 rounded-xl font-bold shadow-lg shadow-yellow-900/20 transition-all flex items-center justify-center gap-2"
         >
           <AcademicCapIcon className="w-5 h-5" />
           <span>Nouveau Quiz</span>

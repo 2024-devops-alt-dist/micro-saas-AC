@@ -11,27 +11,6 @@ import {
 import { useEffect, useState } from 'react';
 import { getUsersStats, type UserStats } from '../quiz/services/statsService';
 
-// interface RawDataItem {
-//     date: string;
-//     matiere: string;
-//     score: number;
-// }
-
-// const data: RawDataItem[] = [
-//     { "date": "2025-01-12", "matiere": "Histoire", "score": 5 },
-//     { "date": "2025-01-15", "matiere": "Maths", "score": 2 },
-//     { "date": "2025-01-15", "matiere": "Sciences de la vie et de la terre", "score": 8 },
-//     { "date": "2025-01-17", "matiere": "Histoire", "score": 6 },
-//     { "date": "2025-01-18", "matiere": "Maths", "score": 5 },
-//     { "date": "2025-01-19", "matiere": "Maths", "score": 4 },
-//     { "date": "2025-01-23", "matiere": "Histoire", "score": 4 },
-//     { "date": "2025-01-25", "matiere": "Maths", "score": 6 },
-//     { "date": "2025-01-28", "matiere": "Histoire", "score": 8 },
-//     { "date": "2025-02-01", "matiere": "Maths", "score": 9 },
-//     { "date": "2025-02-02", "matiere": "Histoire", "score": 9 },
-//     { "date": "2025-02-02", "matiere": "Sciences de la vie et de la terre", "score": 5 },
-//     { "date": "2025-02-05", "matiere": "Histoire", "score": 8 }
-// ];
 
 const BarChartPerThem = () => {
     const [stats, setStats] = useState<UserStats[]>([]);
