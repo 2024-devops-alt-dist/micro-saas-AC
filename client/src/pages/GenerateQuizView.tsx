@@ -1,10 +1,12 @@
 import GenerateQuiz from '../features/quiz/components/GenerateQuiz'
+import BottomNav from '../components/BottomNav'
 
 function GererateQuizView() {
   return (
     <div>
-        <GenerateQuiz />
-      
+      <GenerateQuiz />
+      <BottomNav />
+
     </div>
   )
 }

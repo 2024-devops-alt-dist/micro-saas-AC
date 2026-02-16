@@ -20,7 +20,7 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 pb-24">
+    <div className="min-h-screen text-white pb-24">
       <Title />
 
       <div className="flex flex-col items-center gap-6 mt-10 text-center">
@@ -62,21 +62,29 @@ function Home() {
         </div>
       </div> */}
 
-      <div className="mt-12 p-4 border border-gray-700 rounded-lg bg-gray-800/50">
-        <Button
-          className="w-full px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
-          onClick={testApiConnection}
-        >
-          Tester la connexion à l'API
-        </Button>
+   <div className="mt-12 p-4 border border-gray-700 rounded-lg bg-gray-800/50 max-w-full">
+  <Button
+    className="w-full px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
+    onClick={testApiConnection}
+  >
+    Tester la connexion à l'API
+  </Button>
 
-        {apiResponse && (
-          <div className="mt-4 p-4 bg-black/30 rounded overflow-x-auto">
-            <h3 className="font-bold text-sm text-gray-400">Réponse de l'API:</h3>
-            <pre className="text-xs mt-2">{JSON.stringify(apiResponse, null, 2)}</pre>
-          </div>
-        )}
+  {apiResponse && (
+    <div className="mt-4 p-4 bg-black/30 rounded max-w-full overflow-hidden">
+      <h3 className="font-bold text-sm text-gray-400">Réponse de l'API:</h3>
+
+      <div className="
+        text-xs mt-2
+        whitespace-pre-wrap
+        break-words
+        max-w-full
+      ">
+        {JSON.stringify(apiResponse, null, 2)}
       </div>
+    </div>
+  )}
+</div>
 
       <BottomNav />
     </div>
