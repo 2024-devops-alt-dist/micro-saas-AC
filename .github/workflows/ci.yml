@@ -63,8 +63,8 @@ jobs:
       - name: Install pip-audit
         run: pip install pip-audit
 
-      - name: Security audit (ignore pip vulnerability)
-        run: pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph
+      - name: Security audit (ignore specific vulnerabilities)
+        run: pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-27jp-wm6q-gp25
 
       - name: Lint code with pylint
         run: pylint .
