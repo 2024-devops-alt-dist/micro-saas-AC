@@ -36,14 +36,15 @@ const Title = ({ text = "QUIZPILOT" }: TitleProps) => {
   }, [text]);
 
   return (
-    <div className="h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 ">
+    <div className="h-64 sm:h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300">
       <h1
         id="title"
         ref={titleRef}
-        className="text-6xl tracking-wider text-center font-skyfont"
+        className="text-4xl sm:text-6xl tracking-wider text-center font-skyfont"
       >
         {text}
       </h1>
+
       {/* <button
         id="reloadBtn"
         onClick={animateText}

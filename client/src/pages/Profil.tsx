@@ -4,14 +4,14 @@ import BottomNav from "../components/BottomNav";
 import { authService } from "../features/auth/services/authService";
 import Button from "../components/Button";
 import Title from "../components/Title";
-import { getUsersStats, type UserStats } from "../features/quiz/services/statsService";
+import { useUserStats } from "../features/charts/services/userStats";
 import EditProfileModal from "../features/auth/components/EditProfileModal";
 import { PresentationChartBarIcon, AtSymbolIcon, AcademicCapIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 
 function Profil() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
-  const [stats, setStats] = useState<UserStats[]>([]);
+  const { stats, state } = useUserStats();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -21,20 +21,13 @@ function Profil() {
       return;
     }
 
-    const fetchStats = async () => {
-      try {
-        const data = await getUsersStats();
-        const sortedData = [...data].sort((a, b) =>
-          new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        setStats(sortedData);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des stats:", error);
-      }
-    };
+    if (state === "unauthenticated") {
+      authService.logout();
+      setIsAuthenticated(false);
+      navigate("/login");
+    }
+  }, [isAuthenticated, state, navigate]);
 
-    fetchStats();
-  }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
     authService.logout();
@@ -128,7 +121,7 @@ function Profil() {
             className="w-full py-2 bg-blue-600/10 text-blue-400 border border-blue-600/30 hover:bg-yellow-300 hover:text-gray-900 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
           >
             <PencilSquareIcon className="w-5 h-5 mr-2" />
-             Modifier mes informations
+            Modifier mes informations
           </Button>
         </div>
       </div>
