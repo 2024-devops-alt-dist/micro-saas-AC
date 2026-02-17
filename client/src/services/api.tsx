@@ -21,7 +21,9 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     });
     if (response.status === 401) {
       localStorage.removeItem("access_token");
-      throw new Error("Session expirée ou jeton invalide. Veuillez vous reconnecter.");
+      const error = new Error("Session expirée ou jeton invalide. Veuillez vous reconnecter.");
+      (error as any).status = 401;
+      throw error;
     }
 
     if (!response.ok) {
@@ -31,12 +33,19 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
       } catch {
         errorData = { message: response.statusText };
       }
-      throw new Error(errorData.message || errorData.detail || "Erreur lors de la récupération des données");
+      const error = new Error(errorData.message || errorData.detail || "Erreur lors de la récupération des données");
+      (error as any).status = response.status;
+      throw error;
     }
     return response.json();
   } catch (error) {
+    // Si l'erreur a déjà un statut (elle vient de notre code ci-dessus), on la relance telle quelle
+    if (error instanceof Error && (error as any).status) {
+      throw error;
+    }
     throw new Error("Erreur réseau ou serveur : " + (error instanceof Error ? error.message : String(error)));
   }
+
 }
 
 
