@@ -50,8 +50,8 @@ export default function QuizCardView({
         {question.propositions.map((p, idx) => {
           const testId = p.is_correct ? "answer-correct" : "answer-wrong";
 
-          let btnBase = "w-full py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-between group";
-          let btnStyle = "";
+          const btnBase = "w-full py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 flex items-center justify-between group";
+          let btnStyle;
 
           if (selected === p.text) {
             btnStyle = p.is_correct
