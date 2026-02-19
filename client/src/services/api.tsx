@@ -43,7 +43,7 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     if (error instanceof Error && (error as any).status) {
       throw error;
     }
-    throw new Error("Erreur réseau ou serveur : " + (error instanceof Error ? error.message : String(error)));
+    throw new Error("Erreur réseau ou serveur", { cause: error });
   }
 
 }

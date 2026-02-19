@@ -21,7 +21,6 @@ export async function generateQuizFromFile(file: File, options: { theme: string;
         if (!response.ok) throw new Error("Erreur lors de la génération du quiz");
         return response.json();
     } catch (error) {
-        throw new Error("Erreur réseau ou serveur : " + (error instanceof Error ? error.message : String(error)));
+        throw new Error("Erreur réseau ou serveur", { cause: error });
     }
 }
-
