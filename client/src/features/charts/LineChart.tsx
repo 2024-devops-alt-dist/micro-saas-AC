@@ -69,19 +69,23 @@ const LineChart = () => {
       <div className={`transition-all duration-700 ${state === 'unauthenticated' ? 'blur-sm pointer-events-none opacity-50 contrast-[0.8]' : ''}`}
         style={{
           width: '100%',
-          height: '500px',
+          minHeight: '420px',
           background: '#ffffff',
-          padding: '24px',
+          padding: '16px',
           borderRadius: '24px',
           boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 10px 15px -3px rgb(0 0 0 / 0.1)',
           border: '1px solid #f1f5f9',
-          fontFamily: 'Inter, system-ui, sans-serif'
+          fontFamily: 'Inter, system-ui, sans-serif',
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }}>
         <div style={{
           display: 'flex',
+          flexWrap: 'wrap',
+          gap: '16px',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '32px'
+          alignItems: 'flex-start',
+          marginBottom: '24px'
         }}>
           <div>
             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>
@@ -110,9 +114,10 @@ const LineChart = () => {
                 fontWeight: 500,
                 cursor: 'pointer',
                 outline: 'none',
-                minWidth: '200px',
+                width: '100%',
+                maxWidth: '220px',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
               }}
             >
               {uniqueMatieres.map(m => (
@@ -122,7 +127,7 @@ const LineChart = () => {
           </div>
         </div>
 
-        <ResponsiveContainer width="100%" height="70%">
+        <ResponsiveContainer width="100%" height={280}>
           <AreaChart data={processedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="selectedGrad" x1="0" y1="0" x2="0" y2="1">

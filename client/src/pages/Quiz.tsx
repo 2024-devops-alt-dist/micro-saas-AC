@@ -38,7 +38,7 @@ function QuizPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 pb-20">
+    <div className="min-h-screen bg-gray-900 pb-20 overflow-x-hidden">
       <QuizCard
         question={question}
         selected={answers[currentIdx] ?? null}
