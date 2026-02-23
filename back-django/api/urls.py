@@ -1,18 +1,23 @@
 """URL configuration for l’API QuizPilot."""
 
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+# )
 
 from . import views
 
 urlpatterns = [
     # Pour échanger un identifiant/mot de passe contre un jeton (Connexion)
-    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/", views.CookieTokenObtainPairView.as_view(), name="token_obtain_pair"),
     # Pour rester connecté sans avoir à retaper son mot de passe
-    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path(
+        "token/refresh/", views.CookieTokenRefreshView.as_view(), name="token_refresh"
+    ),
+    # Déconnexion (suppression des cookies)
+    path("logout/", views.LogoutView.as_view(), name="logout"),
     # Enregistrer un nouvel utilisateur
     path("register/", views.RegisterView.as_view(), name="auth_register"),
     path("me/", views.MeView.as_view(), name="me"),

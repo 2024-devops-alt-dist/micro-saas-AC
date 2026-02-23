@@ -6,11 +6,9 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     throw new Error("API_URL is not defined");
   }
 
-  const token = localStorage.getItem("access_token");
 
   const headers = {
     ...options.headers,
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     "Content-Type": "application/json",
   };
 
@@ -18,9 +16,12 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers,
+      credentials: "include", // Important pour envoyer les cookies
     });
     if (response.status === 401) {
-      localStorage.removeItem("access_token");
+      // On ne peut pas importer authService ici a cause d'une possible dépendance circulaire
+      // On va juste vider le localStorage localement ou laisser le composant gérer
+      localStorage.clear();
       const error = new Error("Session expirée ou jeton invalide. Veuillez vous reconnecter.");
       (error as any).status = 401;
       throw error;

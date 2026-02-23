@@ -4,6 +4,8 @@ from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.conf import settings
 
 from .models import Category, Level, Propositions, Questions, QuizStats, Users
 from .serializers import (
@@ -172,3 +174,62 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"DEBUG STATS - ERREUR CRITIQUE: {str(e)}")
             raise e
+
+
+class CookieTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            access_token = response.data.get("access")
+            refresh_token = response.data.get("refresh")
+
+            response.set_cookie(
+                key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+                value=access_token,
+                expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            )
+            response.set_cookie(
+                key=settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
+                value=refresh_token,
+                expires=settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"],
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            )
+            # Optionnel: on peut enlever les tokens du corps de la réponse si on veut être strict
+            # del response.data['access']
+            # del response.data['refresh']
+        return response
+
+
+class CookieTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        # Si le refresh token n'est pas dans le body, on le cherche dans les cookies
+        refresh_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
+        if refresh_token and "refresh" not in request.data:
+            request.data["refresh"] = refresh_token
+
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            access_token = response.data.get("access")
+            response.set_cookie(
+                key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+                value=access_token,
+                expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+                secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
+                httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
+                samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
+            )
+        return response
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        response = Response({"message": "Successfully logged out"}, status=200)
+        response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
+        response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
+        return response
