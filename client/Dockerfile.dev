@@ -4,11 +4,11 @@ FROM node:20-alpine
 # définir le répertoire de travail dans le conteneur
 WORKDIR /usr/src/app
 
-# Copier package.json et package-lock.json
-COPY package.json package-lock.json ./
+# Copier package.json, package-lock.json et .npmrc pour installer les dépendances
+COPY package.json package-lock.json .npmrc ./
 
 # Installer toutes les dépendances
-RUN npm install
+RUN npm ci
 
 # Copier tout le code
 COPY . .
