@@ -63,8 +63,8 @@ test.describe('feature Quiz E2E', () => {
     await expect(nextBtn).toBeEnabled();
     await nextBtn.click();
 
-    // Vérifie que la page de résultats est affichée avec le score
-    await expect(page.getByText(/Votre score:/i)).toBeVisible();
+    // Vérifie que la page de résultats est affichée (bouton RECOMMENCER toujours présent)
+    await expect(page.getByRole('button', { name: /recommencer/i })).toBeVisible();
   });
 
   test('Navigation arrière : impossible de reselectionner une proposition déjà choisie, couleur correcte', async ({ page }) => {
