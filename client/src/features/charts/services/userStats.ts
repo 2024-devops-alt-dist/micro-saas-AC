@@ -14,10 +14,10 @@ export const useUserStats = () => {
     console.log("stats mockés", MOCK_USER_STATS);
 
     const fetchStats = useCallback(async () => {
-        const token = localStorage.getItem("access_token") || localStorage.getItem("token");
-        console.log("token ?", token);
+        const isAuthenticated = localStorage.getItem("is_authenticated") === "true";
+        console.log("isAuthenticated ?", isAuthenticated);
 
-        if (!token) {
+        if (!isAuthenticated) {
             setStats(MOCK_USER_STATS);
             setState("unauthenticated");
             return;
