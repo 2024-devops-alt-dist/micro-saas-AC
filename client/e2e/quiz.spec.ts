@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 
 test.describe('feature Quiz E2E', () => {
-  
+
   test('Bonne réponse colore en vert', async ({ page }) => {
     await page.goto('http://localhost:3005/quiz');
     for (let i = 0; i < 10; i++) {
@@ -12,10 +12,10 @@ test.describe('feature Quiz E2E', () => {
       await expect(correctAnswer).toBeEnabled();
       await correctAnswer.click();
       const correctDisabledBtn = page.locator('[data-testid="answer-correct"]');
-      await expect(correctDisabledBtn).toHaveClass(/bg-green-400/);
+      await expect(correctDisabledBtn).toHaveClass(/bg-green-500/);
 
       if (i < 9) {
-        const nextBtn = page.getByRole('button', { name: /suivante/i });
+        const nextBtn = page.getByRole('button', { name: /suivant/i });
         await expect(nextBtn).toBeEnabled();
         await nextBtn.click();
       }
@@ -36,10 +36,10 @@ test.describe('feature Quiz E2E', () => {
       await wrongAnswerBtn.click();
 
       const allWrongAnswers = page.locator('[data-testid="answer-wrong"]');
-      await expect(allWrongAnswers.nth(0)).toHaveClass(/bg-red-400/);
+      await expect(allWrongAnswers.nth(0)).toHaveClass(/bg-red-500/);
 
       if (i < 9) {
-        const nextBtn = page.getByRole('button', { name: /suivante/i });
+        const nextBtn = page.getByRole('button', { name: /suivant/i });
         await expect(nextBtn).toBeEnabled();
         await nextBtn.click();
       }
@@ -54,12 +54,12 @@ test.describe('feature Quiz E2E', () => {
       const answer = page.locator('button:not([disabled])').first();
       await answer.click();
       if (i < 9) {
-        const nextBtn = page.getByRole('button', { name: /suivante/i });
+        const nextBtn = page.getByRole('button', { name: /suivant/i });
         await expect(nextBtn).toBeEnabled();
         await nextBtn.click();
       }
     }
-    const nextBtn = page.getByRole('button', { name: /suivante/i });
+    const nextBtn = page.getByRole('button', { name: /suivant/i });
     await expect(nextBtn).toBeEnabled();
     await nextBtn.click();
 
@@ -79,12 +79,12 @@ test.describe('feature Quiz E2E', () => {
     await firstAnswer.click();
 
     // 2. Passe à la deuxième question
-    const nextBtn = page.getByRole('button', { name: /suivante/i });
+    const nextBtn = page.getByRole('button', { name: /suivant/i });
     await expect(nextBtn).toBeEnabled();
     await nextBtn.click();
 
-    // 3. Clique sur "précédente" pour revenir à la première question
-    const prevBtn = page.getByRole('button', { name: /précédente/i });
+    // 3. Clique sur "précédent" pour revenir à la première question
+    const prevBtn = page.getByRole('button', { name: /précédent/i });
     await expect(prevBtn).toBeEnabled();
     await prevBtn.click();
 
@@ -94,14 +94,14 @@ test.describe('feature Quiz E2E', () => {
     await expect(selectedBtnBack).toBeDisabled();
     // La couleur dépend du type de réponse
     // On vérifie que la classe contient vert OU rouge
-    await expect(selectedBtnBack).toHaveClass(/bg-green-400|bg-red-400/);
+    await expect(selectedBtnBack).toHaveClass(/bg-green-500|bg-red-500/);
 
     // vérifier si c'était la bonne ou mauvaise réponse en inspectant le mock ou le data-testid
     const isCorrect = await selectedBtnBack.getAttribute('data-testid') === 'answer-correct';
     if (isCorrect) {
-      await expect(selectedBtnBack).toHaveClass(/bg-green-400/);
+      await expect(selectedBtnBack).toHaveClass(/bg-green-500/);
     } else {
-      await expect(selectedBtnBack).toHaveClass(/bg-red-400/);
+      await expect(selectedBtnBack).toHaveClass(/bg-red-500/);
     }
 
   });
