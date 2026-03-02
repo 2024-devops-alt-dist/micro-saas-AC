@@ -179,7 +179,7 @@ export default function GenerateQuiz() {
         </div>
 
         <div className="space-y-4 bg-gray-800/40 p-6 rounded-3xl border border-gray-700/50">
-          <h3 className="text-xs uppercase tracking-widest text-gray-200 font-bold">Source du contenu</h3>
+          <h2 className="text-xs uppercase tracking-widest text-gray-200 font-bold">Source du contenu</h2>
 
           <div className="flex flex-col gap-3">
             <label htmlFor="file-input" className="cursor-pointer group" aria-label="Zone de chargement de fichier">

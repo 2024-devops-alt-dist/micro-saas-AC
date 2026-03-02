@@ -20,7 +20,8 @@ function Home() {
   };
 
   return (
-    <main className="min-h-screen text-white pb-24 px-4 sm:px-6">
+    <main className="min-h-screen bg-gray-900 text-white pb-24 px-4 sm:px-6">
+
       <Title text="QUIZPILOT" />
 
       <div className="max-w-2xl mx-auto flex flex-col items-center gap-8 mt-4 sm:mt-10 text-center">
