@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemaps (optionnel, à ajouter si vous en créez un)
+# Sitemap: https://quizpilot.senga200.ovh/sitemap.xml

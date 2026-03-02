@@ -14,6 +14,8 @@ const Title = ({ text = "QUIZPILOT", tag = "h1" }: TitleProps) => {
 
   useEffect(() => {
     let step = 0;
+    const intervalTime = 50; // Plus rapide pour stabiliser le LCP plus tôt
+
     const timer = setInterval(() => {
       const revealed = text.slice(0, step);
       let randomPart = "";
@@ -28,20 +30,19 @@ const Title = ({ text = "QUIZPILOT", tag = "h1" }: TitleProps) => {
         clearInterval(timer);
         setDisplayedText(text);
       }
-    }, 110);
+    }, intervalTime);
 
     return () => clearInterval(timer);
   }, [text]);
 
   return (
-    <div className="h-64 sm:h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300">
-      <Tag
-        className="text-4xl sm:text-6xl tracking-wider text-center font-skyfont"
-      >
+    <div className="h-64 sm:h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 antialiased overflow-hidden">
+      <Tag className="text-4xl sm:text-6xl tracking-wider text-center font-skyfont select-none min-h-[1.5em] leading-relaxed">
         {displayedText}
       </Tag>
     </div>
   );
 };
+
 
 export default Title;

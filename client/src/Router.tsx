@@ -6,7 +6,6 @@ import Profil from "./pages/Profil";
 import Stats from "./pages/Stats";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -47,3 +46,5 @@ const router = createBrowserRouter([
 export default function Router() {
   return <RouterProvider router={router} />;
 }
+
+
