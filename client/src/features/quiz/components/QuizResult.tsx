@@ -4,7 +4,6 @@ import Collapse from '../../../components/Collapse'
 import ValidationAnimation from './ValidationAnimation';
 import { useEffect, useState } from 'react';
 import { getCategories, getLevels, saveQuizStats } from '../../../services/api';
-import BottomNav from '../../../components/BottomNav';
 
 interface CategoryOrLevel {
   id: number;
@@ -170,7 +169,6 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
           </ul>
         </Collapse>
       </div>
-      <BottomNav />
     </div>
   );
 }

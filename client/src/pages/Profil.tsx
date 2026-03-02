@@ -55,7 +55,7 @@ function Profil() {
   const email = authService.getEmail();
 
   return (
-    <div className="min-h-screen text-white pb-24">
+    <main className="min-h-screen text-white pb-24">
       <Title text="MON PROFIL" />
 
       {successMessage && (
@@ -85,7 +85,7 @@ function Profil() {
         <div className="space-y-3 bg-gray-900/50 p-4 rounded-xl border border-gray-700/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
-              <span className="text-blue-400 text-lg">👤</span>
+              <span className="text-blue-400 text-lg" role="img" aria-label="Utilisateur">👤</span>
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Nom du pilote</p>
@@ -95,7 +95,7 @@ function Profil() {
 
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center">
-              <AtSymbolIcon className="w-5 h-5 text-indigo-400" />
+              <AtSymbolIcon className="w-5 h-5 text-indigo-400" aria-hidden="true" />
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Email</p>
@@ -105,7 +105,7 @@ function Profil() {
 
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
-              <PresentationChartBarIcon className="w-5 h-5 text-green-400" />
+              <PresentationChartBarIcon className="w-5 h-5 text-green-400" aria-hidden="true" />
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide">Quiz effectués</p>
@@ -161,7 +161,7 @@ function Profil() {
       />
 
       <BottomNav />
-    </div>
+    </main>
   );
 }
 

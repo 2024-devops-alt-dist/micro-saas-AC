@@ -6,29 +6,10 @@ import { generateQuizFromFile } from "../../../services/n8nServices";
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 
-//import { type ChangeEvent } from "react";
-//import useGenerateQuiz from "./useGenerateQuiz";
-//import ProgressRing from "./ProgressRing";
-
 const THEMES = ["Histoire", "Maths", "Science", "Technologie et Sciences numériques", "Géographie", "Biologie", "Physique Chimie", "Langues Vivantes", "Economie et Gestion", "Sciences de la Vie et de la Terre", "Autres"];
 const DIFFICULTIES = ["Facile", "Intermédiaire", "Difficile"];
-//const QUESTION_TYPES = ["QCM", "Vrai/Faux", "Ouverte"];
 
 export default function GenerateQuiz() {
-  //   const {
-  //     options,
-  //     setOption,
-  //     file,
-  //     setFile,
-  //     isGenerating,
-  //     progress,
-  //     error,
-  //     generateQuiz,
-  //     uploadFile,
-  //     startScan,
-  //     reset,
-  //   }
-  // = useGenerateQuiz({ theme: THEMES[0], difficulty: DIFFICULTIES[0], questionType: QUESTION_TYPES[0] });
 
   const navigate = useNavigate();
   const [isScanOpen, setIsScanOpen] = useState(false);
@@ -39,7 +20,6 @@ export default function GenerateQuiz() {
   const [options, setOptions] = useState({
     theme: THEMES[0],
     difficulty: DIFFICULTIES[0],
-    //questionType: QUESTION_TYPES[0],
   });
 
   // empêche le scroll de fond quand la modale est ouverte
@@ -56,9 +36,7 @@ export default function GenerateQuiz() {
 
   // on gère l upload du fichier pdf
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("Fichier selectionné:", e.target.files);
     const f = e.target.files?.[0] ?? null;
-    console.log("Fichier selectionné:", f);
     setFile(f);
     setError(null);
     setSuccess(null);
@@ -102,10 +80,9 @@ export default function GenerateQuiz() {
   };
 
   const handleScanConfirm = async (scannedFile: File) => {
-    console.log("Fichier scanné:", scannedFile);
     try {
       const pdfFile = await imageToPdf(scannedFile);
-      setFile(pdfFile); // ← on stocke le PDF
+      setFile(pdfFile);
       setSuccess("Scan converti en PDF avec succès");
       setError(null);
     } catch (err) {
@@ -124,31 +101,15 @@ export default function GenerateQuiz() {
     setIsGenerating(true);
     setError(null);
     setSuccess(null);
-    // try {
-    //   const result = await generateQuizFromFile(file);
-    //   console.log("Resultat du quiz généré (result):", result);
-    //   console.log("Resultat du quiz généré (result.quiz):", result.quiz);
-    //   setSuccess("Quiz généré avec succès");
-    //   if (result && result.quiz) {
-    //     // On redirige vers la page quiz en passant les données réelles
-
-    //     navigate("/quiz", { state: { quizData: result.quiz } });
-    //   }
-    // } catch (error) {
     try {
       const response = await generateQuizFromFile(file, options);
-      console.log("DEBUG - Réponse brute:", response);
-
-      // 1. On gère le cas où n8n renvoie un tableau [ { quiz: ... } ]
       const result = Array.isArray(response) ? response[0] : response;
 
-      // 2. On vérifie si n8n n'a pas renvoyé une erreur (format JSON d'erreur n8n)
       if (result.errorMessage || result.error) {
         setError(`Erreur n8n: ${result.errorMessage || result.error}`);
         return;
       }
 
-      // 3. On vérifie si on a bien nos questions
       if (result && result.quiz) {
         setSuccess("Quiz généré avec succès ! Redirection...");
         navigate("/quiz", {
@@ -172,8 +133,8 @@ export default function GenerateQuiz() {
   };
 
   const scanModalContent = (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4 text-black">Scanner un document</h2>
+    <div className="p-4" role="dialog" aria-labelledby="scan-title">
+      <h2 id="scan-title" className="text-xl font-bold mb-4 text-black">Scanner un document</h2>
       <Scan
         onConfirm={handleScanConfirm}
         onClose={() => setIsScanOpen(false)}
@@ -181,17 +142,18 @@ export default function GenerateQuiz() {
     </div>
   );
 
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-6 pb-24">
       <div className="w-full max-w-md space-y-6">
 
         <div className="space-y-4">
-          <label className="text-xs uppercase tracking-widest text-gray-500 font-bold ml-2">Paramètres du Quiz</label>
+          <label htmlFor="theme-select" className="inline-block text-xs uppercase tracking-widest text-gray-200 font-bold ml-2">Thème du Quiz</label>
           <select
+            id="theme-select"
             value={options.theme}
             onChange={(e) => setOptions({ ...options, theme: e.target.value })}
-            className="w-full p-4 rounded-2xl bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-yellow-300 outline-none transition-all"
+            className="w-full p-4 rounded-2xl bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-yellow-300 outline-none transition-all cursor-pointer"
+            aria-label="Sélectionner le thème du quiz"
           >
             {THEMES.map((t) => (
               <option key={t} value={t}>
@@ -200,10 +162,13 @@ export default function GenerateQuiz() {
             ))}
           </select>
 
+          <label htmlFor="difficulty-select" className="inline-block text-xs uppercase tracking-widest text-gray-200 font-bold ml-2">Difficulté du Quiz</label>
           <select
+            id="difficulty-select"
             value={options.difficulty}
             onChange={(e) => setOptions({ ...options, difficulty: e.target.value })}
-            className="w-full p-4 rounded-2xl bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-yellow-300 outline-none transition-all"
+            className="w-full p-4 rounded-2xl bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-yellow-300 outline-none transition-all cursor-pointer"
+            aria-label="Sélectionner la difficulté du quiz"
           >
             {DIFFICULTIES.map((d) => (
               <option key={d} value={d}>
@@ -214,16 +179,27 @@ export default function GenerateQuiz() {
         </div>
 
         <div className="space-y-4 bg-gray-800/40 p-6 rounded-3xl border border-gray-700/50">
-          <label className="text-xs uppercase tracking-widest text-gray-500 font-bold">Source du contenu</label>
+          <h3 className="text-xs uppercase tracking-widest text-gray-200 font-bold">Source du contenu</h3>
 
           <div className="flex flex-col gap-3">
-            <label htmlFor="file-input" className="cursor-pointer group">
-              <div className="p-4 bg-gray-700/50 rounded-2xl border-2 border-dashed border-gray-600 group-hover:border-yellow-300/50 transition-all text-center">
-                <span className="text-2xl mb-2 block">📄</span>
+            <label htmlFor="file-input" className="cursor-pointer group" aria-label="Zone de chargement de fichier">
+              <div
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.getElementById('file-input')?.click();
+                  }
+                }}
+                className="p-4 bg-gray-700/50 rounded-2xl border-2 border-dashed border-gray-600 group-hover:border-yellow-300/50 transition-all text-center focus:ring-2 focus:ring-yellow-300 outline-none"
+                aria-label={file ? `Fichier chargé : ${file.name}` : "Cliquer ou appuyer sur Entrée pour charger un fichier PDF ou Image"}
+              >
+                <span className="text-2xl mb-2 block" aria-hidden="true">📄</span>
                 <div className="text-sm font-bold text-gray-200">
                   {file ? file.name : "Charger un fichier"}
                 </div>
-                <div className="text-[10px] text-gray-500 mt-1 uppercase">PDF ou Image (Max 5Mo)</div>
+                <div className="text-[10px] text-gray-200 mt-1 uppercase" aria-hidden="true">PDF ou Image (Max 5Mo)</div>
               </div>
             </label>
             <input
@@ -235,9 +211,9 @@ export default function GenerateQuiz() {
             />
           </div>
 
-          <div className="relative flex items-center gap-3 py-2">
+          <div className="relative flex items-center gap-3 py-2" aria-hidden="true">
             <div className="flex-grow border-t border-gray-700"></div>
-            <span className="text-[10px] text-gray-600 uppercase font-bold px-2">Ou</span>
+            <span className="text-[10px] text-gray-200 uppercase font-bold px-2">Ou</span>
             <div className="flex-grow border-t border-gray-700"></div>
           </div>
 
@@ -245,8 +221,9 @@ export default function GenerateQuiz() {
             type="button"
             onClick={() => setIsScanOpen(true)}
             className="w-full py-3 bg-gray-700 text-gray-300 rounded-2xl border border-gray-600 hover:bg-gray-600 hover:text-white transition-all flex items-center justify-center gap-2"
+            aria-label="Utiliser la caméra pour scanner un document"
           >
-            <span>📸</span>
+            <span aria-hidden="true">📸</span>
             <span className="font-bold text-sm">Scanner un document</span>
           </Button>
         </div>
@@ -260,22 +237,24 @@ export default function GenerateQuiz() {
           >
             {isGenerating ? (
               <div className="flex items-center justify-center gap-2">
-                <div className="w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
                 <span>Génération...</span>
               </div>
             ) : "Générer le Quiz"}
           </Button>
 
-          {error && (
-            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs text-center font-medium">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="mt-4 p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs text-center font-medium">
-              {success}
-            </div>
-          )}
+          <div className="mt-4" aria-live="polite">
+            {error && (
+              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs text-center font-medium" role="alert">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs text-center font-medium" role="status">
+                {success}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <Modal isOpen={isScanOpen} isClose={() => setIsScanOpen(false)} content={scanModalContent} />

@@ -4,10 +4,10 @@ import Title from "../components/Title";
 
 export default function Register() {
     return (
-        <div className="min-h-screen bg-gray-900 pb-20">
-            <Title text="CONNEXION" />
+        <main className="min-h-screen bg-gray-900 pb-20">
+            <Title text="INSCRIPTION" />
             <AuthForm initialIsLogin={false} />
             <BottomNav />
-        </div>
+        </main>
     );
 }

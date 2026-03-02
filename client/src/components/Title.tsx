@@ -1,16 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import "../App.css";
 
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 interface TitleProps {
   text?: string;
+  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
-const Title = ({ text = "QUIZPILOT" }: TitleProps) => {
-  const titleRef = useRef<HTMLHeadingElement>(null);
+const Title = ({ text = "QUIZPILOT", tag = "h1" }: TitleProps) => {
+  const [displayedText, setDisplayedText] = useState(text);
+  const Tag = tag as any;
 
-  const animateText = () => {
+  useEffect(() => {
     let step = 0;
     const timer = setInterval(() => {
       const revealed = text.slice(0, step);
@@ -18,40 +20,26 @@ const Title = ({ text = "QUIZPILOT" }: TitleProps) => {
       for (let i = 0; i < text.length - step; i++) {
         randomPart += LETTERS[Math.floor(Math.random() * LETTERS.length)];
       }
-      if (titleRef.current) {
-        titleRef.current.textContent = revealed + randomPart;
-      }
+
+      setDisplayedText(revealed + randomPart);
+
       step++;
       if (step > text.length) {
         clearInterval(timer);
-        if (titleRef.current) {
-          titleRef.current.textContent = text;
-        }
+        setDisplayedText(text);
       }
     }, 110);
-  };
 
-  useEffect(() => {
-    animateText();
+    return () => clearInterval(timer);
   }, [text]);
 
   return (
     <div className="h-64 sm:h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300">
-      <h1
-        id="title"
-        ref={titleRef}
+      <Tag
         className="text-4xl sm:text-6xl tracking-wider text-center font-skyfont"
       >
-        {text}
-      </h1>
-
-      {/* <button
-        id="reloadBtn"
-        onClick={animateText}
-        className="mt-3 px-3 py-2 text-md bg-[#f3eb75] rounded-lg cursor-pointer font-skyfont text-[#1A1F26]"
-      >
-        rejouer l'animation
-      </button> */}
+        {displayedText}
+      </Tag>
     </div>
   );
 };
