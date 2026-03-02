@@ -3,6 +3,7 @@ import QuizCard from "../features/quiz/components/QuizCard";
 import QuizResult from "../features/quiz/components/QuizResult";
 import mockQuiz from "../features/quiz/data/mockQuiz.json";
 import UseQuiz from "../features/quiz/components/UseQuiz";
+import Title from "../components/Title";
 import BottomNav from "../components/BottomNav";
 
 function QuizPage() {
@@ -26,30 +27,31 @@ function QuizPage() {
     questions
   } = UseQuiz(dataToUse);
 
-  if (isFinished) {
-    return (
-      <QuizResult
-        score={score}
-        answers={answers}
-        questions={questions}
-        metadata={metadata}
-      />
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-900 pb-20 overflow-x-hidden">
-      <QuizCard
-        question={question}
-        selected={answers[currentIdx] ?? null}
-        onSelect={selectAnswer}
-        onPrev={prev}
-        onNext={next}
-        disablePrev={currentIdx === 0}
-        disableNext={!answers[currentIdx]}
-      />
+    <main className="min-h-screen bg-gray-900 pb-20 overflow-x-hidden">
+      <Title text={isFinished ? "RÉSULTATS" : "QUIZ EN COURS"} />
+
+      {isFinished ? (
+        <QuizResult
+          score={score}
+          answers={answers}
+          questions={questions}
+          metadata={metadata}
+        />
+      ) : (
+        <QuizCard
+          question={question}
+          selected={answers[currentIdx] ?? null}
+          onSelect={selectAnswer}
+          onPrev={prev}
+          onNext={next}
+          disablePrev={currentIdx === 0}
+          disableNext={!answers[currentIdx]}
+        />
+      )}
+
       <BottomNav />
-    </div>
+    </main>
   );
 }
 

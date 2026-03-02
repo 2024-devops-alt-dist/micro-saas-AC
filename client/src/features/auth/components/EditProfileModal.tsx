@@ -91,11 +91,12 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
 
                     {/* Mot de passe actuel (requis) */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label htmlFor="current-password" className="block text-sm font-medium text-gray-300 mb-2">
                             Mot de passe actuel *
                         </label>
                         <div className="relative">
                             <input
+                                id="current-password"
                                 type={showCurrentPassword ? "text" : "password"}
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
@@ -106,19 +107,20 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
                             <button
                                 type="button"
                                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                aria-label={showCurrentPassword ? "Masquer le mot de passe actuel" : "Afficher le mot de passe actuel"}
                             >
                                 {showCurrentPassword ? "👁️" : "👁️‍🗨️"}
                             </button>
                         </div>
                     </div>
 
-                    {/* Nouvel email */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label htmlFor="new-email" className="block text-sm font-medium text-gray-300 mb-2">
                             Nouvel email
                         </label>
                         <input
+                            id="new-email"
                             type="email"
                             value={newEmail}
                             onChange={(e) => setNewEmail(e.target.value)}
@@ -127,13 +129,13 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
                         />
                     </div>
 
-                    {/* Nouveau mot de passe */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label htmlFor="new-password" className="block text-sm font-medium text-gray-300 mb-2">
                             Nouveau mot de passe (optionnel)
                         </label>
                         <div className="relative">
                             <input
+                                id="new-password"
                                 type={showNewPassword ? "text" : "password"}
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
@@ -143,7 +145,8 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
                             <button
                                 type="button"
                                 onClick={() => setShowNewPassword(!showNewPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                aria-label={showNewPassword ? "Masquer le nouveau mot de passe" : "Afficher le nouveau mot de passe"}
                             >
                                 {showNewPassword ? "👁️" : "👁️‍🗨️"}
                             </button>
@@ -153,11 +156,12 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
                     {/* Confirmation nouveau mot de passe */}
                     {newPassword && (
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-300 mb-2">
                                 Confirmer le nouveau mot de passe
                             </label>
                             <div className="relative">
                                 <input
+                                    id="confirm-password"
                                     type={showConfirmPassword ? "text" : "password"}
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -168,6 +172,7 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                                    aria-label={showConfirmPassword ? "Masquer la confirmation du mot de passe" : "Afficher la confirmation du mot de passe"}
                                 >
                                     {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
                                 </button>

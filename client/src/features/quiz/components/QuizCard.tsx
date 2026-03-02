@@ -39,7 +39,7 @@ export default function QuizCardView({
     <div className="flex flex-col items-center justify-center px-4 py-8">
       {/* Question Card */}
       <div className="bg-gray-800/60 rounded-3xl shadow-2xl p-6 sm:p-8 mb-8 w-full max-w-md border border-gray-700/50 backdrop-blur-sm">
-        <div className="text-yellow-300/50 text-[10px] uppercase tracking-widest font-bold mb-2">Question</div>
+        <div className="text-yellow-300 text-[10px] uppercase tracking-widest font-bold mb-2">Question</div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-100 leading-tight">
           {question.question}
         </h2>
@@ -66,12 +66,15 @@ export default function QuizCardView({
               key={`${idx}-${p.text}`}
               data-testid={testId}
               className={`${btnBase} ${btnStyle}`}
+              aria-label={`${p.text}${selected === p.text ? (p.is_correct ? ", Correct" : ", Incorrect") : ""}`}
               disabled={!!selected}
               onClick={() => handleClick(p)}
             >
               <span>{p.text}</span>
               {selected === p.text && (
-                <span className="text-xl">{p.is_correct ? "✓" : "✕"}</span>
+                <span className="text-xl" aria-hidden="true">
+                  {p.is_correct ? "✓" : "✕"}
+                </span>
               )}
             </button>
           );
