@@ -41,7 +41,9 @@ const mockApi = {
 
 const realApi = {
   async getAll() {
-    const response = await fetch(`${API_URL}/questions/`);
+    const response = await fetch(`${API_URL}/questions/`, {
+      credentials: 'include',
+    });
     if (!response.ok) throw new Error('Erreur lors de la récupération des questions');
     return response.json();
   },
@@ -51,6 +53,7 @@ const realApi = {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(item),
     });
     if (!response.ok) throw new Error('Erreur lors de la création de la question');
@@ -59,6 +62,7 @@ const realApi = {
   async delete(id: number) {
     const response = await fetch(`${API_URL}/questions/${id}`, {
       method: 'DELETE',
+      credentials: 'include',
     });
     if (!response.ok) throw new Error('Erreur lors de la suppression de la question');
     return response.json();
@@ -70,6 +74,7 @@ const realApi = {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ answer: userAnswer }),
     });
     if (!response.ok) throw new Error('Erreur lors de la vérification de la réponse');

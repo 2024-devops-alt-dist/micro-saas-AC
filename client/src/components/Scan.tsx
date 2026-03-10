@@ -133,7 +133,7 @@ export default function ScanModal({ onConfirm, onClose, maxWidth = 1280 }: Props
           // Preview + actions
           <>
             <div className="w-full bg-gray-900 rounded overflow-hidden flex items-center justify-center">
-              <img src={imgSrc} alt="preview" className="w-full h-auto object-contain" />
+              <img src={imgSrc} alt="Aperçu du document scanné" className="w-full h-auto object-contain" />
             </div>
 
             <div className="flex w-full gap-3">

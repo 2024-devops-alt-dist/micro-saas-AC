@@ -7,8 +7,11 @@ import Title from '../components/Title';
 
 function Stats() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white pb-24 overflow-x-hidden">
+    <main className="min-h-screen text-white pb-24 overflow-x-hidden">
       <Title text="MES STATS" />
+      <div className="p-4 border-b border-gray-700">
+        <h2 className="font-bold text-lg">Suivez votre progression</h2>
+      </div>
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
@@ -27,7 +30,7 @@ function Stats() {
       </div>
 
       <BottomNav />
-    </div>
+    </main>
 
   )
 }

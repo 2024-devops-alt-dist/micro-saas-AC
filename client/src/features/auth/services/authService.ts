@@ -6,10 +6,10 @@ export const authService = {
             method: "POST",
             body: JSON.stringify({ username, password }),
         });
-        if (data.access) {
-            localStorage.setItem("access_token", data.access);
-            localStorage.setItem("refresh_token", data.refresh);
+        if (data) {
+            // On ne stocke plus les tokens dans localStorage
             localStorage.setItem("username", username);
+            localStorage.setItem("is_authenticated", "true");
             // On récupère le profil complet pour avoir l'ID et l'email
             const profile = await this.getProfile();
             if (profile.id) {
@@ -33,16 +33,20 @@ export const authService = {
         });
     },
 
-    logout() {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
+    async logout() {
+        try {
+            await apiFetch("/api/logout/", { method: "POST" });
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
         localStorage.removeItem("username");
         localStorage.removeItem("user_id");
         localStorage.removeItem("email");
+        localStorage.removeItem("is_authenticated");
     },
 
     isAuthenticated() {
-        return !!localStorage.getItem("access_token");
+        return localStorage.getItem("is_authenticated") === "true";
     },
 
     getUsername() {
@@ -57,9 +61,9 @@ export const authService = {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/me/`, {
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+                "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify({
                 current_password: currentPassword,
                 email: newEmail,

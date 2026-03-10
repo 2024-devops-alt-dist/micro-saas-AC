@@ -6,6 +6,7 @@ type InputFieldProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   required?: boolean;
+  "aria-label"?: string;
 };
 
 const InputField = ({
@@ -16,6 +17,7 @@ const InputField = ({
   className,
   id,
   required,
+  "aria-label": ariaLabel,
 }: InputFieldProps) => (
   <input
     type={type}
@@ -25,6 +27,7 @@ const InputField = ({
     id={id}
     className={`${className}`}
     required={required}
+    aria-label={ariaLabel}
   />
 );
 

@@ -10,13 +10,12 @@ function QuizHistory() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white pb-24 px-4 sm:px-6 overflow-x-hidden">
+        <main className="min-h-screen text-white pb-24 px-4 sm:px-6 overflow-x-hidden">
             <Title text="MES QUIZ" />
-
             <div className="bg-gray-800 rounded-3xl border border-gray-700 overflow-hidden shadow-2xl max-w-4xl mx-auto mt-4 sm:mt-8">
 
                 <div className="p-4 border-b border-gray-700 bg-gray-800/50">
-                    <h3 className="font-bold text-lg">Historique des Quiz</h3>
+                    <h2 className="font-bold text-lg">Historique des Quiz</h2>
                 </div>
 
                 {state === "loading" ? (
@@ -87,7 +86,7 @@ function QuizHistory() {
             </div>
             <BottomNav />
 
-        </div>
+        </main>
     );
 }
 

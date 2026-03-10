@@ -64,9 +64,10 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
         <InputField
           type="text"
           placeholder="Nom d'utilisateur"
+          aria-label="Nom d'utilisateur"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-3 rounded bg-gray-700 placeholder-gray-400 shadow-md"
+          className="w-full p-3 pr-12 rounded bg-gray-700 placeholder-gray-400 shadow-md"
           id="username"
           required
         />
@@ -75,9 +76,10 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
           <InputField
             type="email"
             placeholder="Email"
+            aria-label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 rounded bg-gray-700 placeholder-gray-400 shadow-md"
+            className="w-full p-3 pr-12 rounded bg-gray-700 placeholder-gray-400 shadow-md"
             id="email"
             required
           />
@@ -87,16 +89,18 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
           <InputField
             type={showPassword ? "text" : "password"}
             placeholder="Mot de passe"
+            aria-label="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 rounded bg-gray-700 placeholder-gray-400 shadow-md"
+            className="w-full p-3 pr-12 rounded bg-gray-700 placeholder-gray-400 shadow-md"
             id="password"
             required
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 cursor-pointer"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
+            aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
           >
             {showPassword ? (
               <FontAwesomeIcon icon={faEyeSlash} />

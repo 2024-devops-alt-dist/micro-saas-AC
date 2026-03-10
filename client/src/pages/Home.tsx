@@ -20,8 +20,9 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen text-white pb-24 px-4 sm:px-6">
-      <Title />
+    <main className="min-h-screen bg-gray-900 text-white pb-24 px-4 sm:px-6">
+
+      <Title text="QUIZPILOT" />
 
       <div className="max-w-2xl mx-auto flex flex-col items-center gap-8 mt-4 sm:mt-10 text-center">
         <div className="space-y-4">
@@ -59,21 +60,15 @@ function Home() {
         {/* Features Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-8">
           <div className="bg-gray-800/40 p-5 rounded-2xl border border-gray-700/50 text-left">
-            {/* <span className="text-2xl mb-2 block">🎯</span>
-            <h4 className="font-bold text-gray-200">Précision IA</h4>
-            <p className="text-xs text-gray-500 mt-1">Des questions adaptées à votre niveau et à votre sujet.</p> */}
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
           </div>
           <div className="bg-gray-800/40 p-5 rounded-2xl border border-gray-700/50 text-left">
-            {/* <span className="text-2xl mb-2 block">📊</span>
-            <h4 className="font-bold text-gray-200">Suivi Pilote</h4>
-            <p className="text-xs text-gray-500 mt-1">Analysez vos performances avec des graphiques détaillés.</p> */}
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
           </div>
         </div>
       </div>
 
-      <div className="mt-16 p-6 border border-gray-700/50 rounded-2xl bg-gray-800/30 max-w-xl mx-auto">
+      <div className="mt-16 p-6 border border-gray-700/50 rounded-2xl bg-gray-800/30 max-w-xl mx-auto hidden">
         <h4 className="text-xs uppercase tracking-widest text-gray-500 mb-4 font-semibold">à cacher</h4>
         <Button
           className="w-full px-4 py-2 bg-gray-800 text-gray-400 rounded-xl border border-gray-700 hover:bg-gray-700 hover:text-white transition-all text-sm"
@@ -93,8 +88,7 @@ function Home() {
       </div>
 
       <BottomNav />
-    </div>
-
+    </main>
   );
 }
 
