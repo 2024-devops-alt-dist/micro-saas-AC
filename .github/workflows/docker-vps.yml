@@ -71,53 +71,62 @@ jobs:
       # se connecter en SSH sur le VPS et lancer le déploiement
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          N8N_DB: ${{ secrets.N8N_DB }}
+          N8N_ENCRYPTION_KEY: ${{ secrets.N8N_ENCRYPTION_KEY }}
+          N8N_HOST: ${{ secrets.N8N_HOST }}
+          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # créer le fichier .env avec les secrets, arrêter et supprimer les conteneurs existants, pull des nouvelles images, et relancer les conteneurs
-          # voir pour ajouter set-e -e pour arrêter en cas d'erreur ?
-          # voir pour ajouter helthcheck avant/après le sleep 20 ?
-          #. Si aucun conteneur ne correspond au filtre, docker stop peut échouer et bloquer le script
-          # donc voir pour ajouter :
-          # docker stop $(docker ps -q --filter "name=^quizpilot") 2>/dev/null || true
-          # docker rm -f $(docker ps -aq --filter "name=^quizpilot") 2>/dev/null || true
+          envs: DOCKERHUB_USERNAME,DB_NAME,DB_USER,DB_PASSWORD,N8N_DB,N8N_ENCRYPTION_KEY,N8N_HOST,ALLOWED_HOSTS,SECRET_KEY,DEBUG,CORS_ALLOWED_ORIGINS
           script: |
+            set -e
             cd /home/debian/quizpilot-docker
 
-            # Génération du fichier .env
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-            echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-            echo "DB_PASSWORD=\"${{ secrets.DB_PASSWORD }}\"" >> .env
-            echo "DB_HOST=postgres" >> .env
-            echo "DB_PORT=5432" >> .env
+            # Génération du fichier .env (les secrets transitent via les variables d'env, pas en clair dans le script)
+            cat > .env <<EOF
+            DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
+            DB_NAME=$DB_NAME
+            DB_USER=$DB_USER
+            DB_PASSWORD=$DB_PASSWORD
+            DB_HOST=postgres
+            DB_PORT=5432
+            N8N_DB=$N8N_DB
+            N8N_ENCRYPTION_KEY=$N8N_ENCRYPTION_KEY
+            N8N_HOST=$N8N_HOST
+            N8N_PROTOCOL=https
+            N8N_PROXY_HOPS=1
+            N8N_SECURE_COOKIE=false
+            N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+            WEBHOOK_URL=https://$N8N_HOST/
+            ALLOWED_HOSTS=$ALLOWED_HOSTS
+            SECRET_KEY=$SECRET_KEY
+            DEBUG=$DEBUG
+            CORS_ALLOWED_ORIGINS=$CORS_ALLOWED_ORIGINS
+            CSRF_TRUSTED_ORIGINS=$CORS_ALLOWED_ORIGINS
+            EOF
+            chmod 600 .env
 
-            # Variables pour n8n (à ajouter dans les secrets GitHub)
-            echo "N8N_DB=${{ secrets.N8N_DB }}" >> .env
-            echo "N8N_ENCRYPTION_KEY=${{ secrets.N8N_ENCRYPTION_KEY }}" >> .env
-            echo "N8N_HOST=${{ secrets.N8N_HOST }}" >> .env
-            echo "N8N_PROTOCOL=https" >> .env
-            echo "N8N_PROXY_HOPS=1" >> .env
-            echo "N8N_SECURE_COOKIE=false" >> .env
-            echo "N8N_DEFAULT_BINARY_DATA_MODE=filesystem" >> .env
-            echo "WEBHOOK_URL=https://${{ secrets.N8N_HOST }}/" >> .env
-
-            echo "ALLOWED_HOSTS=\"${{ secrets.ALLOWED_HOSTS }}\"" >> .env
-            echo "SECRET_KEY=\"${{ secrets.SECRET_KEY }}\"" >> .env
-            echo "DEBUG=${{ secrets.DEBUG }}" >> .env
-            echo "CORS_ALLOWED_ORIGINS=\"${{ secrets.CORS_ALLOWED_ORIGINS }}\"" >> .env
-            echo "CSRF_TRUSTED_ORIGINS=\"${{ secrets.CORS_ALLOWED_ORIGINS }}\"" >> .env
-
-            # Nettoyage agressif : on stoppe tous les types d'anciens containers pour libérer les ports
-            docker stop quizpilot_api quizpilot_client quizpilot_db quizpilot_n8n n8n postgres-n8n-quizzpilot quizpilot_api_new quizpilot_client_new quizpilot_db_new quizpilot_n8n_new || true
-            docker rm -f quizpilot_api quizpilot_client quizpilot_db quizpilot_n8n n8n postgres-n8n-quizzpilot quizpilot_api_new quizpilot_client_new quizpilot_db_new quizpilot_n8n_new || true
-
-            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            # Nettoyage par filtre dynamique (robuste si les noms changent)
+            docker ps -q --filter "name=quizpilot" | xargs -r docker stop
+            docker ps -aq --filter "name=quizpilot" | xargs -r docker rm -f
 
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
 
-            # Re-activation des migrations automatiques (maintenant que la donnée est là)
-            sleep 20
-            docker exec quizpilot_api python manage.py migrate
+            # Attendre que l'API soit prête avant de lancer les migrations
+            echo "Attente du démarrage de l'API..."
+            until docker exec quizpilot_api python manage.py migrate 2>/dev/null; do
+              echo "API pas encore prête, nouvel essai dans 5s..."
+              sleep 5
+            done
+            echo "Migrations terminées avec succès"
