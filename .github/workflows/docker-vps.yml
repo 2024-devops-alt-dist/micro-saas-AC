@@ -55,17 +55,16 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: mkdir -p /home/debian/quizpilot-docker
 
       # copier le fichier docker-compose.prod.yml sur le VPS distant (toujours en ssh)
       - name: Copy docker-compose.prod.yml to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
-          # à voir : ameliorer avec avec key: ${{ secrets.VPS_SSH_KEY }} au lieu de password ?
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "docker-compose.prod.yml"
           target: "/home/debian/quizpilot-docker"
 
@@ -75,7 +74,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           # créer le fichier .env avec les secrets, arrêter et supprimer les conteneurs existants, pull des nouvelles images, et relancer les conteneurs
           # voir pour ajouter set-e -e pour arrêter en cas d'erreur ?
           # voir pour ajouter helthcheck avant/après le sleep 20 ?
@@ -93,7 +92,7 @@ jobs:
             echo "DB_PASSWORD=\"${{ secrets.DB_PASSWORD }}\"" >> .env
             echo "DB_HOST=postgres" >> .env
             echo "DB_PORT=5432" >> .env
-            
+
             # Variables pour n8n (à ajouter dans les secrets GitHub)
             echo "N8N_DB=${{ secrets.N8N_DB }}" >> .env
             echo "N8N_ENCRYPTION_KEY=${{ secrets.N8N_ENCRYPTION_KEY }}" >> .env
@@ -103,7 +102,7 @@ jobs:
             echo "N8N_SECURE_COOKIE=false" >> .env
             echo "N8N_DEFAULT_BINARY_DATA_MODE=filesystem" >> .env
             echo "WEBHOOK_URL=https://${{ secrets.N8N_HOST }}/" >> .env
-            
+
             echo "ALLOWED_HOSTS=\"${{ secrets.ALLOWED_HOSTS }}\"" >> .env
             echo "SECRET_KEY=\"${{ secrets.SECRET_KEY }}\"" >> .env
             echo "DEBUG=${{ secrets.DEBUG }}" >> .env

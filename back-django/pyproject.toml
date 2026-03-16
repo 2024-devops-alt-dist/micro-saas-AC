@@ -1,0 +1,14 @@
+[tool.black]
+line-length = 170
+exclude = '''
+/(
+    env
+  | migrations
+  | __pycache__
+)/
+'''
+
+[tool.isort]
+line_length = 170
+profile = "black"
+skip = ["env", "migrations"]
