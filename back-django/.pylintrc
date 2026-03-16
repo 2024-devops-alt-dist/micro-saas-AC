@@ -24,3 +24,6 @@ good-names=i,j,k,e,x,y,id,pk,_
 
 [TYPECHECK]
 generated-members=objects,DoesNotExist,MultipleObjectsReturned,id,pk
+
+[FORMAT]
+max-line-length=170
