@@ -13,9 +13,7 @@ urlpatterns = [
     # Pour échanger un identifiant/mot de passe contre un jeton (Connexion)
     path("token/", views.CookieTokenObtainPairView.as_view(), name="token_obtain_pair"),
     # Pour rester connecté sans avoir à retaper son mot de passe
-    path(
-        "token/refresh/", views.CookieTokenRefreshView.as_view(), name="token_refresh"
-    ),
+    path("token/refresh/", views.CookieTokenRefreshView.as_view(), name="token_refresh"),
     # Déconnexion (suppression des cookies)
     path("logout/", views.LogoutView.as_view(), name="logout"),
     # Enregistrer un nouvel utilisateur

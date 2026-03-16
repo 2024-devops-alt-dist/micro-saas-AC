@@ -50,12 +50,8 @@ class Level(models.Model):
 
 class Questions(models.Model):
     text_question = models.TextField()
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, db_column="category_id", null=True
-    )
-    level = models.ForeignKey(
-        Level, on_delete=models.CASCADE, db_column="level_id", null=True
-    )
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, db_column="category_id", null=True)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE, db_column="level_id", null=True)
 
     class Meta:
         db_table = "questions"
@@ -88,9 +84,7 @@ class Users(models.Model):
     id_user = models.AutoField(primary_key=True)
     pseudo = models.CharField(max_length=150, unique=True, db_column="pseudo")
     email = models.EmailField(unique=True, db_column="email")
-    password = models.CharField(
-        max_length=255, db_column="password", null=True, blank=True
-    )
+    password = models.CharField(max_length=255, db_column="password", null=True, blank=True)
 
     class Meta:
         db_table = "users"
@@ -106,15 +100,9 @@ class Users(models.Model):
 
 
 class QuizStats(models.Model):
-    user = models.ForeignKey(
-        Users, on_delete=models.CASCADE, db_column="user_id", null=True
-    )
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, db_column="category_id", null=True
-    )
-    level = models.ForeignKey(
-        Level, on_delete=models.CASCADE, db_column="level_id", null=True
-    )
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, db_column="user_id", null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, db_column="category_id", null=True)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE, db_column="level_id", null=True)
     date = models.DateTimeField(null=True, blank=True)
     score = models.IntegerField()
     # On laisse les autres champs (quiz_id, average_time) optionnels car gérés par la base ou n8n

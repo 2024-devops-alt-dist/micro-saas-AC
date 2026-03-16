@@ -41,9 +41,7 @@ class MeView(APIView):
         current_password = data.get("current_password")
         if not current_password:
             return Response(
-                {
-                    "error": "Le mot de passe actuel est requis pour modifier votre profil"
-                },
+                {"error": "Le mot de passe actuel est requis pour modifier votre profil"},
                 status=400,
             )
 
@@ -63,24 +61,18 @@ class MeView(APIView):
         if new_password:
             if len(new_password) < 8:
                 return Response(
-                    {
-                        "error": "Le nouveau mot de passe doit contenir au moins 8 caractères"
-                    },
+                    {"error": "Le nouveau mot de passe doit contenir au moins 8 caractères"},
                     status=400,
                 )
             user.set_password(new_password)
 
         user.save()
         serializer = UserSerializer(user)
-        return Response(
-            {"message": "Profil mis à jour avec succès", "user": serializer.data}
-        )
+        return Response({"message": "Profil mis à jour avec succès", "user": serializer.data})
 
 
 def test_api(request):
-    return JsonResponse(
-        {"status": "ok", "message": "Test endpoint is working! on testttt"}
-    )
+    return JsonResponse({"status": "ok", "message": "Test endpoint is working! on testttt"})
 
 
 # creation d une nouvelle catégorie
@@ -147,9 +139,7 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # On filtre via l'email pour faire le lien entre auth_user et la table users
-        return QuizStats.objects.filter(user__email=self.request.user.email).order_by(
-            "-date"
-        )
+        return QuizStats.objects.filter(user__email=self.request.user.email).order_by("-date")
 
     def perform_create(self, serializer):
         user_django = self.request.user
@@ -162,10 +152,7 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
                     "pseudo": user_django.username,
                 },
             )
-            print(
-                f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} "
-                f"(ID: {user_n8n.id_user}, Created: {created})"
-            )
+            print(f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} " f"(ID: {user_n8n.id_user}, Created: {created})")
             print(f"DEBUG STATS - Data envoyée: {self.request.data}")
 
             serializer.save(user=user_n8n)
