@@ -10,28 +10,20 @@ import { PresentationChartBarIcon, AtSymbolIcon, AcademicCapIcon, PencilSquareIc
 
 function Profil() {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(authService.isAuthenticated());
   const { stats, state } = useUserStats();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-
     if (state === "unauthenticated") {
       authService.logout();
-      setIsAuthenticated(false);
       navigate("/login");
     }
-  }, [isAuthenticated, state, navigate]);
+  }, [state, navigate]);
 
 
   const handleLogout = () => {
     authService.logout();
-    setIsAuthenticated(false);
     navigate("/");
   };
 
@@ -48,8 +40,6 @@ function Profil() {
       }
     }
   };
-
-  if (!isAuthenticated) return null;
 
   const username = authService.getUsername();
   const email = authService.getEmail();

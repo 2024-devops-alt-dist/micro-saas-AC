@@ -1,22 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * Minimal declaration for the Node `process` global so TypeScript doesn't
- * require @types/node for this config file.
- */
 declare const process: { env: { CI?: string } };
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: './e2e',
   /* Run tests in files in parallel */
@@ -55,6 +40,7 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
+    //TODO
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
@@ -75,11 +61,4 @@ export default defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

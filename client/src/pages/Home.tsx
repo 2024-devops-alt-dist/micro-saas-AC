@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button.tsx';
-import { apiFetch } from '../services/api.tsx';
+import { apiFetch } from '../services/api';
 import Title from '../components/Title.tsx';
 import BottomNav from '../components/BottomNav.tsx';
 import { authService } from '../features/auth/services/authService';
 
 function Home() {
   const [apiResponse, setApiResponse] = useState<string | object | null>(null);
-  const isAuthenticated = authService.isAuthenticated();
+  // Indicateur UI uniquement — la vraie sécurité est gérée par le cookie HTTP-only côté serveur
+  const hasSession = authService.hasSession();
 
   const testApiConnection = async () => {
     try {
@@ -34,7 +35,7 @@ function Home() {
           </p>
         </div>
 
-        {!isAuthenticated ? (
+        {!hasSession ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-sm px-4">
             <Link to="/login">
               <Button className="w-full px-6 py-3 bg-blue-600/20 text-blue-400 border border-blue-600/30 hover:bg-blue-600 hover:text-white rounded-xl font-semibold transition-all duration-300">
