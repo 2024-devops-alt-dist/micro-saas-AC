@@ -1,5 +1,4 @@
 import { apiFetch } from "../../../services/api";
-//stocker le token dans localStorage
 export const authService = {
     async login(username: string, password: string) {
         const data = await apiFetch("/api/token/", {
@@ -7,9 +6,8 @@ export const authService = {
             body: JSON.stringify({ username, password }),
         });
         if (data) {
-            // On ne stocke plus les tokens dans localStorage
+            // Stockage des infos de profil non sensibles pour l'affichage UI
             localStorage.setItem("username", username);
-            localStorage.setItem("is_authenticated", "true");
             // On récupère le profil complet pour avoir l'ID et l'email
             const profile = await this.getProfile();
             if (profile.id) {
@@ -42,11 +40,11 @@ export const authService = {
         localStorage.removeItem("username");
         localStorage.removeItem("user_id");
         localStorage.removeItem("email");
-        localStorage.removeItem("is_authenticated");
     },
 
-    isAuthenticated() {
-        return localStorage.getItem("is_authenticated") === "true";
+    // Indicateur UI uniquement — la vraie auth est vérifiée par le cookie HTTP-only côté serveur
+    hasSession() {
+        return !!localStorage.getItem("username");
     },
 
     getUsername() {

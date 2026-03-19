@@ -75,7 +75,8 @@ def test_api(request):
     return JsonResponse({"status": "ok", "message": "Test endpoint is working! on testttt"})
 
 
-# creation d une nouvelle catégorie
+# CRUD pour "l'outil principal" de l'app
+# création d'une nouvelle catégorie
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -133,6 +134,7 @@ class PropositionsRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
     lookup_field = "id"
 
 
+# Stats : utilisateur authentifié obligatoire, filtrage que sur ses propres stats
 class QuizStatsListCreateView(generics.ListCreateAPIView):
     serializer_class = QuizStatsSerializer
     permission_classes = [IsAuthenticated]
@@ -141,6 +143,7 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         # On filtre via l'email pour faire le lien entre auth_user et la table users
         return QuizStats.objects.filter(user__email=self.request.user.email).order_by("-date")
 
+    # creation d une nouvelle stat : recup user django, trouver ou créer user n8n, sauvegarder la stat avec ce user n8n
     def perform_create(self, serializer):
         user_django = self.request.user
         print(f"DEBUG STATS - Tentative création pour: {user_django.email}")
@@ -163,13 +166,15 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             raise e
 
 
+# gestion de l'auth (stocker les tokens JWT dans des cookies HTTP-only au lieu de les retourner simplement dans le corps de la réponse JSON)
 class CookieTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
+        # On appelle la logique de base pour obtenir les tokens
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             access_token = response.data.get("access")
             refresh_token = response.data.get("refresh")
-
+            print(f"DEBUG LOGIN - Connexion réussie, token généré: {access_token[:20]}...")
             response.set_cookie(
                 key=settings.SIMPLE_JWT["AUTH_COOKIE"],
                 value=access_token,
@@ -186,12 +191,12 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
                 samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
             )
-            # Optionnel: on peut enlever les tokens du corps de la réponse si on veut être strict
-            # del response.data['access']
-            # del response.data['refresh']
         return response
+        print(f"DEBUG AUTH - Tentative de connexion pour: {request.data.get('username')}")
+        print(f"DEBUG AUTH - Status de la réponse: {response.status_code}")
 
 
+# renouveller le token quand il expire
 class CookieTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Si le refresh token n'est pas dans le body, on le cherche dans les cookies
@@ -214,6 +219,7 @@ class CookieTokenRefreshView(TokenRefreshView):
         return response
 
 
+# demander au navigateur de supprimer les cookies pour se déconnecter
 class LogoutView(APIView):
     def post(self, request):
         response = Response({"message": "Successfully logged out"}, status=200)

@@ -14,7 +14,7 @@ const Title = ({ text = "QUIZPILOT", tag = "h1" }: TitleProps) => {
 
   useEffect(() => {
     let step = 0;
-    const intervalTime = 50; // Plus rapide pour stabiliser le LCP plus tôt
+    const intervalTime = 50;
 
     const timer = setInterval(() => {
       const revealed = text.slice(0, step);

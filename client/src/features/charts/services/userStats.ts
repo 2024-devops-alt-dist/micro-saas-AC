@@ -11,23 +11,11 @@ export const useUserStats = () => {
     const [stats, setStats] = useState<UserStats[]>([]);
     const [state, setState] = useState<UseUserStatsState>("loading");
     const [error, setError] = useState<string | null>(null);
-    console.log("stats mockés", MOCK_USER_STATS);
-
     const fetchStats = useCallback(async () => {
-        const isAuthenticated = localStorage.getItem("is_authenticated") === "true";
-        console.log("isAuthenticated ?", isAuthenticated);
-
-        if (!isAuthenticated) {
-            setStats(MOCK_USER_STATS);
-            setState("unauthenticated");
-            return;
-        }
-
         try {
             setState("loading");
             setError(null);
             const data = await getUsersStats();
-            console.log("data du user", data);
             setStats(data);
             setState("ready");
 

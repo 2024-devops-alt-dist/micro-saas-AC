@@ -10,7 +10,7 @@ function QuizPage() {
   const location = useLocation();
 
   // On récupère les données du quiz depuis la navigation (si on vient de GenerateQuiz)
-  // Sinon on utilise le mock quiz (utile pour les tests E2E)
+  // Sinon on utilise le mock quiz (tests E2E)
   const quizDataFromNavigation = location.state?.quizData;
   const metadata = location.state?.metadata;
   const dataToUse = quizDataFromNavigation || mockQuiz.quiz;

@@ -1,6 +1,9 @@
 # utiliser une image de base Python 3
 FROM python:3
 
+# désactiver le buffering Python pour voir les print() dans docker logs
+ENV PYTHONUNBUFFERED=1
+
 # définir le répertoire de travail dans le conteneur
 WORKDIR /usr/src/app
 
