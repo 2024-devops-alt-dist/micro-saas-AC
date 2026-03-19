@@ -192,8 +192,6 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
             )
         return response
-        print(f"DEBUG AUTH - Tentative de connexion pour: {request.data.get('username')}")
-        print(f"DEBUG AUTH - Status de la réponse: {response.status_code}")
 
 
 # renouveller le token quand il expire
