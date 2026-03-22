@@ -1,30 +1,18 @@
 
-## badge 
-[![CI](https://github.com/SIMPLON-PROJECT-RNCP/projet_rncp/actions/workflows/ci.yml/badge.svg)](https://github.com/SIMPLON-PROJECT-RNCP/projet_rncp/actions/workflows/ci.yml)
-
-### ce que fait la pipeline CI
-- Installe les dépendances pour le backend (Django) et le frontend (React)
-- Effectue un audit de sécurité des dépendances pour les deux parties
-- Analyse le code backend avec Pylint pour détecter les erreurs et les problèmes de style
-- Vérifie le formatage du code backend avec Black
-- Analyse le code frontend avec ESLint pour détecter les erreurs et les problèmes de style
-
-
 # QuizPilot
 
 ## 🎯 Concept
 
-**QuizPilot** est une application Micro-SaaS de quiz éducatif, leur permettant générer des quiz. Le but ? Réviser les matières scolaires tout en s'amusant grâce à une interface simple et ludique.
+**QuizPilot** est une application Micro-SaaS de quiz éducatif permettant de générer des quiz personnalisés. Le but ? Réviser les matières scolaires tout en s'amusant grâce à une interface simple et ludique.
 
 ---
-
 
 ## ✨ Fonctionnalités
 
 - 🎓 Quiz classés par **catégorie** (Maths, Histoire, etc.) et **niveau** (Facile, Moyen, Difficile)
-- 🤖 Des questions pertinentes et toujours différentes grace à un agent IA doté de memoire
+- 🤖 Des questions pertinentes et toujours différentes grâce à un agent IA doté de mémoire
 - ✅ Score enregistré par utilisateur et par catégorie
-- 📸 Possibilité de scanner un document et le faire analyser par L'ia
+- 📸 Possibilité de scanner un document et le faire analyser par l'IA
 - 🔐 Authentification des utilisateurs
 - 📊 Suivi des performances
 
@@ -32,93 +20,142 @@
 
 ## 👤 Public cible
 
-- public scolarisé (élèves, étudiants)
+- Public scolarisé (élèves, étudiants)
 - Parents souhaitant proposer une activité éducative
 - Écoles primaires et collèges en recherche d'outils ludo-éducatifs
 
 ---
 
-## 🧱 Stack Technique
+## 🧱 Stack technique
 
-| Côté        | Technologie            |
-|-------------|------------------------|
-| Frontend    | REACT Tailwind CSS     |
-| Backend     | Django (Python 3.11+)  |
-| Base de données | PostgreSQL         |
-| Environnement | Docker               |
-| agent IA      | n8n                  |
+| Côté            | Technologie              |
+|-----------------|--------------------------|
+| Frontend        | React + TypeScript, Vite |
+| Styles          | Tailwind CSS             |
+| Backend         | Django (Python 3.11+)    |
+| Base de données | PostgreSQL               |
+| Environnement   | Docker                   |
+| Agent IA        | n8n                      |
 
+---
+
+## 🔑 Variables d'environnement
+
+Copier `.env.exemple` en `.env` et renseigner les valeurs :
+
+| Variable | Description |
+|---|---|
+| `DB_ENGINE` | Moteur de base de données Django |
+| `DB_NAME` | Nom de la base de données |
+| `DB_USER` | Utilisateur PostgreSQL |
+| `DB_PASSWORD` | Mot de passe PostgreSQL |
+| `DB_HOST` | Hôte PostgreSQL (ex: `postgres`) |
+| `DB_PORT` | Port PostgreSQL (ex: `5432`) |
+| `SECRET_KEY` | Clé secrète Django |
+| `DEBUG` | Mode debug Django (`True` / `False`) |
+| `ALLOWED_HOSTS` | Hôtes autorisés (ex: `localhost,127.0.0.1`) |
+| `CORS_ALLOWED_ORIGINS` | Origines autorisées pour les requêtes CORS |
+| `DJANGO_SUPERUSER_USERNAME` | Nom du superutilisateur créé au démarrage |
+| `DJANGO_SUPERUSER_PASSWORD` | Mot de passe du superutilisateur |
+| `DJANGO_SUPERUSER_EMAIL` | Email du superutilisateur |
+| `VITE_API_URL` | URL du backend appelée par le frontend |
+| `VITE_N8N_WEBHOOK_URL` | URL du webhook n8n pour la génération de quiz |
+| `VITE_N8N_PROXY_TARGET` | Cible du proxy n8n (ex: `http://n8n:5678`) |
+| `N8N_ENCRYPTION_KEY` | Clé de chiffrement n8n |
+
+---
 
 ## 📎 Livrables
 
-### 🖼️ Maquettes 
+### 🖼️ Maquettes
 [🔗 Voir les maquettes sur Figma](https://www.figma.com/design/Xu2ocFXQvCjZubZsyGHSic/QuizPilot-template-vrais?node-id=0-1&t=Q2HIV22vVWLG6mWS-1)
 
 ### 🖼️ Wireframes
 [🔗 Voir les wireframes sur Figma](https://www.figma.com/design/YdcOWTTci2QMH1sE2N6w6U/incollapps-wireframe?node-id=0-1&t=mAe4KxNikvUzydES-1)
 
 ### 🗃️ MCD (Modèle Conceptuel de Données)
-[📄 Voir le MCD (PDF)](DOCS/MCD/QUIZPILOT.drawio.pdf)
+[📄 Voir le MCD (PNG)](DOCS/MERISE/QUIZPILOT-mcd.png)
+[Voir le Merise complet](https://drive.google.com/file/d/1Ew-YYnEw2W2db7aFqvvVxO9ODHd_P6L6/view?usp=sharing)
 
 ### 🎯 Diagramme de cas d'utilisation
-[📄 Voir le diagramme de cas d'utilisation (PDF)](DOCS/diagramme/QUIZPILOTDiagrammeCasUtilisatio.drawio.pdf)
+[📄 Voir le diagramme de cas d'utilisation (SVG)](DOCS/DIAGRAMMES/QuizPilot_DiagrammeCasUsage.svg)
 
+---
 
+## 📁 Structure du projet
 
-### 📁 Structure du projet
-```.
-├── back-django
-│   ├── api
-│   │   ├── migrations
+```
+.
+├── back-django/
+│   ├── api/
+│   │   ├── migrations/
+│   │   ├── models.py
 │   │   ├── serializers.py
 │   │   ├── urls.py
 │   │   └── views.py
+│   ├── backend/
+│   │   └── settings.py
 │   ├── manage.py
 │   ├── requirements.txt
-│   └── settings.py
 │   └── Dockerfile
-
-
-├── client
-│   ├── public
-│   └── src
-│       ├── components
-│       ├── pages
-│       ├── App.js
-│       └── index.js
-│   └── Dockerfile
+├── client/
+│   ├── public/
+│   └── src/
+│       ├── components/
+│       ├── features/
+│       ├── pages/
+│       ├── services/
+│       ├── App.tsx
+│       └── main.tsx
+│   ├── Dockerfile
 │   └── package.json
-│   └── package-lock.json
-├── .gitignore
+├── .env.exemple
 ├── docker-compose.yml
-├── README.md
-└── tailwind.config.js
-``` 
+└── README.md
+```
+
+---
 
 ## 🚀 Démarrage rapide
+
 ### Prérequis
-- Docker et Docker Compose installés sur votre machine
-- Cloner le dépôt GitHub du projet
-- Accéder au répertoire du projet
+
+- Docker et Docker Compose installés
+- Cloner le dépôt et se placer dans le répertoire
+
 ```bash
-cd projet_rncp
+git clone https://github.com/2024-devops-alt-dist/micro-saas-AC.git
+cd micro-saas-AC
 ```
-- créer un fichier `.env` à la racine du projet avec les variables d'environnement nécessaires (exemple dans `.env.example`)
-### Lancement de l'application
+
+- Créer le fichier `.env` à partir de l'exemple :
+
+```bash
+cp .env.exemple .env
+# Puis renseigner les valeurs dans .env
+```
+
+### Lancement
+
 ```bash
 docker-compose up --build
 ```
-### Accès à l'application
-```bash 
-# Ouvrir votre navigateur et accéder aux URLs suivantes :
-```
+
+### Accès
+
 - Frontend : [http://localhost:3000](http://localhost:3000)
-- Backend : [http://localhost:8000](http://localhost:8000/api/)
-### Arrêt de l'application
+- Backend API : [http://localhost:8000/api/](http://localhost:8000/api/)
+
+### Arrêt
+
 ```bash
 docker-compose down
 ```
+
+---
+
 ## 🛠️ Commandes utiles
+
 ```bash
 # Accéder au conteneur backend
 docker-compose exec back-django bash
@@ -126,49 +163,37 @@ docker-compose exec back-django bash
 # Accéder au conteneur frontend
 docker-compose exec client bash
 
-# Arrêter tous les conteneurs
-docker-compose down
-# Rebuild les conteneurs après modification
+# Rebuild après modification
 docker-compose up --build
 ```
 
-## 📚 Ressources supplémentaires
-- [Documentation Django REST Framework](https://www.django-rest-framework.org/)
-- [Documentation React](https://reactjs.org/docs/getting-started.html)  
-- [Documentation Tailwind CSS](https://tailwindcss.com/docs)    
-- [Documentation Docker](https://docs.docker.com/)
+---
+
+## ⚙️ Pipeline CI
 
 
-## ✅ Black - [Documentation Black](https://black.readthedocs.io/en/stable/)
-### Installation de Black
+[![CI Pipeline]](https://github.com/2024-devops-alt-dist/micro-saas-AC/actions/workflows/ci.yml)
+
+
+La CI s'exécute sur chaque push et vérifie :
+
+- **Frontend** : audit de sécurité npm, ESLint, vérification TypeScript, build
+- **Backend** : audit de sécurité pip, Pylint, Black, isort, tests Django
+
+### Outils qualité (développement local)
+
+Les hooks git sont gérés par [Lefthook](https://github.com/evilmartians/lefthook). Pour les installer :
+
 ```bash
-pip install black
-```
-### Utilisation de Black
-```bash
- python -m black Chemin/nomDuFichier.py
-```
-## Pylint - [Documentation Pylint](https://pylint.pycqa.org/en/latest/)
-### Installation de Pylint
-```bash
-pip install pylint
-``` 
-### Utilisation de Pylint
-```bash
-python -m pylint Chemin/nomDuFichier.py
+npm install
+npx lefthook install
 ```
 
-## Lefthook - [Documentation Lefthook](https://github.com/evilmartians/lefthook)
-### Installation de Lefthook
-```bash
-pip install lefthook
-```
-### Initialisation de Lefthook
-```bash
-lefthook install
-lefthook add pre-commit
-lefthook add pre-push
-lefthook install
-lefthook run pre-commit
-```
-## 📝 Notes
+---
+
+## 📚 Ressources
+
+- [Django REST Framework](https://www.django-rest-framework.org/)
+- [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Docker](https://docs.docker.com/)
