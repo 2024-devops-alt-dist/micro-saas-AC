@@ -19,5 +19,8 @@ COPY . .
 # exposer le port utilisé par Django
 EXPOSE 8000
 
+# collecter les fichiers statiques lors du build
+RUN python manage.py collectstatic --noinput
+
 # commande pour lancer le serveur
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
