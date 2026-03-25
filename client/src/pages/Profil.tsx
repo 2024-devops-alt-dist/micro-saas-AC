@@ -41,6 +41,11 @@ function Profil() {
     }
   };
 
+  const handleDeleteAccount = async (currentPassword: string) => {
+    await authService.deleteAccount(currentPassword);
+    navigate("/");
+  };
+
   const username = authService.getUsername();
   const email = authService.getEmail();
 
@@ -147,6 +152,7 @@ function Profil() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onSubmit={handleUpdateProfile}
+        onDeleteAccount={handleDeleteAccount}
         currentEmail={email}
       />
 

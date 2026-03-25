@@ -6,6 +6,7 @@ import Profil from "./pages/Profil";
 import Stats from "./pages/Stats";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/stats",
     element: <Stats />,
+  },
+  {
+    path: "/reset-password/:uid/:token",
+    element: <ResetPassword />,
   },
 ]);
 

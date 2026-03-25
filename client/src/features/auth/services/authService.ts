@@ -88,4 +88,24 @@ export const authService = {
 
         return data;
     },
+
+    async deleteAccount(currentPassword: string) {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/me/`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ current_password: currentPassword }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || "Erreur lors de la suppression du compte");
+        }
+
+        localStorage.removeItem("username");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("email");
+
+        return response.json();
+    },
 };

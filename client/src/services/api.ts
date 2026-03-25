@@ -38,8 +38,14 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
       } catch {
         errorData = { message: response.statusText };
       }
+
+      // Erreurs de validation DRF : { "email": ["msg"], "username": ["msg"] }
+      const firstFieldError = Object.values(errorData)
+        .find((v) => Array.isArray(v) && v.length > 0);
+      const fieldMessage = Array.isArray(firstFieldError) ? firstFieldError[0] : null;
+
       throw createApiError(
-        errorData.message || errorData.detail || "Erreur lors de la récupération des données",
+        fieldMessage || errorData.message || errorData.detail || errorData.error || "Erreur lors de la récupération des données",
         response.status
       );
     }
