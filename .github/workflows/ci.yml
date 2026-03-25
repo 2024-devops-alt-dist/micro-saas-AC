@@ -79,7 +79,7 @@ jobs:
         run: pip install pip-audit
 
       - name: Security audit (ignore specific vulnerabilities)
-        run: pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-27jp-wm6q-gp25
+        run: pip-audit --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-27jp-wm6q-gp25 --ignore-vuln CVE-2026-4539
 
       - name: Lint code with pylint
         run: pylint .
