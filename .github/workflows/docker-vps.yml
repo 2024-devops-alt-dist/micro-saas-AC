@@ -135,11 +135,4 @@ jobs:
             echo "Migrations terminées avec succès"
 
             # Créer le superuser si il n'existe pas déjà
-            docker exec quizpilot_api python manage.py shell -c "
-from django.contrib.auth.models import User
-if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
-    User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')
-    print('Superuser créé')
-else:
-    print('Superuser existe déjà')
-"
+            docker exec quizpilot_api python manage.py shell -c "from django.contrib.auth.models import User; User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists() or User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')"
