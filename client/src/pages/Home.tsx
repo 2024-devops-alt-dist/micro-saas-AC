@@ -60,11 +60,24 @@ function Home() {
 
         {/* Features Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-8">
-          <div className="bg-gray-800/40 p-5 rounded-2xl border border-gray-700/50 text-left">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
+          <div className="bg-gray-800/40 p-5 rounded-2xl border border-gray-700/50 text-left space-y-3">
+            <h3 className="text-yellow-300 font-bold text-sm uppercase tracking-wider">Mentions légales</h3>
+            <div className="text-gray-300 text-sm space-y-1">
+              <p className="font-medium">Agnès Cappello</p>
+              <p className="text-gray-400">senga.ds@gmail.com</p>
+              <p className="text-gray-400">Hébergé chez OVH</p>
+            </div>
+            <p className="text-gray-500 text-xs leading-relaxed border-t border-gray-700/50 pt-3">
+              Les données personnelles sont utilisées uniquement pour répondre aux demandes et ne sont jamais partagées. Vous pouvez demander à les consulter, les modifier ou les supprimer à tout moment.
+            </p>
           </div>
-          <div className="bg-gray-800/40 p-5 rounded-2xl border border-gray-700/50 text-left">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
+          <div className="bg-gray-800/40 p-5 rounded-2xl border border-gray-700/50 text-left space-y-3">
+            <h3 className="text-yellow-300 font-bold text-sm uppercase tracking-wider">Propriété intellectuelle</h3>
+            <ul className="text-gray-400 text-sm space-y-2">
+              <li className="flex gap-2"><span className="text-yellow-400 mt-0.5">—</span><span>Ce projet est une création originale développée dans le cadre d'un titre RNCP.</span></li>
+              <li className="flex gap-2"><span className="text-yellow-400 mt-0.5">—</span><span>Toute ressemblance avec des projets existants serait purement fortuite.</span></li>
+              <li className="flex gap-2"><span className="text-yellow-400 mt-0.5">—</span><span>Ce projet est destiné à un usage éducatif et ne doit pas être utilisé à des fins commerciales sans autorisation préalable.</span></li>
+            </ul>
           </div>
         </div>
       </div>

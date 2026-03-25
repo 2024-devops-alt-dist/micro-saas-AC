@@ -34,9 +34,13 @@ export const authService = {
     async logout() {
         try {
             await apiFetch("/api/logout/", { method: "POST" });
-        } catch (error) {
-            console.error("Logout error:", error);
+        } catch {
+            // Silencieux : la session est peut-être déjà expirée côté serveur
         }
+        this.clearSession();
+    },
+
+    clearSession() {
         localStorage.removeItem("username");
         localStorage.removeItem("user_id");
         localStorage.removeItem("email");

@@ -16,7 +16,7 @@ function Profil() {
 
   useEffect(() => {
     if (state === "unauthenticated") {
-      authService.logout();
+      authService.clearSession();
       navigate("/login");
     }
   }, [state, navigate]);
