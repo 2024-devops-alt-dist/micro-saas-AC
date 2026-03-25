@@ -5,6 +5,7 @@ import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { authService } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../../../services/api";
 
 interface AuthFormProps {
   initialIsLogin?: boolean;
@@ -19,6 +20,28 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotError, setForgotError] = useState("");
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError("");
+    setForgotLoading(true);
+    try {
+      await apiFetch("/api/password-reset/", {
+        method: "POST",
+        body: JSON.stringify({ email: forgotEmail }),
+      });
+      setForgotMessage("Si cet email est enregistré, un lien vous a été envoyé.");
+    } catch {
+      setForgotError("Une erreur est survenue. Réessayez.");
+    } finally {
+      setForgotLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +55,8 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
         navigate("/profil");
       } else {
         await authService.register(username, email, password);
-        setMessage("Compte créé avec succès ! Connectez-vous.");
-        setIsLogin(true);
+        await authService.login(username, password);
+        navigate("/profil");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
@@ -112,9 +135,13 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
 
         {isLogin && (
           <div className="flex justify-end text-shadow-white">
-            <a href="#" className="text-sm text-white hover:underline">
+            <button
+              type="button"
+              onClick={() => { setShowForgotModal(true); setForgotMessage(""); setForgotError(""); setForgotEmail(""); }}
+              className="text-sm text-white hover:underline"
+            >
               Mot de passe oublié ?
-            </a>
+            </button>
           </div>
         )}
 
@@ -140,6 +167,44 @@ function AuthForm({ initialIsLogin = true }: AuthFormProps) {
           {isLogin ? "Créer un compte" : "Se connecter"}
         </button>
       </p>
+
+      {showForgotModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl border border-gray-700 max-w-sm w-full p-6 shadow-2xl">
+            <h3 className="text-lg font-bold text-white mb-2">Réinitialiser le mot de passe</h3>
+            <p className="text-gray-400 text-sm mb-4">Entrez votre email et nous vous enverrons un lien.</p>
+            {forgotMessage ? (
+              <p className="text-green-400 text-sm bg-green-500/10 p-3 rounded">{forgotMessage}</p>
+            ) : (
+              <form onSubmit={handleForgotPassword} className="flex flex-col gap-3">
+                {forgotError && <p className="text-red-400 text-sm bg-red-500/10 p-2 rounded">{forgotError}</p>}
+                <input
+                  type="email"
+                  placeholder="votre@email.com"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  className="w-full p-3 rounded bg-gray-900 border border-gray-700 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+                  required
+                />
+                <Button
+                  type="submit"
+                  disabled={forgotLoading}
+                  className="py-2 bg-yellow-300 hover:bg-yellow-400 text-black font-bold rounded-lg transition disabled:opacity-50"
+                >
+                  {forgotLoading ? "Envoi..." : "Envoyer le lien"}
+                </Button>
+              </form>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowForgotModal(false)}
+              className="mt-4 w-full py-2 text-sm text-gray-400 hover:text-white transition"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

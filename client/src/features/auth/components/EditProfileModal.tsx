@@ -4,11 +4,12 @@ import Button from "../../../components/Button";
 interface EditProfileModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (currentPassword: string, newEmail?: string, newPassword?: string) => Promise<void>;
+    onSubmit: (password: string, newEmail?: string, newPassword?: string) => Promise<void>;
+    onDeleteAccount: (currentPassword: string) => Promise<void>;
     currentEmail: string;
 }
 
-function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfileModalProps) {
+function EditProfileModal({ isOpen, onClose, onSubmit, onDeleteAccount, currentEmail }: EditProfileModalProps) {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newEmail, setNewEmail] = useState(currentEmail);
     const [newPassword, setNewPassword] = useState("");
@@ -61,6 +62,24 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
             setLoading(false);
         }
     };
+    const deleteAccount = async () => {
+        if (!currentPassword) {
+            setError("Veuillez entrer votre mot de passe actuel pour supprimer votre compte");
+            return;
+        }
+        if (!window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+            return;
+        }
+        setLoading(true);
+        try {
+            await onDeleteAccount(currentPassword);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Une erreur est survenue");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     const handleClose = () => {
         setCurrentPassword("");
@@ -179,6 +198,16 @@ function EditProfileModal({ isOpen, onClose, onSubmit, currentEmail }: EditProfi
                             </div>
                         </div>
                     )}
+                    <div className="pt-4">
+                        <Button
+                            type="button"
+                            onClick={deleteAccount}
+                            className="w-full py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
+                        >
+                            Supprimer mon compte
+                        </Button>
+                    </div>
+
 
                     <div className="flex gap-3 pt-4">
                         <Button

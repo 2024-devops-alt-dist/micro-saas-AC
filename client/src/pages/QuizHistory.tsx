@@ -1,9 +1,20 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUserStats } from "../features/charts/services/userStats";
 import Title from "../components/Title";
 import BottomNav from "../components/BottomNav";
+import { authService } from "../features/auth/services/authService";
 
 function QuizHistory() {
     const { stats, state } = useUserStats();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (state === "unauthenticated") {
+            authService.clearSession();
+            navigate("/login");
+        }
+    }, [state, navigate]);
 
     const sortedStats = [...stats].sort((a, b) =>
         new Date(b.date).getTime() - new Date(a.date).getTime()

@@ -1,6 +1,10 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
 from django.http import JsonResponse
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -69,6 +73,26 @@ class MeView(APIView):
         user.save()
         serializer = UserSerializer(user)
         return Response({"message": "Profil mis à jour avec succès", "user": serializer.data})
+
+    def delete(self, request):
+        user = request.user
+        current_password = request.data.get("current_password")
+
+        if not current_password:
+            return Response(
+                {"error": "Le mot de passe est requis pour supprimer votre compte"},
+                status=400,
+            )
+
+        if not user.check_password(current_password):
+            return Response({"error": "Mot de passe incorrect"}, status=400)
+
+        user.delete()
+
+        response = Response({"message": "Compte supprimé avec succès"}, status=200)
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+        return response
 
 
 def test_api(request):
@@ -224,3 +248,66 @@ class LogoutView(APIView):
         response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
         response.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
         return response
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email", "").strip()
+        if not email:
+            return Response({"error": "L'email est requis."}, status=400)
+
+        # On ne révèle pas si l'email existe ou non (sécurité)
+        try:
+            user = User.objects.get(email=email)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3005")
+            reset_link = f"{frontend_url}/reset-password/{uid}/{token}/"
+
+            send_mail(
+                subject="Réinitialisation de votre mot de passe QuizPilot",
+                message=(
+                    f"Bonjour {user.username},\n\n"
+                    f"Vous avez demandé la réinitialisation de votre mot de passe.\n\n"
+                    f"Cliquez sur le lien ci-dessous (valable 24h) :\n{reset_link}\n\n"
+                    f"Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.\n\n"
+                    f"L'équipe QuizPilot"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+        except User.DoesNotExist:
+            pass  # On ne révèle pas si l'adresse est connue
+
+        return Response({"message": "Si cet email est enregistré, un lien de réinitialisation vous a été envoyé."}, status=200)
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        uid = request.data.get("uid")
+        token = request.data.get("token")
+        new_password = request.data.get("new_password")
+
+        if not all([uid, token, new_password]):
+            return Response({"error": "Tous les champs sont requis."}, status=400)
+
+        if len(new_password) < 8:
+            return Response({"error": "Le mot de passe doit contenir au moins 8 caractères."}, status=400)
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (User.DoesNotExist, ValueError, TypeError):
+            return Response({"error": "Lien invalide."}, status=400)
+
+        if not default_token_generator.check_token(user, token):
+            return Response({"error": "Lien expiré ou invalide."}, status=400)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({"message": "Mot de passe réinitialisé avec succès."}, status=200)

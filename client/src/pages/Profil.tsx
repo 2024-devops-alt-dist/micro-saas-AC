@@ -16,7 +16,7 @@ function Profil() {
 
   useEffect(() => {
     if (state === "unauthenticated") {
-      authService.logout();
+      authService.clearSession();
       navigate("/login");
     }
   }, [state, navigate]);
@@ -39,6 +39,11 @@ function Profil() {
         window.location.reload();
       }
     }
+  };
+
+  const handleDeleteAccount = async (currentPassword: string) => {
+    await authService.deleteAccount(currentPassword);
+    navigate("/");
   };
 
   const username = authService.getUsername();
@@ -147,6 +152,7 @@ function Profil() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onSubmit={handleUpdateProfile}
+        onDeleteAccount={handleDeleteAccount}
         currentEmail={email}
       />
 

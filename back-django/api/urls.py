@@ -16,6 +16,9 @@ urlpatterns = [
     path("token/refresh/", views.CookieTokenRefreshView.as_view(), name="token_refresh"),
     # Déconnexion (suppression des cookies)
     path("logout/", views.LogoutView.as_view(), name="logout"),
+    # Réinitialisation du mot de passe
+    path("password-reset/", views.PasswordResetRequestView.as_view(), name="password-reset"),
+    path("password-reset/confirm/", views.PasswordResetConfirmView.as_view(), name="password-reset-confirm"),
     # Enregistrer un nouvel utilisateur
     path("register/", views.RegisterView.as_view(), name="auth_register"),
     path("me/", views.MeView.as_view(), name="me"),
