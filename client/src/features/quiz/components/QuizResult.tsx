@@ -94,7 +94,7 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
         <div className="mb-6">
           <div className="w-24 h-24 rounded-full bg-gray-900 border-4 border-yellow-300 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-yellow-900/10">
             <span className="text-3xl font-bold text-yellow-300">{score}</span>
-            <span className="text-gray-500 text-sm ml-1">/{questions.length}</span>
+            <span className="text-gray-200 text-sm ml-1">/{questions.length}</span>
           </div>
 
           {ratio >= 0.8 ? (
@@ -107,7 +107,7 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
         </div>
 
         <div className="space-y-3 mb-8">
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <p className="text-gray-200 text-sm leading-relaxed">
             {ratio >= 0.8
               ? "Vous avez maîtrisé ce sujet avec brio. Votre plan de vol vers la réussite est parfaitement tracé !"
               : ratio >= 0.5
@@ -147,19 +147,36 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
               const isCorrect = userAns === correctAns;
 
               return (
-                <li key={i} className="bg-gray-800/40 p-4 rounded-2xl border border-gray-700/30">
-                  <h3 className="font-bold text-sm mb-3 text-gray-100">{q.question}</h3>
+                <li
+                  key={i}
+                  className="bg-[#111d37] p-4 rounded-2xl border border-gray-700/30"
+                  aria-label={`Question ${i + 1}: ${q.question}`}
+                >
+                  <h3 className="font-bold mb-3 text-gray-100 text-xl">{q.question}</h3>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="text-gray-500 uppercase font-bold w-16">Votre choix:</span>
-                      <span className={isCorrect ? "text-green-400 font-medium" : "text-red-400 font-medium"}>
+                      <span className="text-gray-100 uppercase font-bold w-16">
+                        Votre choix :
+                      </span>
+                      <span
+                        className={`font-normal text-base flex items-center gap-1 ${
+                          isCorrect ? "text-green-300" : "text-red-400"
+                        }`}
+                        aria-label={isCorrect ? "Bonne réponse" : "Réponse incorrecte"}
+                      >
+                        <span aria-hidden="true">{isCorrect ? "✔" : "✗"}</span>
                         {userAns || "Aucune réponse"}
                       </span>
                     </div>
                     {!isCorrect && (
                       <div className="flex items-center gap-2 text-xs">
-                        <span className="text-gray-500 uppercase font-bold w-16">Correct:</span>
-                        <span className="text-green-400 font-medium">{correctAns}</span>
+                        <span className="text-green-300 uppercase font-bold w-16">
+                          Correct :
+                        </span>
+                        <span className="text-green-300 font-normal text-base flex items-center gap-1" aria-label="Réponse correcte">
+                          <span aria-hidden="true">✔</span>
+                          {correctAns}
+                        </span>
                       </div>
                     )}
                   </div>

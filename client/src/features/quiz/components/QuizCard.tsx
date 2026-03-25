@@ -15,7 +15,7 @@ type Question = {
 type Props = {
   question: Question;
   selected?: string | null;
-  onSelect?: (answer: string) => void;
+  onSelect?: (_value: string) => void;
   onPrev?: () => void;
   onNext?: () => void;
   disablePrev?: boolean;
