@@ -83,11 +83,14 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: ${{ secrets.DEBUG }}
           CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
+          DJANGO_SUPERUSER_USERNAME: ${{ secrets.DJANGO_SUPERUSER_USERNAME }}
+          DJANGO_SUPERUSER_EMAIL: ${{ secrets.DJANGO_SUPERUSER_EMAIL }}
+          DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: DOCKERHUB_USERNAME,DB_NAME,DB_USER,DB_PASSWORD,N8N_DB,N8N_ENCRYPTION_KEY,N8N_HOST,ALLOWED_HOSTS,SECRET_KEY,DEBUG,CORS_ALLOWED_ORIGINS
+          envs: DOCKERHUB_USERNAME,DB_NAME,DB_USER,DB_PASSWORD,N8N_DB,N8N_ENCRYPTION_KEY,N8N_HOST,ALLOWED_HOSTS,SECRET_KEY,DEBUG,CORS_ALLOWED_ORIGINS,DJANGO_SUPERUSER_USERNAME,DJANGO_SUPERUSER_EMAIL,DJANGO_SUPERUSER_PASSWORD
           script: |
             set -e
             cd /home/debian/quizpilot-docker
@@ -130,3 +133,13 @@ jobs:
               sleep 5
             done
             echo "Migrations terminées avec succès"
+
+            # Créer le superuser si il n'existe pas déjà
+            docker exec quizpilot_api python manage.py shell -c "
+from django.contrib.auth.models import User
+if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
+    User.objects.create_superuser('$DJANGO_SUPERUSER_USERNAME', '$DJANGO_SUPERUSER_EMAIL', '$DJANGO_SUPERUSER_PASSWORD')
+    print('Superuser créé')
+else:
+    print('Superuser existe déjà')
+"
