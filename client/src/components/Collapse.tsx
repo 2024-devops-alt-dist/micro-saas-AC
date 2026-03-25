@@ -9,11 +9,11 @@ function Collapse({ title, children }: CollapseProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="overflow-hidden rounded-xl mb-4 shadow border border-[#E6DE52] bg-[#F3EB75]">
+    <div className="overflow-hidden mb-4 border border-[#E6DE52] bg-yellow-300 text-gray-900 rounded-2xl font-bold hover:bg-yellow-400 transition-all active:scale-95 shadow-lg shadow-yellow-900/10">
       <button
         className={`
           w-full px-4 py-3 font-semibold text-[#1a1f26] focus:outline-none
-          hover:bg-[#F8F795]
+          hover:bg-yellow-400 transition-all active:scale-95 shadow-lg shadow-yellow-900/10
           flex flex-col items-center justify-center
           md:flex-row md:justify-between md:items-center
           ${isOpen ? "border-b-2 border-[#1a1f26]" : ""}
@@ -33,7 +33,7 @@ function Collapse({ title, children }: CollapseProps) {
         style={{ borderTop: isOpen ? "2px solid #E6DE52" : "0px" }}
       >
         {isOpen && (
-          <div className="py-3 text-[#1a1f26] text-base bg-[#F3EB75]">
+          <div className="py-3 text-[#1a1f26] text-base bg-yellow-300 hover:bg-yellow-400 transition-all rounded-b-2xl shadow-lg shadow-yellow-900/10">
             {children}
           </div>
         )}
