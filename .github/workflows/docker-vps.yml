@@ -146,16 +146,6 @@ jobs:
             done
             echo "Migrations terminées avec succès"
 
-            # Resynchroniser les séquences PostgreSQL des tables n8n (managed=False)
-            # Nécessaire car n8n insère des lignes directement, hors du contrôle de Django
-            docker exec quizpilot_api python manage.py shell -c "
-from django.db import connection
-with connection.cursor() as c:
-    c.execute(\"SELECT setval(pg_get_serial_sequence('users', 'id_user'), COALESCE(MAX(id_user), 1), true) FROM users\")
-    c.execute(\"SELECT setval(pg_get_serial_sequence('quiz_stats', 'id'), COALESCE(MAX(id), 1), true) FROM quiz_stats\")
-print('Sequences resynchronisees')
-"
-
             # Créer ou mettre à jour le superuser (applique toujours le mot de passe des secrets)
             docker exec \
               -e DJANGO_SUPERUSER_USERNAME="$DJANGO_SUPERUSER_USERNAME" \

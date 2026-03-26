@@ -170,24 +170,25 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
     # creation d une nouvelle stat : recup user django, trouver ou créer user n8n, sauvegarder la stat avec ce user n8n
     def perform_create(self, serializer):
         user_django = self.request.user
-        print(f"DEBUG STATS - Tentative création pour: {user_django.email}")
 
-        try:
-            user_n8n, created = Users.objects.get_or_create(
+        # Cherche d'abord l'utilisateur n8n existant par email
+        user_n8n = Users.objects.filter(email=user_django.email).first()
+
+        if user_n8n is None:
+            # n8n insère des IDs explicites sans passer par la séquence PostgreSQL,
+            # ce qui la désynchronise. On calcule MAX+1 pour éviter les conflits.
+            from django.db import connection
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT COALESCE(MAX(id_user), 0) + 1 FROM users")
+                next_id = cursor.fetchone()[0]
+            user_n8n = Users.objects.create(
+                id_user=next_id,
                 email=user_django.email,
-                defaults={
-                    "pseudo": user_django.username,
-                },
+                pseudo=user_django.username,
             )
-            print(f"DEBUG STATS - Utilisateur n8n: {user_n8n.pseudo} " f"(ID: {user_n8n.id_user}, Created: {created})")
-            print(f"DEBUG STATS - Data envoyée: {self.request.data}")
 
-            serializer.save(user=user_n8n)
-            print("DEBUG STATS - Sauvegarde réussie")
-
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            print(f"DEBUG STATS - ERREUR CRITIQUE: {str(e)}")
-            raise e
+        serializer.save(user=user_n8n)
 
 
 # gestion de l'auth (stocker les tokens JWT dans des cookies HTTP-only au lieu de les retourner simplement dans le corps de la réponse JSON)
