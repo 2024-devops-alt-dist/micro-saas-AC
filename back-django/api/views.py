@@ -169,6 +169,8 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
 
     # creation d une nouvelle stat : recup user django, trouver ou créer user n8n, sauvegarder la stat avec ce user n8n
     def perform_create(self, serializer):
+        from django.db import IntegrityError, connection
+
         user_django = self.request.user
 
         # Cherche d'abord l'utilisateur n8n existant par email
@@ -177,16 +179,20 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
         if user_n8n is None:
             # n8n insère des IDs explicites sans passer par la séquence PostgreSQL,
             # ce qui la désynchronise. On calcule MAX+1 pour éviter les conflits.
-            from django.db import connection
-
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT COALESCE(MAX(id_user), 0) + 1 FROM users")
-                next_id = cursor.fetchone()[0]
-            user_n8n = Users.objects.create(
-                id_user=next_id,
-                email=user_django.email,
-                pseudo=user_django.username,
-            )
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT COALESCE(MAX(id_user), 0) + 1 FROM users")
+                    next_id = cursor.fetchone()[0]
+                user_n8n = Users.objects.create(
+                    id_user=next_id,
+                    email=user_django.email,
+                    pseudo=user_django.username,
+                )
+            except IntegrityError:
+                # Race condition : un autre processus a créé l'utilisateur entre-temps
+                user_n8n = Users.objects.filter(email=user_django.email).first()
+                if user_n8n is None:
+                    raise
 
         serializer.save(user=user_n8n)
 
