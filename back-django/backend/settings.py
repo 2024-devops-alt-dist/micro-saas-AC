@@ -73,11 +73,11 @@ SIMPLE_JWT = {
     # Cookie settings
     "AUTH_COOKIE": "access_token",
     "AUTH_COOKIE_REFRESH": "refresh_token",
-    "AUTH_COOKIE_DOMAIN": None,
-    "AUTH_COOKIE_SECURE": False,  # Set to True in production
+    "AUTH_COOKIE_DOMAIN": os.getenv("COOKIE_DOMAIN") or None,
+    "AUTH_COOKIE_SECURE": os.getenv("COOKIE_SECURE", "False").lower() == "true",
     "AUTH_COOKIE_HTTP_ONLY": True,
     "AUTH_COOKIE_PATH": "/",
-    "AUTH_COOKIE_SAMESITE": "Lax",
+    "AUTH_COOKIE_SAMESITE": os.getenv("COOKIE_SAMESITE", "Lax"),
 }
 
 
