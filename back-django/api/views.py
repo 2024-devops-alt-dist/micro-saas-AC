@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
@@ -5,6 +7,8 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
+logger = logging.getLogger(__name__)
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -267,19 +271,26 @@ class PasswordResetRequestView(APIView):
             frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3005")
             reset_link = f"{frontend_url}/reset-password/{uid}/{token}/"
 
-            send_mail(
-                subject="Réinitialisation de votre mot de passe QuizPilot",
-                message=(
-                    f"Bonjour {user.username},\n\n"
-                    f"Vous avez demandé la réinitialisation de votre mot de passe.\n\n"
-                    f"Cliquez sur le lien ci-dessous (valable 24h) :\n{reset_link}\n\n"
-                    f"Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.\n\n"
-                    f"L'équipe QuizPilot"
-                ),
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email],
-                fail_silently=False,
-            )
+            try:
+                send_mail(
+                    subject="Réinitialisation de votre mot de passe QuizPilot",
+                    message=(
+                        f"Bonjour {user.username},\n\n"
+                        f"Vous avez demandé la réinitialisation de votre mot de passe.\n\n"
+                        f"Cliquez sur le lien ci-dessous (valable 24h) :\n{reset_link}\n\n"
+                        f"Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.\n\n"
+                        f"L'équipe QuizPilot"
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
+            except Exception as smtp_error:
+                logger.error("Erreur envoi email reset pour %s : %s", email, smtp_error)
+                return Response(
+                    {"error": "Impossible d'envoyer l'email. Veuillez réessayer plus tard."},
+                    status=500,
+                )
         except User.DoesNotExist:
             pass  # On ne révèle pas si l'adresse est connue
 
