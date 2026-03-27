@@ -62,7 +62,7 @@ class Users(models.Model):
     id_user = models.AutoField(primary_key=True)
     pseudo = models.CharField(max_length=150, unique=True, db_column="pseudo")
     email = models.EmailField(unique=True, db_column="email")
-    password = models.CharField(max_length=255, db_column="password", null=True, blank=True)
+    password = models.CharField(max_length=255, db_column="password", default="", blank=True)
 
     class Meta:
         db_table = "users"
