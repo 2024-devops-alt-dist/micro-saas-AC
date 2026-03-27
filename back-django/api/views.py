@@ -266,7 +266,9 @@ class PasswordResetRequestView(APIView):
 
         # On ne révèle pas si l'email existe ou non (sécurité)
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.filter(email=email).first()
+            if user is None:
+                raise User.DoesNotExist
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
             frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3005")
