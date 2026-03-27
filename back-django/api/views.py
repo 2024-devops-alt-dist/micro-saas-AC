@@ -187,11 +187,21 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT COALESCE(MAX(id_user), 0) + 1 FROM users")
                 next_id = cursor.fetchone()[0]
-            user_n8n = Users.objects.create(
-                id_user=next_id,
-                email=user_django.email,
-                pseudo=user_django.username,
-            )
+            try:
+                user_n8n = Users.objects.create(
+                    id_user=next_id,
+                    email=user_django.email,
+                    pseudo=user_django.username,
+                    password="",
+                )
+            except Exception as e:
+                logger.error("Impossible de créer le user n8n pour %s: %s", user_django.email, e)
+                # Réessayer avec filter au cas où une race condition a créé l'entrée entre-temps
+                user_n8n = Users.objects.filter(email=user_django.email).first()
+                if user_n8n is None:
+                    from rest_framework.exceptions import APIException
+
+                    raise APIException(f"Impossible de lier le compte utilisateur: {e}")
 
         serializer.save(user=user_n8n)
 
