@@ -5,10 +5,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, permissions
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -194,14 +196,12 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
                     pseudo=user_django.username,
                     password="",
                 )
-            except Exception as e:
+            except IntegrityError as e:
                 logger.error("Impossible de créer le user n8n pour %s: %s", user_django.email, e)
                 # Réessayer avec filter au cas où une race condition a créé l'entrée entre-temps
                 user_n8n = Users.objects.filter(email=user_django.email).first()
                 if user_n8n is None:
-                    from rest_framework.exceptions import APIException
-
-                    raise APIException(f"Impossible de lier le compte utilisateur: {e}")
+                    raise APIException(f"Impossible de lier le compte utilisateur: {e}") from e
 
         serializer.save(user=user_n8n)
 
