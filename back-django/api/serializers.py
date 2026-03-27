@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.db import connection
 from rest_framework import serializers
 
 from .models import Category, Level, Propositions, Questions, QuizStats, Users
@@ -32,19 +31,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             password=validated_data["password"],
         )
-
-        # Créer l'entrée dans la table `users` (partagée avec n8n) dès l'inscription
-        # pour éviter les conflits de séquence PostgreSQL lors de la création de quiz
-        if not Users.objects.filter(email=user.email).exists():
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT COALESCE(MAX(id_user), 0) + 1 FROM users")
-                next_id = cursor.fetchone()[0]
-            Users.objects.create(
-                id_user=next_id,
-                email=user.email,
-                pseudo=user.username,
-            )
-
         return user
 
 
