@@ -1,4 +1,5 @@
 import logging
+import smtplib
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,8 +8,6 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-
-logger = logging.getLogger(__name__)
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -25,6 +24,8 @@ from .serializers import (
     RegisterSerializer,
     UserSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 # creation d un nouveau compte
@@ -285,7 +286,7 @@ class PasswordResetRequestView(APIView):
                     recipient_list=[email],
                     fail_silently=False,
                 )
-            except Exception as smtp_error:
+            except (smtplib.SMTPException, OSError, TimeoutError) as smtp_error:
                 logger.error("Erreur envoi email reset pour %s : %s", email, smtp_error)
                 return Response(
                     {"error": "Impossible d'envoyer l'email. Veuillez réessayer plus tard."},
