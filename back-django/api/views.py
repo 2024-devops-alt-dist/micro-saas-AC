@@ -1,5 +1,6 @@
 import logging
 import smtplib
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,6 +8,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework import generics, permissions
@@ -189,21 +191,29 @@ class QuizStatsListCreateView(generics.ListCreateAPIView):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT COALESCE(MAX(id_user), 0) + 1 FROM users")
                 next_id = cursor.fetchone()[0]
-            try:
-                user_n8n = Users.objects.create(
-                    id_user=next_id,
-                    email=user_django.email,
-                    pseudo=user_django.username,
-                    password="",
-                )
-            except IntegrityError as e:
-                logger.error("Impossible de créer le user n8n pour %s: %s", user_django.email, e)
-                # Réessayer avec filter au cas où une race condition a créé l'entrée entre-temps
-                user_n8n = Users.objects.filter(email=user_django.email).first()
-                if user_n8n is None:
-                    raise APIException(f"Impossible de lier le compte utilisateur: {e}") from e
 
-        serializer.save(user=user_n8n)
+            # Tentative 1 : pseudo = username Django
+            for pseudo_candidate in [user_django.username, f"{user_django.username}_{str(uuid.uuid4())[:8]}"]:
+                try:
+                    user_n8n = Users.objects.create(
+                        id_user=next_id,
+                        email=user_django.email,
+                        pseudo=pseudo_candidate,
+                        password="",
+                    )
+                    break  # Succès, on sort de la boucle
+                except IntegrityError as e:
+                    logger.warning("Conflit lors de la création du user n8n (%s) pour %s: %s", pseudo_candidate, user_django.email, e)
+                    # Peut-être une race condition : re-chercher par email
+                    user_n8n = Users.objects.filter(email=user_django.email).first()
+                    if user_n8n is not None:
+                        break  # L'utilisateur a été créé entre-temps
+
+            if user_n8n is None:
+                logger.error("Impossible de créer ou trouver le user n8n pour %s", user_django.email)
+                raise APIException("Impossible de lier le compte utilisateur. Veuillez réessayer.")
+
+        serializer.save(user=user_n8n, date=timezone.now())
 
 
 # gestion de l'auth (stocker les tokens JWT dans des cookies HTTP-only au lieu de les retourner simplement dans le corps de la réponse JSON)

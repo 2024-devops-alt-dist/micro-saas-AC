@@ -2,7 +2,7 @@ import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 import Collapse from '../../../components/Collapse'
 import ValidationAnimation from './ValidationAnimation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getCategories, getLevels, saveQuizStats } from '../../../services/api';
 
 interface CategoryOrLevel {
@@ -26,13 +26,15 @@ type ResultProps = {
 function QuizResult({ score, questions, answers, metadata }: ResultProps) {
   const { width, height } = useWindowSize()
   const ratio = score / questions.length;
-  const [isSaved, setIsSaved] = useState(false);
+  const hasSaved = useRef(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   useEffect(() => {
+    let cancelled = false;
+
     const saveResult = async () => {
       const userId = localStorage.getItem("user_id");
-      console.log("DEBUG STATS - userId:", userId);
-      console.log("DEBUG STATS - metadata:", metadata);
 
       if (!userId) {
         console.warn("DEBUG STATS - Aucun userId trouvé. Reconnectez-vous.");
@@ -42,23 +44,35 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
         console.warn("DEBUG STATS - Pas de metadata reçues.");
         return;
       }
-      if (isSaved) return;
 
+      setSaveStatus('saving');
       try {
         const [categories, levels] = await Promise.all([getCategories(), getLevels()]) as [CategoryOrLevel[], CategoryOrLevel[]];
 
-        // On cherche une correspondance souple pour le thème (ex: "Maths" vs "Mathématiques")
+        if (cancelled) return;
+
+        // Normalise les accents pour la comparaison (ex: "Économie" = "Economie")
+        const normalize = (s: string) =>
+          s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        // Synonymes de niveaux pour absorber les écarts entre UI et DB
+        const LEVEL_GROUPS = [
+          ['facile', 'easy', 'debutant'],
+          ['moyen', 'intermediaire', 'medium', 'normal'],
+          ['difficile', 'hard', 'avance', 'expert'],
+        ];
+
         const cat = categories.find((c: CategoryOrLevel) =>
-          c.name.toLowerCase().includes(metadata.theme.toLowerCase()) ||
-          metadata.theme.toLowerCase().includes(c.name.toLowerCase())
+          normalize(c.name).includes(normalize(metadata.theme)) ||
+          normalize(metadata.theme).includes(normalize(c.name))
         );
 
-        const lev = levels.find((l: CategoryOrLevel) =>
-          l.name.toLowerCase() === metadata.difficulty.toLowerCase()
-        );
-
-        console.log("DEBUG STATS - Catégorie trouvée:", cat);
-        console.log("DEBUG STATS - Niveau trouvé:", lev);
+        const diffNorm = normalize(metadata.difficulty);
+        const lev = levels.find((l: CategoryOrLevel) => {
+          const levNorm = normalize(l.name);
+          if (levNorm === diffNorm) return true;
+          return LEVEL_GROUPS.some(group => group.includes(levNorm) && group.includes(diffNorm));
+        });
 
         if (cat && lev) {
           await saveQuizStats({
@@ -67,21 +81,37 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
             level_id: lev.id,
             score: score
           });
-          setIsSaved(true);
+          hasSaved.current = true;
+          setSaveStatus('saved');
           console.log("✅ Statistiques enregistrées !");
         } else {
-          console.warn("DEBUG STATS - Correspondance non trouvée en base pour:", metadata);
+          const msg = `Thème/niveau non trouvé en base (thème: "${metadata.theme}", niveau: "${metadata.difficulty}")`;
+          console.warn("DEBUG STATS -", msg);
+          setSaveError(msg);
+          setSaveStatus('error');
         }
       } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
         console.error("DEBUG STATS - Erreur API:", err);
+        setSaveError(msg);
+        setSaveStatus('error');
       }
     };
 
-    saveResult();
-  }, [score, metadata, isSaved]);
+    if (!hasSaved.current) {
+      saveResult();
+    }
+
+    return () => { cancelled = true; };
+  }, [score, metadata]);
 
   return (
     <div className="relative min-h-[60vh] flex flex-col items-center justify-center px-4 py-8 text-white">
+      {saveStatus === 'error' && saveError && (
+        <div className="w-full max-w-md mb-4 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm">
+          ⚠️ Résultat non enregistré : {saveError}
+        </div>
+      )}
 
       {/* Animations */}
       {ratio >= 0.8 && (

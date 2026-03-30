@@ -36,7 +36,7 @@ const Title = ({ text = "QUIZPILOT", tag = "h1" }: TitleProps) => {
   }, [text]);
 
   return (
-    <div className="h-64 sm:h-96 flex flex-col justify-center items-center bg-[#1A1F26] text-yellow-300 antialiased overflow-hidden">
+    <div className="h-64 sm:h-96 flex flex-col justify-center items-center  text-yellow-300 antialiased overflow-hidden">
       <Tag className="text-4xl sm:text-6xl tracking-wider text-center font-skyfont select-none min-h-[1.5em] leading-relaxed">
         {displayedText}
       </Tag>

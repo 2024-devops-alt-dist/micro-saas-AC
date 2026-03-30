@@ -6,6 +6,7 @@ import UseQuiz from "../features/quiz/components/UseQuiz";
 import Title from "../components/Title";
 import BottomNav from "../components/BottomNav";
 
+
 function QuizPage() {
   const location = useLocation();
 
@@ -49,6 +50,9 @@ function QuizPage() {
           disableNext={!answers[currentIdx]}
         />
       )}
+
+
+      
 
       <BottomNav />
     </main>

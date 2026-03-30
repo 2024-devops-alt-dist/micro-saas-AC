@@ -4,6 +4,8 @@ import { useUserStats } from "../features/charts/services/userStats";
 import Title from "../components/Title";
 import BottomNav from "../components/BottomNav";
 import { authService } from "../features/auth/services/authService";
+import Button from "../components/Button";
+import { Link } from "react-router-dom";
 
 function QuizHistory() {
     const { stats, state } = useUserStats();
@@ -21,7 +23,7 @@ function QuizHistory() {
     );
 
     return (
-        <main className="min-h-screen text-white pb-24 px-4 sm:px-6 overflow-x-hidden">
+        <main className="min-h-screen  text-white pb-24 px-4 sm:px-6 overflow-x-hidden">
             <Title text="MES QUIZ" />
             <div className="bg-gray-800 rounded-3xl border border-gray-700 overflow-hidden shadow-2xl max-w-4xl mx-auto mt-4 sm:mt-8">
 
@@ -95,6 +97,16 @@ function QuizHistory() {
                     </div>
                 )}
             </div>
+            <div className="w-full max-w-md mt-6">
+            <Link to="/generate-quiz">
+                          <Button className="w-full py-4 bg-yellow-300 text-gray-900 hover:bg-yellow-400 rounded-2xl font-bold text-lg shadow-xl shadow-yellow-900/30 transition-all active:scale-95">
+                            CRÉER UN QUIZ
+                          </Button>
+                        </Link>
+                
+            </div>
+                   
+            
             <BottomNav />
 
         </main>

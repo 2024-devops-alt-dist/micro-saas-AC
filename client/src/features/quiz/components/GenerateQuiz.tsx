@@ -6,8 +6,8 @@ import { generateQuizFromFile } from "../../../services/n8nServices";
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 
-const THEMES = ["Histoire", "Maths", "Science", "Technologie et Sciences numériques", "Géographie", "Biologie", "Physique Chimie", "Langues Vivantes", "Economie et Gestion", "Sciences de la Vie et de la Terre", "Autres"];
-const DIFFICULTIES = ["Facile", "Intermédiaire", "Difficile"];
+const THEMES = ["Français", "Mathématiques", "Histoire", "Géographie", "Économie", "Sciences", "Technologie", "Biologie", "Physique", "Chimie", "Informatique", "Arts", "Littérature", "Philosophie", "Langues Vivantes", "Autres"];
+const DIFFICULTIES = ["Facile", "Moyen", "Difficile"];
 
 export default function GenerateQuiz() {
 
