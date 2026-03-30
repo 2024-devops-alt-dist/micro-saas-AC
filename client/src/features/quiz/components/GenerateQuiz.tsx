@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 
 const THEMES = ["Français", "Mathématiques", "Histoire", "Géographie", "Économie", "Sciences", "Technologie", "Biologie", "Physique", "Chimie", "Informatique", "Arts", "Littérature", "Philosophie", "Langues Vivantes", "Autres"];
-const DIFFICULTIES = ["Facile", "Moyen", "Difficile"];
+const DIFFICULTIES = ["Facile", "Intermédiaire", "Difficile"];
 
 export default function GenerateQuiz() {
 
