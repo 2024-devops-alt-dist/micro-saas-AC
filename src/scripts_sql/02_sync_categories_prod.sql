@@ -19,4 +19,5 @@ INSERT INTO category (id, name) VALUES
 (15, 'droit'),
 (16, 'gestion'),
 (17, 'professionnel'),
-(18, 'autres');
+(18, 'autres'),
+(19, 'Langues Vivantes');
