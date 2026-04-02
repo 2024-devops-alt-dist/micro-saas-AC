@@ -51,6 +51,10 @@ function QuizResult({ score, questions, answers, metadata }: ResultProps) {
 
         if (cancelled) return;
 
+        console.log("DEBUG - categories reçues:", categories);
+        console.log("DEBUG - levels reçus:", levels);
+        console.log("DEBUG - metadata:", metadata);
+
         // Normalise les accents pour la comparaison (ex: "Économie" = "Economie")
         const normalize = (s: string) =>
           s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
