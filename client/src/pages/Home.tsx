@@ -30,7 +30,7 @@ function Home() {
           <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-yellow-200 to-yellow-500 bg-clip-text text-transparent">
             Bienvenue sur QuizPilot
           </h2>
-          <p className="text-gray-400 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
+          <p className="text-gray-300 max-w-md mx-auto text-xl sm:text-base leading-relaxed">
             Préparez vos examens avec des quiz personnalisés générés par l'IA et suivez votre progression en temps réel.
           </p>
         </div>
